@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3A4652</color>
+    <color name="colorPrimaryDark">#2C3641</color>
+    <color name="colorAccent">#61F5FF</color>
+
+    <color name="colorInactive">#6D7C8C</color>
+    <color name="colorChartXY">#a3b9d1</color>
+
+
+    <color name="colorEditTxtBg">#2C3641</color>
+
+    <color name="colorBtnBgActive">#2C3641</color>
+    <color name="colorBtnBgInactive">#445261</color>
+
+    <color name="colorSpinBg">#313C47</color>
+    <color name="colorSpinTxt">#f3f4f5</color>
+
+    <color name="colorPrice">#000000</color>
+</resources>

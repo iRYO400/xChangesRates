@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="txtAppName">20sp</dimen>
+    <dimen name="txtPriceMain">48sp</dimen>
+    <dimen name="txtPriceSecondary">16sp</dimen>
+
+    <dimen name="spinnerText">22sp</dimen>
+    <dimen name="spinnerDropText">20sp</dimen>
+
+    <dimen name="etText">24sp</dimen>
+
+    <dimen name="dimBtnSize">12sp</dimen>
+
+</resources>

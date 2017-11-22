@@ -1,0 +1,63 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+
+        <item name="android:fitsSystemWindows">true</item>
+
+        <item name="android:windowBackground">@color/colorPrimary</item>
+    </style>
+
+    <style name="StyleAppName">
+        <item name="android:textColor">@color/colorSpinTxt</item>
+        <item name="android:textSize">@dimen/txtAppName</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="StyleEditText">
+        <item name="android:inputType">textNoSuggestions|numberDecimal</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:background">@drawable/bg_et</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/etText</item>
+    </style>
+
+    <style name="StyleSpinner" parent="android:Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/colorSpinTxt</item>
+        <item name="android:textSize">@dimen/spinnerText</item>
+    </style>
+
+    <style name="StyleSpinnerDropItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/colorSpinTxt</item>
+        <item name="android:textSize">@dimen/spinnerDropText</item>
+        <item name="android:background">@drawable/bg_spinner_drop</item>
+    </style>
+
+    <style name="StyleButton">
+        <item name="android:background">@drawable/bg_btn</item>
+        <item name="android:textColor">@drawable/bg_btn_text</item>
+        <item name="android:textSize">@dimen/dimBtnSize</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+
+    <style name="txtPriceMain">
+        <item name="android:textSize">@dimen/txtPriceMain</item>
+        <item name="android:textColor">@color/colorPrice</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="txtPriceSecondary">
+        <item name="android:textSize">@dimen/txtPriceSecondary</item>
+        <item name="android:textColor">@color/colorPrice</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+
+</resources>
