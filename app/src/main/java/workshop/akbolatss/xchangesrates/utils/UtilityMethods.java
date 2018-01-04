@@ -27,7 +27,7 @@ public class UtilityMethods {
 
     public static String getTodayDate() {
         Date date = new Date();
-        return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(date);
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH).format(date);
     }
 
     public static String getCalculatedBackDays(int daysAgo) {

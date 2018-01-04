@@ -8,18 +8,32 @@ package workshop.akbolatss.xchangesrates.utils;
 public class Constants {
 
     public static final String DEBUG_TAG = "DE_TAG";
-    public static final String BASE_URL = "https://api.coindesk.com/v1/bpi/";
-
-
+    public static final String BASE_URL = "http://bitcoinstat.org/api_v3/";
+//    public static final String BASE_URL = "https://api.coindesk.com/v1/bpi/";
 
     public static final String HAWK_FIRST_FRAG = "IsFirstStart";
-    public static final String HAWK_CURRENCY_POS = "SelectedCurrency";
-    public static final String HAWK_CURRENCY_RATE = "SelectedCurrencyRate";
-    public static final String HAWK_HISTORY = "SelectedHistoryPeriod";
+    public static final String HAWK_LAST_UPDATE = "LastUpdateDate";
+    public static final String HAWK_EXCHANGE_RESPONSE = "ExchangeResponse";
+
+    public static final String HAWK_XCHANGE_POS = "XchangePosition";
 
 
-    public static final int WEEK_AGO = -7;
-    public static final int ONE_MONTH_AGO = -30;
-    public static final int THREE_MONTHS_AGO = -90;
-    public static final int YEAR_AGO = -365;
+    public static final String HAWK_HISTORY_CODE = "SelectedHistory";
+    public static final String HAWK_HISTORY_POS = "SelectedHistoryPos";
+
+    public static final String HAWK_SNAPSHOTS = "ListOfSnapshots";
+    public static final String HAWK_SNAPSHOT_LIST = "SnapshotList";
+
+    public static final String MINUTES_10 = "10min";
+    public static final String HOUR_1 = "1h";
+    public static final String HOUR_3 = "3h";
+    public static final String HOUR_12 = "12h";
+    public static final String HOUR_24 = "24h";
+    public static final String WEEK = "1w";
+    public static final String MONTH = "1m";
+    public static final String MONTH_3 = "3m";
+    public static final String MONTH_6 = "6m";
+    public static final String YEAR_1 = "1y";
+    public static final String YEAR_2 = "2y";
+    public static final String YEAR_5 = "5y";
 }

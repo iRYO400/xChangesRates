@@ -4,7 +4,7 @@
     <dimen name="txtAppName">20sp</dimen>
     <dimen name="txtPriceMain">48sp</dimen>
     <dimen name="txtPriceSecondary">16sp</dimen>
-
+    <dimen name="txtExchange">20sp</dimen>
     <dimen name="spinnerText">22sp</dimen>
     <dimen name="spinnerDropText">20sp</dimen>
 

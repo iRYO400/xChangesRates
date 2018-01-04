@@ -7,8 +7,10 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-
-        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:fontFamily">@font/main_font</item>
+        <!--<item name="windowActionBar">false</item>-->
+        <!--<item name="windowNoTitle">true</item>-->
+        <!--<item name="android:fitsSystemWindows">true</item>-->
 
         <item name="android:windowBackground">@color/colorPrimary</item>
     </style>
@@ -16,7 +18,6 @@
     <style name="StyleAppName">
         <item name="android:textColor">@color/colorSpinTxt</item>
         <item name="android:textSize">@dimen/txtAppName</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
     <style name="StyleEditText">

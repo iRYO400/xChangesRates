@@ -3,17 +3,56 @@
 
     <string name="defaultCurrency">USD</string>
 
+    <integer name="key_id">0</integer>
+    <integer name="key_pos">1</integer>
+
     <string name="tvWeek">Week</string>
     <string name="tvMonth">Month</string>
     <string name="tvThreeMonths">3 Months</string>
     <string name="tvYear">Year</string>
     <string name="tvEquality">=</string>
-    <string name="tvError">Что-то пошло не так...</string>
+    <string name="tvDoubleDots">:</string>
+    <string name="tvError">Что-то пошло не так…</string>
+
+    <string name="no_snapshots">You didn\'t add any snapshot :(</string>
+    <string name="menu_shoot">Take a Snapshot</string>
+    <string name="menu_refresh">Update data</string>
+    <string name="menu_progress">Updating…</string>
+
+    //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
+
+    <string name="tv10min">10 минут</string>
+    <string name="tv1h">1 час</string>
+    <string name="tv3h">3 часа</string>
+    <string name="tv12h">12 часов</string>
+    <string name="tv24h">24 часа</string>
+    <string name="tv1w">Неделя</string>
+    <string name="tv1m">Месяц</string>
+    <string name="tv3m">3 месяца</string>
+    <string name="tv6m">Полгода</string>
+    <string name="tv1y">Год</string>
+    <string name="tv2y">2 года</string>
+    <string name="tv5y">5 лет</string>
+
+
+    <array name="menuOptions">
+        <item>Chart</item>
+        <item>Snapshots</item>
+        <item>Settings</item>
+        <item>About</item>
+    </array>
 
     <string-array name="array_coin_code">
         <item>BTC</item>
     </string-array>
 
+    <string-array name="array_xchanges">
+        <item>Kraken</item>
+        <item>Bitpay</item>
+        <item>Coindesk</item>
+        <item>BitGo</item>
+        <item>BitcoinMasters</item>
+    </string-array>
     <string-array name="array_currency_codes">
         <item>USD</item>
         <item>EUR</item>
@@ -182,4 +221,7 @@
         <item>ZMW</item>
         <item>ZWL</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

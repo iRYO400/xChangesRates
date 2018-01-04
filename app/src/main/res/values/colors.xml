@@ -16,5 +16,10 @@
     <color name="colorSpinBg">#313C47</color>
     <color name="colorSpinTxt">#f3f4f5</color>
 
+    <color name="colorSnapRate">#f3f3f3</color>
+    <color name="colorSnapBg">#445261</color>
+    <color name="colorSnapExchange">#a3b9d1</color>
+    <color name="colorSnapTxtDate">#6D7C8C</color>
+
     <color name="colorPrice">#000000</color>
 </resources>
