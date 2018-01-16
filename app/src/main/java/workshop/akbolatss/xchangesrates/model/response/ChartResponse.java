@@ -1,4 +1,6 @@
-package workshop.akbolatss.xchangesrates.model;
+package workshop.akbolatss.xchangesrates.model.response;
+
+import workshop.akbolatss.xchangesrates.model.dao.ChartData;
 
 public class ChartResponse {
     private String request;
@@ -23,7 +25,7 @@ public class ChartResponse {
     }
 
     public ChartResponseData getData() {
-        return this.data;
+        return data;
     }
 
     public void setData(ChartResponseData data) {

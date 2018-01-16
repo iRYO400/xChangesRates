@@ -9,6 +9,7 @@ public class Constants {
 
     public static final String DEBUG_TAG = "DE_TAG";
     public static final String BASE_URL = "http://bitcoinstat.org/api_v3/";
+    public static final String DB_SNAPS_NAME = "snapshots-db";
 //    public static final String BASE_URL = "https://api.coindesk.com/v1/bpi/";
 
     public static final String HAWK_FIRST_FRAG = "IsFirstStart";
@@ -20,9 +21,6 @@ public class Constants {
 
     public static final String HAWK_HISTORY_CODE = "SelectedHistory";
     public static final String HAWK_HISTORY_POS = "SelectedHistoryPos";
-
-    public static final String HAWK_SNAPSHOTS = "ListOfSnapshots";
-    public static final String HAWK_SNAPSHOT_LIST = "SnapshotList";
 
     public static final String MINUTES_10 = "10min";
     public static final String HOUR_1 = "1h";

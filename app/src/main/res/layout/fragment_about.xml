@@ -4,10 +4,18 @@
     android:layout_height="match_parent"
     tools:context="workshop.akbolatss.xchangesrates.screens.about.AboutFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="64dp" />
+
+    <FrameLayout
+        android:id="@+id/flAbout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:visibility="gone">
 
+    </FrameLayout>
 </FrameLayout>

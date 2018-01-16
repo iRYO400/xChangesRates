@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_take_snap"
-        android:icon="@drawable/ic_pages_24dp"
+        android:icon="@drawable/ic_save"
         android:title="@string/menu_shoot"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_refresh"
-        android:icon="@drawable/ic_refresh_24dp"
+        android:icon="@drawable/ic_refresh"
         android:orderInCategory="100"
         android:title="@string/menu_refresh"
         app:showAsAction="ifRoom" />

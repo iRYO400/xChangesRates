@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_margin="4dp"
     android:background="@color/colorSnapBg"
     android:elevation="4dp"
     android:orientation="vertical">
@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingEnd="4dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
         android:paddingStart="4dp">
 
         <LinearLayout
@@ -23,7 +25,7 @@
                 android:id="@+id/tvSnapName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="BTC/USD"
+                android:text=""
                 android:textAllCaps="true"
                 android:textColor="@color/colorSnapRate"
                 android:textSize="18sp" />
@@ -42,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:maxLines="1"
-                    android:text="25.12.17"
+                    android:text=""
                     android:textColor="@color/colorSnapTxtDate"
                     android:textSize="10sp" />
 
@@ -51,10 +53,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="14:32"
+                    android:text=""
                     android:textColor="@color/colorSnapTxtDate"
                     android:textSize="10sp" />
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_error_24dp"
+                android:visibility="gone"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -63,6 +72,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:visibility="gone" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -81,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:text="25 000"
+                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="@color/colorSnapRate"
                     android:textSize="24sp" />
@@ -92,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_arrow_high"
                     android:maxLines="1"
-                    android:text="25 000"
+                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="@color/colorSnapExchange"
                     android:textSize="14sp" />
@@ -103,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_arrow_low"
                     android:maxLines="1"
-                    android:text="25 000"
+                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="@color/colorSnapExchange"
                     android:textSize="14sp" />
@@ -121,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="by Kraken"
+            android:text=""
             android:textColor="@color/colorSnapExchange"
             android:textSize="11sp" />
 

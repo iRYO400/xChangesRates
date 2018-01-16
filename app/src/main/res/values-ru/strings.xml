@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="key_id">0</integer>
+    <integer name="key_pos">1</integer>
+
+    <string name="tvError">Что-то пошло не так…</string>
+
+    <string name="no_snapshots">Вы не добавили ни единого снэпшота :(</string>
+    <string name="menu_shoot">Сохранить снэпшот</string>
+    <string name="menu_refresh">Обновить</string>
+    <string name="menu_progress">Обновляется…</string>
+
+    //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
+
+    <string name="tv1h">Час</string>
+    <string name="tv3h">3 часа</string>
+    <string name="tv12h">12 часов</string>
+    <string name="tv24h">24 часа</string>
+    <string name="tv1w">Неделя</string>
+    <string name="tv1m">Месяц</string>
+    <string name="tv3m">3 месяца</string>
+    <string name="tv6m">Полгода</string>
+    <string name="tv1y">Год</string>
+    <string name="tv2y">2 года</string>
+    <string name="tv5y">5 лет</string>
+
+    <string name="profile_subtitle">Mobile Developer</string>
+
+    <array name="menuOptions">
+        <item>Snapshots</item>
+        <item>Chart</item>
+        <item>About</item>
+    </array>
+
+    <string name="tv10min">10 минут</string>
+    <string name="toast_saving">Сохраняю снэпшот</string>
+    <string name="splash_1">Данные успешно обновлены</string>
+    <string name="splash_2">Проверьте интернет соединение и перезапустите приложение</string>
+    <string name="splash_3">"Не получается обновить данные. Последнее обновление было "</string>
+</resources>

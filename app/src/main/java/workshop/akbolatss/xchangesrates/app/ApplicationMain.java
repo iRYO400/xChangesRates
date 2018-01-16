@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import me.yokeyword.fragmentation.BuildConfig;
+import me.yokeyword.fragmentation.Fragmentation;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -52,17 +54,6 @@ public class ApplicationMain extends Application {
 
         // Gson кастомизация
         Gson gson = new GsonBuilder()
-//                .registerTypeAdapter(BPIResponse.class, new JsonDeserializer<BPIResponse>() {
-//                    @Override
-//                    public BPIResponse deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-//
-//                        if (json.isJsonPrimitive()) {
-//                            return new BPIResponse((float) json.getAsDouble());
-//                        } else {
-//                            return new Gson().fromJson(json, BPIResponse.class);
-//                        }
-//                    }
-//                })
                 .registerTypeAdapter(ExchangeModel.class, new JsonDeserializer<ExchangeModel>() {
                     @Override
                     public ExchangeModel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -116,7 +107,10 @@ public class ApplicationMain extends Application {
                 .client(client)
                 .build();
 
-
+        Fragmentation.builder()
+                .stackViewMode(Fragmentation.BUBBLE)
+                .debug(BuildConfig.DEBUG)
+                .install();
 
         mAPIService = mRetrofit.create(APIService.class);
     }

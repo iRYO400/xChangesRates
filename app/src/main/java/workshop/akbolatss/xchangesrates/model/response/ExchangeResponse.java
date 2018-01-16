@@ -1,6 +1,8 @@
-package workshop.akbolatss.xchangesrates.model;
+package workshop.akbolatss.xchangesrates.model.response;
 
 import java.util.List;
+
+import workshop.akbolatss.xchangesrates.model.ExchangeModel;
 
 /**
  * Author: Akbolat Sadvakassov

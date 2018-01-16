@@ -1,6 +1,12 @@
-package workshop.akbolatss.xchangesrates.model;
+package workshop.akbolatss.xchangesrates.model.response;
+
+/**
+ * Author: Akbolat Sadvakassov
+ * Date: 05.01.2018
+ */
 
 public class ChartResponseDataInfo {
+
     private float volume;
     private String high;
     private float change24;

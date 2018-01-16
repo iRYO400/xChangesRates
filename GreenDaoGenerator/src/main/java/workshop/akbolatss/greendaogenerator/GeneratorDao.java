@@ -1,11 +1,14 @@
 package workshop.akbolatss.greendaogenerator;
 
 
+import org.greenrobot.greendao.generator.DaoGenerator;
 import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Property;
 import org.greenrobot.greendao.generator.Schema;
 
-public class DaoGenerator {
+public class GeneratorDao {
+
+    private static final String PROJECT_DIR = System.getProperty("user.dir");
 
     public static void main(String[] arg) {
         Schema schema = new Schema(1, "workshop.akbolatss.xchangesrates.model"); // Your app package name and the (.db) is the folder where the DAO files will be generated into.
@@ -14,7 +17,7 @@ public class DaoGenerator {
         addTables(schema);
 
         try {
-            new org.greenrobot.greendao.generator.DaoGenerator().generateAll(schema, "./app/src/main/java");
+            new DaoGenerator().generateAll(schema, "src/main/java");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -25,22 +28,26 @@ public class DaoGenerator {
         Entity info = addChartResponseDataInfo(schema);
         Entity charts = addChartResponseDataChart(schema);
 
-        Property infoId = info.addLongProperty("infoId").notNull().getProperty();
-        data.addToOne(info, infoId, "info");
+        Property infoProp = info.addLongProperty("infoId").notNull().getProperty();
+        data.addToOne(info, infoProp);
+
+        Property chartsProp = charts.addLongProperty("chartsId").notNull().getProperty();
+        data.addToMany(charts, chartsProp, "charts");
     }
 
 
     private static Entity addChartResponseData(final Schema schema) {
-        Entity data = schema.addEntity("ChartResponseData");
+        Entity data = schema.addEntity("ChartData");
         data.addIdProperty().primaryKey().autoincrement();
-        data.addStringProperty("exchange").notNull();
+        data.addStringProperty("exchange");
+        data.addStringProperty("coin");
         data.addStringProperty("currency");
         data.addStringProperty("source");
         return data;
     }
 
     private static Entity addChartResponseDataInfo(final Schema schema) {
-        Entity info = schema.addEntity("ChartResponseDataInfo");
+        Entity info = schema.addEntity("ChartDataInfo");
         info.addIdProperty().primaryKey().autoincrement();
         info.addFloatProperty("volume");
         info.addStringProperty("high");
@@ -58,7 +65,7 @@ public class DaoGenerator {
     }
 
     private static Entity addChartResponseDataChart(final Schema schema) {
-        Entity chart = schema.addEntity("ReminderItem");
+        Entity chart = schema.addEntity("ChartDataCharts");
         chart.addIdProperty().primaryKey().autoincrement();
         chart.addFloatProperty("market");
         chart.addStringProperty("high");

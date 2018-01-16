@@ -1,6 +1,11 @@
-package workshop.akbolatss.xchangesrates.model;
+package workshop.akbolatss.xchangesrates.model.response;
 
 import java.util.List;
+
+/**
+ * Author: Akbolat Sadvakassov
+ * Date: 05.01.2018
+ */
 
 public class ChartResponseData {
     private String exchange;

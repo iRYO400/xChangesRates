@@ -6,4 +6,4 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:fontFamily="@font/main_font"
-    android:text="@string/tvWeek" />
+    android:text="" />

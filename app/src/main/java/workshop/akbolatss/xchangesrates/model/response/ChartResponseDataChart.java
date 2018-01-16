@@ -1,4 +1,9 @@
-package workshop.akbolatss.xchangesrates.model;
+package workshop.akbolatss.xchangesrates.model.response;
+
+/**
+ * Author: Akbolat Sadvakassov
+ * Date: 05.01.2018
+ */
 
 public class ChartResponseDataChart {
     private float market;

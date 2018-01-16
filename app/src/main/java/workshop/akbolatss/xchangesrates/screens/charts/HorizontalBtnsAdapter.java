@@ -36,13 +36,13 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
 
     private List<String> mBtnIds;
     private int mSelectedPos;
-    private final onBtnClickListener mClickListener;
+    private final onBtnClickListener mListener;
     private List<Button> mBtnsList;
 
-    public HorizontalBtnsAdapter(List<String> mBtnIds, int mSelectedPos, onBtnClickListener mClickListener) {
+    public HorizontalBtnsAdapter(List<String> mBtnIds, int mSelectedPos, onBtnClickListener mListener) {
         this.mBtnIds = mBtnIds;
         this.mSelectedPos = mSelectedPos;
-        this.mClickListener = mClickListener;
+        this.mListener = mListener;
         this.mBtnsList = new ArrayList<>();
     }
 
@@ -51,7 +51,7 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
         public void onClick(View view) {
             String id = view.getTag(R.integer.key_id).toString();
             mSelectedPos = (int) view.getTag(R.integer.key_pos);
-            mClickListener.onBtnClick(id, mSelectedPos);
+            mListener.onBtnClick(id, mSelectedPos);
 
             onUpdateBtns(mSelectedPos);
         }
@@ -68,10 +68,10 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
     public void onBindViewHolder(HorizontalBtnsVH holder, int position) {
         if (mSelectedPos == position) {
             holder.bind(mBtnIds.get(position),
-                    true);
+                    true, mListener);
         } else {
             holder.bind(mBtnIds.get(position),
-                    false);
+                    false, mListener);
         }
 
         holder.button.setOnClickListener(mInternalListener);
@@ -80,7 +80,7 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
         mBtnsList.add(holder.button);
     }
 
-    public void onUpdateBtns(int selectedPos) {
+    private void onUpdateBtns(int selectedPos) {
         for (int i = 0; i < mBtnsList.size(); i++) {
             if (selectedPos == i) {
                 mBtnsList.get(i).setSelected(true);
@@ -116,7 +116,7 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(String s, boolean isSelected) {
+        public void bind(final String s, boolean isSelected, final onBtnClickListener mListener) {
             String str = "";
             switch (s) {
                 case MINUTES_10:
@@ -158,6 +158,7 @@ public class HorizontalBtnsAdapter extends RecyclerView.Adapter<HorizontalBtnsAd
             }
             button.setSelected(isSelected);
             button.setText(str);
+
         }
     }
 }

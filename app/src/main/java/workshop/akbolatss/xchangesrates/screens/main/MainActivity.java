@@ -1,15 +1,12 @@
 package workshop.akbolatss.xchangesrates.screens.main;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,15 +14,17 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.SupportActivity;
+import me.yokeyword.fragmentation.SupportFragment;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.views.DuoMenuView;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import workshop.akbolatss.xchangesrates.R;
+import workshop.akbolatss.xchangesrates.screens.about.AboutFragment;
 import workshop.akbolatss.xchangesrates.screens.charts.ChartFragment;
-import workshop.akbolatss.xchangesrates.screens.settings.SettingsFragment;
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment;
 
-public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMenuClickListener, ChartFragment.onChartFragmentInteractionListener {
+public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuClickListener, ChartFragment.onChartFragmentListener {
 
     private MenuAdapter mMenuAdapter;
 
@@ -48,8 +47,9 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
         setContentView(R.layout.activity_main);
         mUnbinder = ButterKnife.bind(this);
 
-
         onInitDrawer();
+
+        loadRootFragment(R.id.container, SnapshotsFragment.newInstance());
     }
 
     private void onInitDrawer() {
@@ -69,8 +69,6 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
         DuoMenuView duoMenuView = (DuoMenuView) mDuoDrawer.getMenuView();
         duoMenuView.setOnMenuClickListener(this);
         duoMenuView.setAdapter(mMenuAdapter);
-
-        onGoToFragment(new ChartFragment(), false);
     }
 
     @Override
@@ -87,24 +85,13 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
     public void onHeaderClicked() {
     }
 
-    private void onGoToFragment(Fragment fragment, boolean addToBackStack) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        if (addToBackStack) {
-            ft.addToBackStack(null);
-        }
-
-        ft.replace(R.id.container, fragment);
-        ft.commit();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_actions, menu);
         MenuItem menuTakeSnap = menu.findItem(R.id.action_take_snap);
         MenuItem menuRefresh = menu.findItem(R.id.action_refresh);
         switch (mCurrFragPos) {
-            case 0:
+            case 1:
                 menuTakeSnap.setVisible(true);
                 menuRefresh.setVisible(true);
                 break;
@@ -120,10 +107,10 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_take_snap:
-                ((ChartFragment) getSupportFragmentManager().findFragmentById(R.id.container)).onTakeSnap();
+                findFragment(ChartFragment.class).onSaveSnapshot();
                 return true;
             case R.id.action_refresh:
-                ((ChartFragment) getSupportFragmentManager().findFragmentById(R.id.container)).onUpdate();
+                findFragment(ChartFragment.class).onUpdate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -139,39 +126,60 @@ public class MainActivity extends AppCompatActivity implements DuoMenuView.OnMen
 
     @Override
     public void onHideLoading() {
-        mCurrFragPos = 0;
+        mCurrFragPos = 1;
         invalidateOptionsMenu();
         mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onOptionClicked(int position, Object objectClicked) {
-        Fragment fragment = null;
-
         switch (position) {
             case 0:
-                Toast.makeText(this, "Charts", Toast.LENGTH_SHORT).show();
-                fragment = new ChartFragment();
+                SnapshotsFragment snapshotsFragment = findFragment(SnapshotsFragment.class);
+                if (snapshotsFragment == null) {
+                    start(SnapshotsFragment.newInstance());
+//                    popTo(SnapshotsFragment.class, false, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            start(SnapshotsFragment.newInstance());
+//                        }
+//                    });
+                } else {
+                    start(snapshotsFragment, SupportFragment.SINGLETASK);
+                }
                 mCurrFragPos = 0;
                 break;
             case 1:
-                Toast.makeText(this, "Snapshots", Toast.LENGTH_SHORT).show();
-                fragment = new SnapshotsFragment();
+                ChartFragment chartFragment = findFragment(ChartFragment.class);
+                if (chartFragment == null) {
+                    popTo(SnapshotsFragment.class, true, new Runnable() {
+                        @Override
+                        public void run() {
+                            loadRootFragment(R.id.container, ChartFragment.newInstance());
+                        }
+                    });
+                } else {
+                    start(chartFragment, SupportFragment.SINGLETASK);
+                }
                 mCurrFragPos = 1;
                 break;
             case 2:
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
-                fragment = new SettingsFragment();
-                mCurrFragPos = 3;
-                break;
-            case 3:
-                Toast.makeText(this, "About Fragment", Toast.LENGTH_SHORT).show();
-                mCurrFragPos = 4;
+                AboutFragment aboutFragment = findFragment(AboutFragment.class);
+                if (aboutFragment == null) {
+//                    popTo(SnapshotsFragment.class, false, new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            start(AboutFragment.newInstance());
+//                        }
+//                    }, getFragmentAnimator().getPopExit());
+                    start(AboutFragment.newInstance());
+                } else {
+                    start(aboutFragment, SupportFragment.SINGLETASK);
+                }
+                mCurrFragPos = 2;
                 break;
         }
-
-        onGoToFragment(fragment, false);
-
+        mMenuAdapter.setViewSelected(mCurrFragPos, true);
         mDuoDrawer.closeDrawer();
 
         invalidateOptionsMenu();

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,29 +28,39 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.orhanobut.hawk.Hawk;
 
+import org.greenrobot.greendao.database.Database;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableSingleObserver;
+import io.reactivex.schedulers.Schedulers;
+import me.yokeyword.fragmentation.ISupportFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
-import workshop.akbolatss.xchangesrates.model.ChartResponse;
-import workshop.akbolatss.xchangesrates.model.ChartResponseData;
-import workshop.akbolatss.xchangesrates.model.ExchangeModel;
-import workshop.akbolatss.xchangesrates.model.ExchangeResponse;
+import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
+import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
+import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
+import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse;
+import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter;
 
-import static workshop.akbolatss.xchangesrates.utils.Constants.DEBUG_TAG;
+import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_EXCHANGE_RESPONSE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_CODE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_POS;
-import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SNAPSHOT_LIST;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_XCHANGE_POS;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_1;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_12;
@@ -66,7 +75,12 @@ import static workshop.akbolatss.xchangesrates.utils.Constants.YEAR_1;
 import static workshop.akbolatss.xchangesrates.utils.Constants.YEAR_2;
 import static workshop.akbolatss.xchangesrates.utils.Constants.YEAR_5;
 
-public class ChartFragment extends Fragment implements AdapterView.OnItemSelectedListener, HorizontalBtnsAdapter.onBtnClickListener {
+public class ChartFragment extends SupportFragment implements AdapterView.OnItemSelectedListener,
+        HorizontalBtnsAdapter.onBtnClickListener, ChartView, ISupportFragment {
+
+    private ChartPresenter mPresenter;
+    private Context mContext;
+    private onChartFragmentListener mListener;
 
     @BindView(R.id.spinCurrencies)
     protected Spinner mSpinCurrencies;
@@ -90,19 +104,10 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
     protected RecyclerView mRecyclerV;
     private HorizontalBtnsAdapter mBtnsAdapter;
 
-    private onChartFragmentInteractionListener mListener;
-
-    private Context mContext;
-
     private ExchangeResponse mExchangeResponse;
-    private ExchangeModel mExchangeModel;
-
-    private ChartResponseData mChartData;
-
-    private String mCoinCode;
-    private String mCurrencyCode;
-    private String mTerm;
-
+    /**
+     * Коэффициент курса выбранной валюты
+     */
     private float mSelectedCurrencyRate;
     /**
      * Фокус на mEtCoin
@@ -113,50 +118,53 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
      */
     private boolean isCurrencyEtFocused;
 
+    public static ChartFragment newInstance() {
+        return new ChartFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.bind(this, view);
         mContext = container.getContext();
+
+        mPresenter = new ChartPresenter(new DBChartRepository(provideDaoSession(container.getContext()),
+                ApplicationMain.getAPIService()));
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        if (mPresenter != null) {
+            mPresenter.onViewAttached(this);
+        }
         onInitRV();
         onInitChart();
-        onInitSpinner(view);
+        onInitSpinner();
     }
 
-    private void onInitSpinner(View view) {
+    private DaoSession provideDaoSession(Context context) {
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
+        Database db = helper.getWritableDb();
+        return new DaoMaster(db).newSession();
+    }
+
+    private void onInitSpinner() {
         mExchangeResponse = Hawk.get(HAWK_EXCHANGE_RESPONSE);
 
         String[] ids = new String[mExchangeResponse.getData().size()];
         for (int i = 0; i < mExchangeResponse.getData().size(); i++) {
             ids[i] = mExchangeResponse.getData().get(i).getCaption();
         }
-
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_spinner_item, ids);
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(mContext, R.layout.custom_spinner_item, ids);
         arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         mSpinXchanges.setAdapter(arrayAdapter);
-        mSpinXchanges.setOnItemSelectedListener(this);
-
-        mExchangeModel = mExchangeResponse.getData().get(Hawk.get(HAWK_XCHANGE_POS, 0));
-
-        arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_spinner_item,
-                mExchangeModel.getCurrencies().get(mExchangeModel.getCurrencies().keySet().toArray()[0]));
-        arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        mSpinCurrencies.setAdapter(arrayAdapter);
-        mSpinCurrencies.setOnItemSelectedListener(this);
-
-        arrayAdapter = new ArrayAdapter<>(view.getContext(), R.layout.custom_spinner_item,
-                mExchangeModel.getCurrencies().keySet().toArray());
-        arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        mSpinCoins.setAdapter(arrayAdapter);
-        mSpinCoins.setOnItemSelectedListener(this);
+        mSpinXchanges.setOnItemSelectedListener(ChartFragment.this);
+        mSpinCoins.setOnItemSelectedListener(ChartFragment.this); // Use in this order!
+        mSpinCurrencies.setOnItemSelectedListener(ChartFragment.this); // !!!
     }
 
     private void onInitChart() {
@@ -196,7 +204,7 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
         strings.add(YEAR_5);
 
         int selectedHistory = Hawk.get(HAWK_HISTORY_POS);
-        mTerm = Hawk.get(HAWK_HISTORY_CODE);
+        mPresenter.setTerm(Hawk.get(HAWK_HISTORY_CODE, HOUR_24));
 
         mRecyclerV.setHasFixedSize(true);
         mRecyclerV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -250,35 +258,29 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         if (adapterView.getId() == mSpinCurrencies.getId()) {
-
-            mCurrencyCode = adapterView.getSelectedItem().toString();
-            new CountDownTimer(1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-
-                }
-
-                @Override
-                public void onFinish() {
-                    onUpdateCurrency();
-                }
-            }.start();
+            mPresenter.setCurrencyCode(adapterView.getSelectedItem().toString());
+            mPresenter.onUpdate();
         } else if (adapterView.getId() == mSpinCoins.getId()) {
+            mPresenter.setCoinCode(adapterView.getSelectedItem().toString());
 
-            mCoinCode = adapterView.getSelectedItem().toString();
+            List<String> strings = mPresenter.getExchangeModel().getCurrencies().get(mPresenter.getExchangeModel().getCurrencies().keySet().toArray()[i]);
+            Collections.sort(strings);
 
-            ArrayAdapter arrayAdapter = new ArrayAdapter<>(adapterView.getContext(), R.layout.custom_spinner_item,
-                    mExchangeModel.getCurrencies().get(mExchangeModel.getCurrencies().keySet().toArray()[i]));
+            ArrayAdapter arrayAdapter = new ArrayAdapter<>(adapterView.getContext(), R.layout.custom_spinner_item, strings);
             arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             mSpinCurrencies.setAdapter(arrayAdapter);
         } else if (adapterView.getId() == mSpinXchanges.getId()) {
 
-            mExchangeModel = mExchangeResponse.getData().get(i);
+            if (Hawk.contains(HAWK_XCHANGE_POS)) {
+                mPresenter.setExchangeModel(mExchangeResponse.getData().get(Hawk.get(HAWK_XCHANGE_POS, 0)));
+            } else {
+                mPresenter.setExchangeModel(mExchangeResponse.getData().get(i));
+            }
 
             Hawk.put(HAWK_XCHANGE_POS, i);
 
             ArrayAdapter arrayAdapter = new ArrayAdapter<>(adapterView.getContext(), R.layout.custom_spinner_item,
-                    mExchangeModel.getCurrencies().keySet().toArray());
+                    mPresenter.getExchangeModel().getCurrencies().keySet().toArray());
             arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             mSpinCoins.setAdapter(arrayAdapter);
         } else {
@@ -290,132 +292,79 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    /**
-     * Обновление курса
-     */
-    private void onUpdateCurrency() {
-        if (mListener != null) {
-            mListener.onShowLoading();
+    @Override
+    public void onLoadLineChart(ChartResponseData chartData) {
+        mSelectedCurrencyRate = Float.parseFloat(chartData.getInfo().getLast());
+
+        mEtCoin.setText(String.valueOf(1));
+        mEtCurrency.setText(chartData.getInfo().getLast());
+
+        List<Entry> entries = new ArrayList<>();
+        for (int i = 0; i < chartData.getChart().size(); i++) {
+            entries.add(new BarEntry(chartData.getChart().get(i).getTimestamp(),
+                    Float.parseFloat(chartData.getChart().get(i).getPrice())));
         }
-        ApplicationMain.getAPIService().getCurrency(mCoinCode, mExchangeModel.getIdent(), mCurrencyCode, mTerm)
-                .enqueue(new Callback<ChartResponse>() {
-                    @Override
-                    public void onResponse(Call<ChartResponse> call, Response<ChartResponse> response) {
-                        if (response.isSuccessful()) {
 
-                            mChartData = response.body().getData();
-                            mChartData.setCoin(mCoinCode);
+        LineDataSet set = new LineDataSet(entries, "");
+        set.setDrawFilled(true);
+        set.setDrawCircles(true);
+        set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        set.setCubicIntensity(0.2f);
+        set.setLineWidth(1.8f);
+        set.setColor(mContext.getResources().getColor(R.color.colorAccent));
+        set.setCircleRadius(2f);
+        set.setCircleColor(Color.WHITE);
+        set.setValueTextColor(Color.WHITE);
+        set.setFillColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
+        set.setFillAlpha(100);
 
-                            mSelectedCurrencyRate = Float.parseFloat(mChartData.getInfo().getLast());
+        LineData lineData = new LineData(set);
+        lineData.setValueTextSize(9f);
+        lineData.setHighlightEnabled(false);
 
-                            mEtCoin.setText(String.valueOf(1));
-                            mEtCurrency.setText(mChartData.getInfo().getLast());
-
-                            List<Entry> entries = new ArrayList<>();
-                            for (int i = 0; i < mChartData.getChart().size(); i++) {
-                                entries.add(new BarEntry(mChartData.getChart().get(i).getTimestamp(),
-                                        Float.parseFloat(mChartData.getChart().get(i).getPrice())));
-                            }
-
-                            LineDataSet set = new LineDataSet(entries, "");
-                            set.setDrawFilled(true);
-                            set.setDrawCircles(true);
-                            set.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                            set.setCubicIntensity(0.2f);
-                            set.setLineWidth(1.8f);
-                            set.setColor(mContext.getResources().getColor(R.color.colorAccent));
-                            set.setCircleRadius(2f);
-                            set.setCircleColor(Color.WHITE);
-                            set.setValueTextColor(Color.WHITE);
-                            set.setFillColor(mContext.getResources().getColor(R.color.colorPrimaryDark));
-                            set.setFillAlpha(100);
-
-                            LineData lineData = new LineData(set);
-                            lineData.setValueTextSize(9f);
-                            lineData.setHighlightEnabled(false);
-
-                            mLineChart.setData(lineData);
-                            mLineChart.invalidate();
-                        }
-
-                        if (mListener != null) {
-                            mListener.onHideLoading();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ChartResponse> call, Throwable t) {
-                        Toast.makeText(getActivity(), R.string.tvError, Toast.LENGTH_SHORT).show();
-                        Log.d(DEBUG_TAG, t.getMessage());
-                        if (mListener != null) {
-                            mListener.onHideLoading();
-                        }
-                    }
-                });
+        mLineChart.setData(lineData);
+        mLineChart.invalidate();
     }
 
     @Override
     public void onBtnClick(String id, int pos) {
-        mTerm = id;
+        mPresenter.setTerm(id);
+        mPresenter.onUpdate();
         Hawk.put(HAWK_HISTORY_CODE, id);
         Hawk.put(HAWK_HISTORY_POS, pos);
-        onUpdateCurrency();
     }
 
     public void onUpdate() {
-        onUpdateCurrency();
+        mPresenter.onUpdate();
     }
 
-    public void onTakeSnap() {
-        if (Hawk.contains(HAWK_SNAPSHOT_LIST)){
-            List<ChartResponseData> chartList = Hawk.get(HAWK_SNAPSHOT_LIST);
-            chartList.add(mChartData);
-            Hawk.put(HAWK_SNAPSHOT_LIST, chartList);
-        } else {
-            List<ChartResponseData> chartList = new ArrayList<>();
-            chartList.add(mChartData);
-            Hawk.put(HAWK_SNAPSHOT_LIST, chartList);
-        }
-//        if (Hawk.contains(HAWK_SNAPSHOTS)) {
-//            List<SnapshotModel> snapshotModels = Hawk.get(HAWK_SNAPSHOTS);
-//            snapshotModels.add(new SnapshotModel(
-//                    ThreadLocalRandom.current().nextLong(),
-//                    mExchangeModel.getCaption(),
-//                    mCoinCode,
-//                    mCurrencyCode,
-//                    Float.parseFloat(mEtCoin.getText().toString()),
-//                    Float.parseFloat(mEtCurrency.getText().toString()),
-//                    mTerm,
-//                    mChartResponse.getData().getChart(),
-//                    mChartResponse.getData().getInfo().getUpdated(),
-//                    true));
-//
-//            Hawk.put(HAWK_SNAPSHOTS, snapshotModels);
-//        } else {
-//            List<SnapshotModel> snapshotModels = new ArrayList<>();
-//            snapshotModels.add(new SnapshotModel(
-//                    ThreadLocalRandom.current().nextLong(),
-//                    mExchangeModel.getCaption(),
-//                    mCoinCode,
-//                    mCurrencyCode,
-//                    Float.parseFloat(mEtCoin.getText().toString()),
-//                    Float.parseFloat(mEtCurrency.getText().toString()),
-//                    mTerm,
-//                    mChartResponse.getData().getChart(),
-//                    mChartResponse.getData().getInfo().getUpdated(),
-//                    true));
-//            Hawk.put(HAWK_SNAPSHOTS, snapshotModels);
-//        }
+    public void onSaveSnapshot() {
+        Toast.makeText(mContext, R.string.toast_saving, Toast.LENGTH_SHORT).show();
+        mPresenter.onSaveSnap();
+    }
+
+    @Override
+    public void onShowLoading() {
+        mListener.onShowLoading();
+    }
+
+    @Override
+    public void onHideLoading() {
+        mListener.onHideLoading();
+    }
+
+    @Override
+    public void onNoContent(boolean isEmpty) {
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onChartFragmentInteractionListener) {
-            mListener = (onChartFragmentInteractionListener) context;
+        if (context instanceof onChartFragmentListener) {
+            mListener = (onChartFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement onChartFragmentInteractionListener");
+                    + " must implement onChartFragmentListener");
         }
     }
 
@@ -425,7 +374,15 @@ public class ChartFragment extends Fragment implements AdapterView.OnItemSelecte
         mListener = null;
     }
 
-    public interface onChartFragmentInteractionListener {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mPresenter != null) {
+            mPresenter.onViewDetached(this);
+        }
+    }
+
+    public interface onChartFragmentListener {
         void onShowLoading();
 
         void onHideLoading();

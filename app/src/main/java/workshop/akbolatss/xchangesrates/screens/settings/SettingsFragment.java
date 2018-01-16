@@ -7,16 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import me.yokeyword.fragmentation.SupportFragment;
 import workshop.akbolatss.xchangesrates.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends SupportFragment {
 
 
-    public SettingsFragment() {
-        // Required empty public constructor
+    public static SettingsFragment newInstance() {
+        return new SettingsFragment();
     }
 
     @Override

@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
-//apply plugin: 'android-aspectjx'
+//apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
+apply plugin: 'io.fabric'
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -10,6 +10,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                includeCompileClasspath true
+            }
+        }
     }
     buildTypes {
         release {
@@ -30,7 +36,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
-//    implementation 'com.justkiddingbaby:fragment-rigger:1.0.0'
     //MPA Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     //Hawk
@@ -38,13 +43,17 @@ dependencies {
     // NavDrawer
     implementation 'nl.psdcompany:duo-navigation-drawer:2.0.7'
 
+    implementation 'me.yokeyword:fragmentation:1.2.4'
+
+    implementation 'com.github.jrvansuita:MaterialAbout:+'
+
     //RxJava 2, RxAndroid 2
     implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
     //GreenDAO
     implementation 'org.greenrobot:greendao:3.2.2'
-
+//    implementation 'org.greenrobot:greendao-generator:3.2.2'
     //Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.+'
     implementation 'com.squareup.retrofit2:converter-gson:2.+'
@@ -55,7 +64,13 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
 //    testImplementation 'junit:junit:4.12'
 //    androidTestImplementation 'com.android.support.test:runner:1.0.1'
 //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+apply plugin: 'com.google.gms.google-services'
