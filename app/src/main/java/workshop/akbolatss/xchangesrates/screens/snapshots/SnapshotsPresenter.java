@@ -4,10 +4,8 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -19,8 +17,6 @@ import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
-
-import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -52,7 +48,7 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
         }
     }
 
-    public void onGetSnapshots() {
+    public void getAllSnapshots() {
         getView().onShowLoading();
         mRepository.getAllChartData()
                 .subscribeOn(Schedulers.io())
@@ -76,8 +72,8 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                 });
     }
 
-    public void onLoadInfo(long key, final int pos){
-        mRepository.getChartDataInfo(key)
+    public void onLoadInfo(long key, final int pos) {
+        mCompositeDisposable.add(mRepository.getChartDataInfo(key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<ChartDataInfo>() {
@@ -87,8 +83,9 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                     }
 
                     @Override
-                    public void onError(Throwable e) {}
-                });
+                    public void onError(Throwable e) {
+                    }
+                }));
     }
 
     public void onUpdateSnapshot(final ChartData data, final int pos) {
@@ -96,7 +93,7 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                 data.getCoin(),
                 data.getExchange(),
                 data.getCurrency(),
-                HOUR_24
+                data.getTiming()
         ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ChartResponse, ChartResponseData>() {
@@ -115,9 +112,9 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                     @Override
                     public void onSuccess(ChartDataMapper mapper) {
                         ChartDataInfo dataInfo = mapper.getDataInfo();
-                        dataInfo.setInfoId(data.getInfo().getInfoId());
-                        dataInfo.setId(data.getInfo().getId());
-                        data.setInfo(dataInfo);
+                        dataInfo.setInfoId(data.getChartDataInfo().getInfoId());
+                        dataInfo.setId(data.getChartDataInfo().getId());
+                        data.setChartDataInfo(dataInfo);
                         List<ChartDataCharts> chartsList = mapper.getChartsList();
                         mRepository.onUpdateChartData(data, dataInfo, chartsList);
 
@@ -128,6 +125,40 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                     @Override
                     public void onError(Throwable e) {
                         getView().onHideLoading();
+                    }
+                }));
+    }
+
+    public void onUpdateOptions(long chartId, boolean isActive, String timing) {
+        mCompositeDisposable.add(mRepository.onOptionsChanged(chartId, isActive, timing)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(Integer count) {
+                        getView().onSaveNotifiesCount(count);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+                }));
+    }
+
+    public void onRemoveSnapshot(long chartId) {
+        mCompositeDisposable.add(mRepository.onDeleteChartData(chartId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<Integer>() {
+                    @Override
+                    public void onSuccess(Integer count) {
+                        getView().onSaveNotifiesCount(count);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
                     }
                 }));
     }

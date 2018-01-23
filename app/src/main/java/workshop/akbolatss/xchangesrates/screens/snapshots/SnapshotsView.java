@@ -19,4 +19,6 @@ public interface SnapshotsView extends BaseView, LoadingView {
     public void onLoadChartInfo(ChartDataInfo dataInfo, int pos);
 
     public void onLoadChart(ChartData data, int pos);
+
+    public void onSaveNotifiesCount(int count);
 }

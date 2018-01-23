@@ -1,5 +1,7 @@
 package workshop.akbolatss.xchangesrates.repositories;
 
+import android.util.Log;
+
 import org.greenrobot.greendao.query.DeleteQuery;
 
 import java.util.List;
@@ -50,6 +52,17 @@ public class DBChartRepository implements ChartRepository {
     }
 
     @Override
+    public Single<List<ChartData>> getActiveChartData() {
+        return Single.fromCallable(new Callable<List<ChartData>>() {
+            @Override
+            public List<ChartData> call() throws Exception {
+                ChartDataDao dataDao = mDaoSession.getChartDataDao();
+                return dataDao.queryBuilder().where(ChartDataDao.Properties.IsActive.eq(true)).list();
+            }
+        });
+    }
+
+    @Override
     public Single<ChartDataInfo> getChartDataInfo(final long key) {
         return Single.fromCallable(new Callable<ChartDataInfo>() {
             @Override
@@ -66,29 +79,34 @@ public class DBChartRepository implements ChartRepository {
     }
 
     @Override
-    public void onAddChartData(final ChartData data, final ChartDataInfo dataInfo, final List<ChartDataCharts> chartsList) {
-        Single.fromCallable(new Callable<Boolean>() {
+    public Single<Boolean> onAddChartData(final ChartData data, final ChartDataInfo dataInfo, final List<ChartDataCharts> chartsList) {
+        return Single.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                ChartDataInfoDao infoDao = mDaoSession.getChartDataInfoDao();
-                infoDao.insert(dataInfo);
 
                 ChartDataDao chartDataDao = mDaoSession.getChartDataDao();
-                data.setInfo(dataInfo);
                 long dataId = chartDataDao.insert(data);
+
+                ChartDataInfoDao infoDao = mDaoSession.getChartDataInfoDao();
+                dataInfo.setInfoId(dataId);
+                infoDao.insert(dataInfo);
 
                 ChartDataChartsDao dataChartsDao = mDaoSession.getChartDataChartsDao();
                 for (int i = 0; i < chartsList.size(); i++) {
                     chartsList.get(i).setChartsId(dataId);
                     dataChartsDao.insert(chartsList.get(i));
                 }
-                //        ChartData newData = chartDataDao.load(dataId);
-//        Log.d("TAG", "NewData " + newData.getInfo().getInfoId() + " newDataId " + newData.getId());
+
+//                ChartData newData = chartDataDao.load(dataId);
+//
+//                try {
+//                    Log.d("TAG", "NewData " + newData.getInfo().getInfoId() + " newDataId " + newData.getId());
+//                } catch (NullPointerException e) {
+//                    e.printStackTrace();
+//                }
                 return true;
             }
-        })
-                .subscribeOn(Schedulers.io())
-                .subscribe();
+        });
     }
 
     @Override
@@ -120,26 +138,42 @@ public class DBChartRepository implements ChartRepository {
     }
 
     @Override
-    public void onDeleteChartData(final ChartData data) {
-        Single.fromCallable(new Callable<Boolean>() {
+    public Single<Integer> onOptionsChanged(final long key, final boolean isActive, final String timing) {
+        return Single.fromCallable(new Callable<Integer>() {
             @Override
-            public Boolean call() throws Exception {
+            public Integer call() throws Exception {
+                ChartDataDao dataDao = mDaoSession.getChartDataDao();
+                ChartData data = dataDao.load(key);
+                data.setIsActive(isActive);
+                data.setTiming(timing);
+                dataDao.update(data);
+
+                return dataDao.queryBuilder().where(ChartDataDao.Properties.IsActive.eq(true)).list().size();
+            }
+        });
+    }
+
+    @Override
+    public Single<Integer> onDeleteChartData(final long chartId) {
+        return Single.fromCallable(new Callable<Integer>() {
+            @Override
+            public Integer call() throws Exception {
                 ChartDataChartsDao dataChartsDao = mDaoSession.getChartDataChartsDao();
                 DeleteQuery<ChartDataCharts> deleteQuery = dataChartsDao.queryBuilder()
-                        .where(ChartDataChartsDao.Properties.ChartsId.eq(data.getId()))
+                        .where(ChartDataChartsDao.Properties.ChartsId.eq(chartId))
                         .buildDelete();
                 deleteQuery.executeDeleteWithoutDetachingEntities();
 
                 ChartDataInfoDao infoDao = mDaoSession.getChartDataInfoDao();
-                infoDao.delete(data.getInfo());
+                DeleteQuery<ChartDataInfo> deleteQuery1 = infoDao.queryBuilder()
+                        .where(ChartDataInfoDao.Properties.InfoId.eq(chartId)).buildDelete();
+                deleteQuery1.executeDeleteWithoutDetachingEntities();
 
                 ChartDataDao chartDataDao = mDaoSession.getChartDataDao();
-                chartDataDao.delete(data);
-                return false;
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .subscribe();
+                chartDataDao.deleteByKey(chartId);
 
+                return chartDataDao.queryBuilder().where(ChartDataDao.Properties.IsActive.eq(true)).list().size();
+            }
+        });
     }
 }

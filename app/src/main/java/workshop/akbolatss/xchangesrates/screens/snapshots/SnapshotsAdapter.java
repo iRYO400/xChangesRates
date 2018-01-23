@@ -1,7 +1,7 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,9 +78,22 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         notifyItemChanged(pos);
     }
 
-    public void onUpdateInfo(ChartDataInfo dataInfo, int pos) {
-        mSnapshotModels.get(pos).setInfo(dataInfo);
+    public void onUpdateNotifyState(boolean isActive, String timing, int pos){
+        ChartData data = mSnapshotModels.get(pos);
+        data.setIsActive(isActive);
+        data.setTiming(timing);
+        mSnapshotModels.set(pos, data);
         notifyItemChanged(pos);
+    }
+
+    public void onUpdateInfo(ChartDataInfo dataInfo, int pos) {
+        mSnapshotModels.get(pos).setChartDataInfo(dataInfo);
+        notifyItemChanged(pos);
+    }
+
+    public void onRemoveSnap(int pos){
+        mSnapshotModels.remove(pos);
+        notifyItemRemoved(pos);
     }
 
     @Override
@@ -93,9 +106,11 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
 
     public interface onSnapshotClickListener {
 
-        public void onSnapshotClick(ChartData model, int pos);
+        public void onUpdateItem(ChartData model, int pos);
 
-        public void onGetChartsInfo(long key, int pos);
+        public void onGetInfo(long key, int pos);
+
+        public void onOpenOptions(long chartId, boolean isActive, String timing, int pos);
     }
 
     public class SnapshotsVH extends RecyclerView.ViewHolder {
@@ -120,8 +135,8 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         FrameLayout frameLayout;
         @BindView(R.id.progressBar)
         ProgressBar progressBar;
-        @BindView(R.id.imgError)
-        ImageView imgError;
+        @BindView(R.id.imgNotifyState)
+        ImageView imgNotifyState;
 
         public SnapshotsVH(View itemView) {
             super(itemView);
@@ -134,22 +149,37 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             name.setText(s);
             exchanger.setText(model.getExchange());
 
+            if (model.getIsActive()) {
+                imgNotifyState.setImageResource(R.drawable.ic_notifications_active_24dp);
+            } else {
+                imgNotifyState.setImageResource(R.drawable.ic_notifications_inactive24dp);
+            }
+
             frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     frameLayout.setClickable(false);
-                    progressBar.setVisibility(View.VISIBLE);
-                    date.setVisibility(View.INVISIBLE);
-                    time.setVisibility(View.INVISIBLE);
+//                    progressBar.setVisibility(View.VISIBLE);
+//                    date.setVisibility(View.INVISIBLE);
+//                    time.setVisibility(View.INVISIBLE);
 
-                    listener.onSnapshotClick(model, getAdapterPosition());
+                    listener.onUpdateItem(model, getAdapterPosition());
                 }
             });
 
+            frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    listener.onOpenOptions(model.getId(), model.getIsActive(), model.getTiming(), getAdapterPosition());
+                    return true;
+                }
+            });
+
+
             if (!model.isInfoNull()) {
-                bindInfo(model.getInfo());
+                bindInfo(model.getChartDataInfo());
             } else {
-                listener.onGetChartsInfo(model.getId(), getAdapterPosition());
+                listener.onGetInfo(model.getId(), getAdapterPosition());
             }
 
             bindChart(model.getCharts());

@@ -8,8 +8,6 @@ import org.greenrobot.greendao.generator.Schema;
 
 public class GeneratorDao {
 
-    private static final String PROJECT_DIR = System.getProperty("user.dir");
-
     public static void main(String[] arg) {
         Schema schema = new Schema(1, "workshop.akbolatss.xchangesrates.model"); // Your app package name and the (.db) is the folder where the DAO files will be generated into.
         schema.enableKeepSectionsByDefault();
@@ -27,12 +25,16 @@ public class GeneratorDao {
         Entity data = addChartResponseData(schema);
         Entity info = addChartResponseDataInfo(schema);
         Entity charts = addChartResponseDataChart(schema);
+        Entity notify = addNotification(schema);
 
-        Property infoProp = info.addLongProperty("infoId").notNull().getProperty();
+        Property infoProp = info.addLongProperty("infoId").getProperty();
         data.addToOne(info, infoProp);
 
-        Property chartsProp = charts.addLongProperty("chartsId").notNull().getProperty();
+        Property chartsProp = charts.addLongProperty("chartsId").getProperty();
         data.addToMany(charts, chartsProp, "charts");
+
+        Property notifyProp = notify.addLongProperty("notificationId").getProperty();
+        data.addToMany(notify, notifyProp);
     }
 
 
@@ -43,6 +45,8 @@ public class GeneratorDao {
         data.addStringProperty("coin");
         data.addStringProperty("currency");
         data.addStringProperty("source");
+        data.addBooleanProperty("isActive");
+        data.addStringProperty("timing");
         return data;
     }
 
@@ -73,5 +77,15 @@ public class GeneratorDao {
         chart.addStringProperty("price");
         chart.addLongProperty("timestamp");
         return chart;
+    }
+
+    private static Entity addNotification(final Schema schema) {
+        Entity notification = schema.addEntity("Notification");
+        notification.addIdProperty().primaryKey().autoincrement();
+        notification.addStringProperty("name");
+        notification.addIntProperty("hour");
+        notification.addIntProperty("minute");
+        notification.addBooleanProperty("isActive");
+        return notification;
     }
 }

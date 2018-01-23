@@ -8,10 +8,11 @@ import io.reactivex.Single;
 import workshop.akbolatss.xchangesrates.model.dao.ChartData;
 import workshop.akbolatss.xchangesrates.model.dao.ChartDataCharts;
 import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
-import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataChart;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataInfo;
+
+import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -50,11 +51,13 @@ public class ChartDataMapper {
             chartData.setCurrency(responseData.getCurrency());
             chartData.setExchange(responseData.getExchange());
             chartData.setSource(responseData.getSource());
+            chartData.setIsActive(false);
+            chartData.setTiming(HOUR_24);
         }
         return chartData;
     }
 
-    public Single<ChartData> transformD(final ChartResponseData responseData){
+    public Single<ChartData> transformD(final ChartResponseData responseData) {
         return Single.fromCallable(new Callable<ChartData>() {
             @Override
             public ChartData call() throws Exception {
@@ -71,7 +74,7 @@ public class ChartDataMapper {
         });
     }
 
-    public Single<ChartDataInfo> transformInfoD(final ChartResponseDataInfo dataInfo){
+    public Single<ChartDataInfo> transformInfoD(final ChartResponseDataInfo dataInfo) {
         return Single.fromCallable(new Callable<ChartDataInfo>() {
             @Override
             public ChartDataInfo call() throws Exception {
@@ -116,7 +119,7 @@ public class ChartDataMapper {
         return info;
     }
 
-    public Single<List<ChartDataCharts>> transformChartsD(final List<ChartResponseDataChart> list){
+    public Single<List<ChartDataCharts>> transformChartsD(final List<ChartResponseDataChart> list) {
         return Single.fromCallable(new Callable<List<ChartDataCharts>>() {
             @Override
             public List<ChartDataCharts> call() throws Exception {
@@ -138,7 +141,7 @@ public class ChartDataMapper {
         });
     }
 
-    public List<ChartDataCharts> transformCharts(List<ChartResponseDataChart> list){
+    public List<ChartDataCharts> transformCharts(List<ChartResponseDataChart> list) {
         List<ChartDataCharts> chartsList = null;
         if (list != null) {
             chartsList = new ArrayList<>();

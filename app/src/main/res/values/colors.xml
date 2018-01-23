@@ -18,6 +18,7 @@
 
     <color name="colorSnapRate">#f3f3f3</color>
     <color name="colorSnapBg">#445261</color>
+    <color name="colorSnapBgInactive">#2C3641</color>
     <color name="colorSnapExchange">#a3b9d1</color>
     <color name="colorSnapTxtDate">#6D7C8C</color>
 

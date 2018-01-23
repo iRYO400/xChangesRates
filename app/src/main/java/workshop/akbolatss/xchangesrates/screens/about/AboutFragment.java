@@ -53,7 +53,7 @@ public class AboutFragment extends SupportFragment {
                         .setPhoto(R.mipmap.profile_picture)
                         .setSubTitle(R.string.profile_subtitle)
                         .setBrief(getString(R.string.profile_brief))
-                        .setAppIcon(R.mipmap.ic_launcher)
+                        .setAppIcon(R.mipmap.ic_main)
                         .setAppName(R.string.app_name)
 
                         .addGooglePlayStoreLink(getString(R.string.profile_playstore_link))

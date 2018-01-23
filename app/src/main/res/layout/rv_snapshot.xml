@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flSnapshot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
@@ -11,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingEnd="4dp"
-        android:paddingTop="2dp"
         android:paddingBottom="2dp"
-        android:paddingStart="4dp">
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingTop="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_error_24dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -102,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_arrow_high"
                     android:maxLines="1"
-                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="@color/colorSnapExchange"
                     android:textSize="14sp" />
@@ -113,10 +113,10 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_arrow_low"
                     android:maxLines="1"
-                    android:text=""
                     android:textAllCaps="true"
                     android:textColor="@color/colorSnapExchange"
                     android:textSize="14sp" />
+
             </LinearLayout>
 
             <com.github.mikephil.charting.charts.LineChart
@@ -126,14 +126,28 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvExchanger"
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text=""
-            android:textColor="@color/colorSnapExchange"
-            android:textSize="11sp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imgNotifyState"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="start"
+                android:src="@drawable/ic_notifications_inactive24dp" />
+
+            <TextView
+                android:id="@+id/tvExchanger"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Kraken"
+                android:textColor="@color/colorSnapExchange"
+                android:textSize="11sp" />
+        </FrameLayout>
+
 
     </LinearLayout>
 

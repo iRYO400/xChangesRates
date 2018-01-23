@@ -21,16 +21,18 @@ public interface ChartRepository {
 
     Single<List<ChartData>> getAllChartData();
 
+    Single<List<ChartData>> getActiveChartData();
+
     Single<ChartDataInfo> getChartDataInfo(long key);
 
     Single<ChartResponse> getSnapshot(String coin, String exchange,
                                   String currency, String term);
 
-    void onAddChartData(ChartData data, ChartDataInfo dataInfo, List<ChartDataCharts> dataCharts);
+    Single<Boolean> onAddChartData(ChartData data, ChartDataInfo dataInfo, List<ChartDataCharts> dataCharts);
 
-    void onDeleteChartData(ChartData chartData);
+    Single<Integer> onDeleteChartData(long key);
 
     void onUpdateChartData(ChartData chartData, ChartDataInfo dataInfo, List<ChartDataCharts> chartsList);
 
-//    void onSwapChartData(ChartData from, ChartData to);
+    Single<Integer> onOptionsChanged(long key, boolean isActive, String timing);
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.orhanobut.hawk.Hawk;
 
 import org.greenrobot.greendao.database.Database;
 
@@ -28,11 +31,13 @@ import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
 import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
 import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
+import workshop.akbolatss.xchangesrates.screens.notifications.NotificationsDialogFragment;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
+import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_NOTIFIES_COUNT;
 
 public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLayout.OnRefreshListener,
-        SnapshotsAdapter.onSnapshotClickListener, SnapshotsView {
+        SnapshotsAdapter.onSnapshotClickListener, SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
 
     private SnapshotsPresenter mPresenter;
 
@@ -68,7 +73,7 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.onViewAttached(this);
         }
 
@@ -83,7 +88,7 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mPresenter.onGetSnapshots();
+                mPresenter.getAllSnapshots();
             }
         }, 500);
     }
@@ -95,13 +100,28 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void onSnapshotClick(ChartData model, int pos) {
+    public void onUpdateItem(ChartData model, int pos) {
         mPresenter.onUpdateSnapshot(model, pos);
     }
 
     @Override
-    public void onGetChartsInfo(long key, int pos) {
+    public void onGetInfo(long key, int pos) {
         mPresenter.onLoadInfo(key, pos);
+    }
+
+    @Override
+    public void onOpenOptions(long chartId, boolean isActive, String timing, int pos) {
+        FragmentManager fm = getFragmentManager();
+        OptionsDialogFragment dialogFragment = OptionsDialogFragment.newInstance(chartId, isActive, timing, pos);
+        dialogFragment.setTargetFragment(SnapshotsFragment.this, 300);
+        dialogFragment.show(fm, "fm");
+    }
+
+    public void onNotificationsDialog() {
+        FragmentManager fm = getFragmentManager();
+        NotificationsDialogFragment dialogFragment = NotificationsDialogFragment.newInstance();
+        dialogFragment.setTargetFragment(SnapshotsFragment.this, 400);
+        dialogFragment.show(fm, "fm");
     }
 
     @Override
@@ -120,8 +140,12 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
+    public void onSaveNotifiesCount(int count) {
+        Hawk.put(HAWK_NOTIFIES_COUNT, count);
+    }
+
+    @Override
     public void onRefresh() {
-//        mPresenter.onGetSnapshots();
         for (int i = 0; i < mAdapter.getSnapshotModels().size(); i++) {
             mPresenter.onUpdateSnapshot(mAdapter.getSnapshotModels().get(i), i);
         }
@@ -152,8 +176,20 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mPresenter != null){
+        if (mPresenter != null) {
             mPresenter.onViewDetached(this);
         }
+    }
+
+    @Override
+    public void onSaveChanges(long chartId, boolean isActive, String timing, int pos) {
+        mPresenter.onUpdateOptions(chartId, isActive, timing);
+        mAdapter.onUpdateNotifyState(isActive, timing, pos);
+    }
+
+    @Override
+    public void onRemoveSnapshot(long chartId, int pos) {
+        mPresenter.onRemoveSnapshot(chartId);
+        mAdapter.onRemoveSnap(pos);
     }
 }

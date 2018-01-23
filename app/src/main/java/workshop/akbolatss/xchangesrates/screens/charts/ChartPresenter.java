@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.screens.charts;
 
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -19,10 +18,19 @@ import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
 
 public class ChartPresenter extends BasePresenter<ChartView> {
 
+    /**
+     * Репозитории
+     */
     private DBChartRepository mRepository;
 
+    /**
+     * Main model
+     */
     private ExchangeModel mExchangeModel;
 
+    /**
+     * Response от сервера
+     */
     private ChartResponseData mChartData;
 
     private String mCoinCode;
@@ -77,8 +85,24 @@ public class ChartPresenter extends BasePresenter<ChartView> {
     public void onSaveSnap() {
         getView().onShowLoading();
         ChartDataMapper mapper = new ChartDataMapper(mChartData, mChartData.getInfo(), mChartData.getChart());
-        getView().onHideLoading();
-        mRepository.onAddChartData(mapper.getData(), mapper.getDataInfo(), mapper.getChartsList());
+//        Flowable<Object> s = Single.concat(mapper.transformD(mChartData), //TODO Улучши, когда твои скиллы по RxJava 2 поднимутся
+//                mapper.transformInfoD(mChartData.getInfo()),
+//                mapper.transformChartsD(mChartData.getChart()));
+        compositeDisposable.add(
+                mRepository.onAddChartData(mapper.getData(), mapper.getDataInfo(), mapper.getChartsList())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeWith(new DisposableSingleObserver<Boolean>() {
+                            @Override
+                            public void onSuccess(Boolean aBoolean) {
+                                getView().onHideLoading();
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                getView().onHideLoading();
+                            }
+                        }));
     }
 
     public void setExchangeModel(ExchangeModel mExchangeModel) {

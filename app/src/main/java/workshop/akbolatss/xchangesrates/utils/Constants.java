@@ -22,6 +22,8 @@ public class Constants {
     public static final String HAWK_HISTORY_CODE = "SelectedHistory";
     public static final String HAWK_HISTORY_POS = "SelectedHistoryPos";
 
+    public static final String HAWK_NOTIFIES_COUNT = "CountOfNotifications";
+
     public static final String MINUTES_10 = "10min";
     public static final String HOUR_1 = "1h";
     public static final String HOUR_3 = "3h";
@@ -34,4 +36,15 @@ public class Constants {
     public static final String YEAR_1 = "1y";
     public static final String YEAR_2 = "2y";
     public static final String YEAR_5 = "5y";
+
+    public static final String BUNDLE_CHART_ID = "chartId";
+    public static final String BUNDLE_TIMING = "timing";
+    public static final String BUNDLE_POSITION = "position";
+    public static final String BUNDLE_ISACTIVE = "isActive";
+    public static final String BUNDLE_NOTIFIES_COUNT = "notifiesCount";
+
+
+    public static final String INTENT_REQUEST_CODE = "IntentRequestCode";
+    public static final String INTENT_HOUR = "IntentHour";
+    public static final String INTENT_MINUTE = "IntentMINUTE";
 }

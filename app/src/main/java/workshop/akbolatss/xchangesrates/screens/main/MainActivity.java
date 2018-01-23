@@ -2,7 +2,6 @@ package workshop.akbolatss.xchangesrates.screens.main;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +29,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
 
     @BindView(R.id.duoDrawer)
     protected DuoDrawerLayout mDuoDrawer;
+    DuoDrawerToggle mDrawerToggle;
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -55,20 +55,22 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
     private void onInitDrawer() {
         setSupportActionBar(mToolbar);
 
-        DuoDrawerToggle duoDrawerToggle = new DuoDrawerToggle(this,
+        mDrawerToggle = new DuoDrawerToggle(this,
                 mDuoDrawer,
                 mToolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
-        mDuoDrawer.setDrawerListener(duoDrawerToggle);
-        duoDrawerToggle.syncState();
+        mDuoDrawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
         mMenuAdapter = new MenuAdapter(new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.menuOptions))));
-        mMenuAdapter.setViewSelected(0, true);
+
         DuoMenuView duoMenuView = (DuoMenuView) mDuoDrawer.getMenuView();
         duoMenuView.setOnMenuClickListener(this);
         duoMenuView.setAdapter(mMenuAdapter);
+
+        mMenuAdapter.setViewSelected(0, true);
     }
 
     @Override
@@ -90,14 +92,22 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         getMenuInflater().inflate(R.menu.toolbar_actions, menu);
         MenuItem menuTakeSnap = menu.findItem(R.id.action_take_snap);
         MenuItem menuRefresh = menu.findItem(R.id.action_refresh);
+        MenuItem menuNotifications = menu.findItem(R.id.action_notify_options);
         switch (mCurrFragPos) {
+            case 0:
+                menuTakeSnap.setVisible(false);
+                menuRefresh.setVisible(false);
+                menuNotifications.setVisible(true);
+                break;
             case 1:
                 menuTakeSnap.setVisible(true);
                 menuRefresh.setVisible(true);
+                menuNotifications.setVisible(false);
                 break;
             default:
                 menuTakeSnap.setVisible(false);
                 menuRefresh.setVisible(false);
+                menuNotifications.setVisible(false);
                 break;
         }
         return true;
@@ -112,6 +122,11 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
             case R.id.action_refresh:
                 findFragment(ChartFragment.class).onUpdate();
                 return true;
+            case R.id.action_notify_options:
+                SnapshotsFragment fragment = findFragment(SnapshotsFragment.class);
+                if (fragment != null) {
+                    fragment.onNotificationsDialog();
+                }
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -122,6 +137,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         mCurrFragPos = 10;
         invalidateOptionsMenu();
         mProgressBar.setVisibility(View.VISIBLE);
+        mDuoDrawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
@@ -129,6 +145,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         mCurrFragPos = 1;
         invalidateOptionsMenu();
         mProgressBar.setVisibility(View.GONE);
+        mDuoDrawer.setDrawerLockMode(DuoDrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override

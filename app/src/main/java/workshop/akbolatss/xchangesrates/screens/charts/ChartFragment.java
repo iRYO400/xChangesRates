@@ -271,20 +271,12 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
             mSpinCurrencies.setAdapter(arrayAdapter);
         } else if (adapterView.getId() == mSpinXchanges.getId()) {
 
-            if (Hawk.contains(HAWK_XCHANGE_POS)) {
-                mPresenter.setExchangeModel(mExchangeResponse.getData().get(Hawk.get(HAWK_XCHANGE_POS, 0)));
-            } else {
-                mPresenter.setExchangeModel(mExchangeResponse.getData().get(i));
-            }
-
-            Hawk.put(HAWK_XCHANGE_POS, i);
+            mPresenter.setExchangeModel(mExchangeResponse.getData().get(i));
 
             ArrayAdapter arrayAdapter = new ArrayAdapter<>(adapterView.getContext(), R.layout.custom_spinner_item,
                     mPresenter.getExchangeModel().getCurrencies().keySet().toArray());
             arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             mSpinCoins.setAdapter(arrayAdapter);
-        } else {
-            //nothing to prevent double item selection :)
         }
     }
 
