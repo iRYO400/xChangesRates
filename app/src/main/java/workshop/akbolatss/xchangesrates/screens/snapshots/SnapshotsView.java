@@ -14,7 +14,7 @@ import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
 
 public interface SnapshotsView extends BaseView, LoadingView {
 
-    public void onLoadCharts(List<ChartData> chartDataList);
+    public void getSnapshots(List<ChartData> chartDataList);
 
     public void onLoadChartInfo(ChartDataInfo dataInfo, int pos);
 

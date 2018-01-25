@@ -36,7 +36,7 @@ import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
-import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
+import workshop.akbolatss.xchangesrates.screens.splash.SplashActivity;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 
@@ -51,7 +51,6 @@ public class NotificationService extends Service {
     public static final String NOTIFICATION_CHANNEL_ID = "workshop.akbolatss.xchangesrates.channel";
     public static final String NOTIFICATION_CHANNEL_NAME = "XChanges Rates";
     public static final String NOTIFICATION_CHANNEL_DESCRIPTION = "Description of XChanges Rates";
-
 
     private DBChartRepository mRepository;
     private Context mContext;
@@ -139,7 +138,7 @@ public class NotificationService extends Service {
                                                     .setChannelId(NOTIFICATION_CHANNEL_ID)
                                                     // setting style to DecoratedCustomViewStyle() is necessary for custom views to display
                                                     .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
-                                                    .setContentIntent(PendingIntent.getActivity(mContext, 0, new Intent(mContext, MainActivity.class), 0));
+                                                    .setContentIntent(PendingIntent.getActivity(mContext, 0, new Intent(mContext, SplashActivity.class), 0));
 
                                             NotificationManager notificationManager = (NotificationManager)
                                                     mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -164,7 +163,6 @@ public class NotificationService extends Service {
                                                     notificationManager.createNotificationChannel(mChannel);
                                                 }
                                             }
-
                                             notificationManager.notify(chartData.getId().intValue(), builder.build());
                                         }
                                     })

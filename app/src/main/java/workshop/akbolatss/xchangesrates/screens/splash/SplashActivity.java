@@ -27,7 +27,7 @@ import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_EXCHANGE_RESPONSE;
-import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_FIRST_FRAG;
+import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_FIRST_START;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_CODE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_POS;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_LAST_UPDATE;
@@ -70,10 +70,10 @@ public class SplashActivity extends AppCompatActivity {
 
     private void initDefault() {
 
-        if (!Hawk.contains(HAWK_FIRST_FRAG)) {
+        if (!Hawk.contains(HAWK_FIRST_START)) {
             Hawk.put(HAWK_HISTORY_POS, 0);
             Hawk.put(HAWK_HISTORY_CODE, MINUTES_10);
-            Hawk.put(HAWK_FIRST_FRAG, true);
+            Hawk.put(HAWK_FIRST_START, true);
 
             mRepository.initDefault()
                     .observeOn(AndroidSchedulers.mainThread())

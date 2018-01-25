@@ -1,11 +1,14 @@
 package workshop.akbolatss.xchangesrates.screens.main;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,17 +16,23 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.OnCompleteListener;
 import me.yokeyword.fragmentation.SupportActivity;
 import me.yokeyword.fragmentation.SupportFragment;
 import nl.psdcompany.duonavigationdrawer.views.DuoDrawerLayout;
 import nl.psdcompany.duonavigationdrawer.views.DuoMenuView;
 import nl.psdcompany.duonavigationdrawer.widgets.DuoDrawerToggle;
 import workshop.akbolatss.xchangesrates.R;
+import workshop.akbolatss.xchangesrates.base.LoadingView;
 import workshop.akbolatss.xchangesrates.screens.about.AboutFragment;
 import workshop.akbolatss.xchangesrates.screens.charts.ChartFragment;
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment;
 
-public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuClickListener, ChartFragment.onChartFragmentListener {
+import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOWCASE_2_DONE;
+
+public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuClickListener, LoadingView, SnapshotsFragment.onSnapshotListener {
 
     private MenuAdapter mMenuAdapter;
 
@@ -50,6 +59,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         onInitDrawer();
 
         loadRootFragment(R.id.container, SnapshotsFragment.newInstance());
+//        loadMultipleRootFragment(R.id.container, 0, SnapshotsFragment.newInstance(), ChartFragment.newInstance());
     }
 
     private void onInitDrawer() {
@@ -96,7 +106,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         switch (mCurrFragPos) {
             case 0:
                 menuTakeSnap.setVisible(false);
-                menuRefresh.setVisible(false);
+                menuRefresh.setVisible(true);
                 menuNotifications.setVisible(true);
                 break;
             case 1:
@@ -120,7 +130,14 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
                 findFragment(ChartFragment.class).onSaveSnapshot();
                 return true;
             case R.id.action_refresh:
-                findFragment(ChartFragment.class).onUpdate();
+                if (mCurrFragPos == 1) {
+                    findFragment(ChartFragment.class).onUpdate();
+                } else if (mCurrFragPos == 0) {
+                    SnapshotsFragment fragment = findFragment(SnapshotsFragment.class);
+                    if (fragment != null) {
+                        fragment.onUpdateSnapshots();
+                    }
+                }
                 return true;
             case R.id.action_notify_options:
                 SnapshotsFragment fragment = findFragment(SnapshotsFragment.class);
@@ -149,18 +166,17 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
     }
 
     @Override
+    public void onNoContent(boolean isEmpty) {
+        //Not needed
+    }
+
+    @Override
     public void onOptionClicked(int position, Object objectClicked) {
         switch (position) {
             case 0:
                 SnapshotsFragment snapshotsFragment = findFragment(SnapshotsFragment.class);
                 if (snapshotsFragment == null) {
                     start(SnapshotsFragment.newInstance());
-//                    popTo(SnapshotsFragment.class, false, new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            start(SnapshotsFragment.newInstance());
-//                        }
-//                    });
                 } else {
                     start(snapshotsFragment, SupportFragment.SINGLETASK);
                 }
@@ -183,12 +199,6 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
             case 2:
                 AboutFragment aboutFragment = findFragment(AboutFragment.class);
                 if (aboutFragment == null) {
-//                    popTo(SnapshotsFragment.class, false, new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            start(AboutFragment.newInstance());
-//                        }
-//                    }, getFragmentAnimator().getPopExit());
                     start(AboutFragment.newInstance());
                 } else {
                     start(aboutFragment, SupportFragment.SINGLETASK);
@@ -200,5 +210,67 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
         mDuoDrawer.closeDrawer();
 
         invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onOpenChart() {
+        mDuoDrawer.openDrawer();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onOptionClicked(1, null);
+            }
+        }, 500);
+    }
+
+    public void onShowCase1() {
+        FancyShowCaseQueue showCaseQueue;
+
+        View menu = findViewById(R.id.action_take_snap);
+        FancyShowCaseView showCase1 = new FancyShowCaseView.Builder(this)
+                .focusOn(menu)
+                .title(getResources().getString(R.string.showcase_main_1))
+                .backgroundColor(R.color.colorShowCaseBG)
+                .build();
+
+        FancyShowCaseView showCase2 = new FancyShowCaseView.Builder(this)
+                .title(getResources().getString(R.string.showcase_main_2))
+                .backgroundColor(R.color.colorShowCaseBG)
+                .build();
+
+        showCaseQueue = new FancyShowCaseQueue()
+                .add(showCase1)
+                .add(showCase2);
+
+        showCaseQueue.setCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete() {
+                Hawk.put(HAWK_SHOWCASE_2_DONE, true);
+            }
+        });
+        showCaseQueue.show();
+    }
+
+
+    public void onShowCase2() {
+        FancyShowCaseQueue showCaseQueue;
+
+        View menu = findViewById(R.id.action_notify_options);
+        FancyShowCaseView showCase1 = new FancyShowCaseView.Builder(this)
+                .focusOn(menu)
+                .title(getResources().getString(R.string.showcase_main_3))
+                .backgroundColor(R.color.colorShowCaseBG)
+                .build();
+
+        FancyShowCaseView showCase2 = new FancyShowCaseView.Builder(this)
+                .title(getResources().getString(R.string.showcase_main_4))
+                .backgroundColor(R.color.colorShowCaseBG)
+                .build();
+
+        showCaseQueue = new FancyShowCaseQueue()
+                .add(showCase1)
+                .add(showCase2);
+
+        showCaseQueue.show();
     }
 }

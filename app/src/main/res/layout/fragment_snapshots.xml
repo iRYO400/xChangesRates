@@ -1,4 +1,5 @@
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
@@ -15,7 +16,6 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
             android:visibility="gone" />
 
         <ProgressBar
@@ -32,5 +32,26 @@
             android:text="@string/no_snapshots"
             android:textColor="@color/colorInactive"
             android:visibility="gone" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_add_24dp"
+            android:visibility="gone"
+            app:fab_colorNormal="@color/colorAccentDark"
+            app:fab_colorPressed="@color/colorPrimaryDark"
+            app:fab_colorRipple="#99FFFFFF"
+            app:fab_hideAnimation="@anim/fab_scale_down"
+            app:fab_shadowColor="#66000000"
+            app:fab_shadowRadius="4dp"
+            app:fab_shadowXOffset="1dp"
+            app:fab_shadowYOffset="3dp"
+            app:fab_showAnimation="@anim/fab_scale_up"
+            app:fab_showShadow="true"
+            app:fab_size="normal" />
     </FrameLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

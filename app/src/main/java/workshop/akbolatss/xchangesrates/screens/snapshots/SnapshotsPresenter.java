@@ -56,13 +56,13 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                 .subscribe(new DisposableSingleObserver<List<ChartData>>() {
                     @Override
                     public void onSuccess(List<ChartData> chartData) {
-                        getView().onHideLoading();
                         if (chartData.size() > 0) {
-                            getView().onLoadCharts(chartData);
+                            getView().getSnapshots(chartData);
                             getView().onNoContent(false);
                         } else {
                             getView().onNoContent(true);
                         }
+                        getView().onHideLoading();
                     }
 
                     @Override
@@ -112,10 +112,12 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                     @Override
                     public void onSuccess(ChartDataMapper mapper) {
                         ChartDataInfo dataInfo = mapper.getDataInfo();
-                        dataInfo.setInfoId(data.getChartDataInfo().getInfoId());
+                        dataInfo.setInfoId(data.getId());
                         dataInfo.setId(data.getChartDataInfo().getId());
-                        data.setChartDataInfo(dataInfo);
+
                         List<ChartDataCharts> chartsList = mapper.getChartsList();
+                        data.setCharts(chartsList);
+
                         mRepository.onUpdateChartData(data, dataInfo, chartsList);
 
                         getView().onLoadChart(data, pos);

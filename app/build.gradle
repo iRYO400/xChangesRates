@@ -1,14 +1,16 @@
 apply plugin: 'com.android.application'
 //apply plugin: 'org.greenrobot.greendao' // only when using greendaogenerator
 apply plugin: 'io.fabric'
+
 android {
     compileSdkVersion 26
+    buildToolsVersion "26.0.3"
     defaultConfig {
         applicationId "workshop.akbolatss.xchangesrates"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.5.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -36,6 +38,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
 
+    implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.0'
+
     //MPA Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     //Hawk
@@ -46,6 +50,8 @@ dependencies {
     implementation 'me.yokeyword:fragmentation:1.2.4'
 
     implementation 'com.github.jrvansuita:MaterialAbout:+'
+
+    implementation 'com.github.clans:fab:1.6.4'
 
     //RxJava 2, RxAndroid 2
     implementation 'io.reactivex.rxjava2:rxjava:2.1.2'

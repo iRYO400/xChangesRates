@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +77,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         notifyItemChanged(pos);
     }
 
-    public void onUpdateNotifyState(boolean isActive, String timing, int pos){
+    public void onUpdateNotifyState(boolean isActive, String timing, int pos) {
         ChartData data = mSnapshotModels.get(pos);
         data.setIsActive(isActive);
         data.setTiming(timing);
@@ -91,7 +90,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         notifyItemChanged(pos);
     }
 
-    public void onRemoveSnap(int pos){
+    public void onRemoveSnap(int pos) {
         mSnapshotModels.remove(pos);
         notifyItemRemoved(pos);
     }
@@ -158,11 +157,10 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             frameLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    frameLayout.setClickable(false);
-//                    progressBar.setVisibility(View.VISIBLE);
-//                    date.setVisibility(View.INVISIBLE);
-//                    time.setVisibility(View.INVISIBLE);
-
+                    frameLayout.setEnabled(false);
+                    progressBar.setVisibility(View.VISIBLE);
+                    date.setVisibility(View.INVISIBLE);
+                    time.setVisibility(View.INVISIBLE);
                     listener.onUpdateItem(model, getAdapterPosition());
                 }
             });
@@ -216,6 +214,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
                     .subscribeWith(new DisposableSingleObserver<LineData>() {
                         @Override
                         public void onSuccess(LineData lineData) {
+                            lineChart.clear();
                             lineChart.setData(lineData);
                             lineChart.invalidate();
                         }

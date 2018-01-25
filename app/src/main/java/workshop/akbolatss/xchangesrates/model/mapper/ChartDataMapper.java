@@ -52,6 +52,7 @@ public class ChartDataMapper {
             chartData.setExchange(responseData.getExchange());
             chartData.setSource(responseData.getSource());
             chartData.setIsActive(false);
+            chartData.setIsLoading(false);
             chartData.setTiming(HOUR_24);
         }
         return chartData;

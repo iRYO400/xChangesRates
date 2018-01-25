@@ -12,11 +12,9 @@ public class Constants {
     public static final String DB_SNAPS_NAME = "snapshots-db";
 //    public static final String BASE_URL = "https://api.coindesk.com/v1/bpi/";
 
-    public static final String HAWK_FIRST_FRAG = "IsFirstStart";
+    public static final String HAWK_FIRST_START = "IsFirstStart";
     public static final String HAWK_LAST_UPDATE = "LastUpdateDate";
     public static final String HAWK_EXCHANGE_RESPONSE = "ExchangeResponse";
-
-    public static final String HAWK_XCHANGE_POS = "XchangePosition";
 
 
     public static final String HAWK_HISTORY_CODE = "SelectedHistory";
@@ -41,10 +39,9 @@ public class Constants {
     public static final String BUNDLE_TIMING = "timing";
     public static final String BUNDLE_POSITION = "position";
     public static final String BUNDLE_ISACTIVE = "isActive";
-    public static final String BUNDLE_NOTIFIES_COUNT = "notifiesCount";
 
 
-    public static final String INTENT_REQUEST_CODE = "IntentRequestCode";
-    public static final String INTENT_HOUR = "IntentHour";
-    public static final String INTENT_MINUTE = "IntentMINUTE";
+    public static final String HAWK_SHOWCASE_0_DONE = "showCase0Done";
+    public static final String HAWK_SHOWCASE_1_DONE = "showCase1Done";
+    public static final String HAWK_SHOWCASE_2_DONE = "showCase2Done";
 }

@@ -1,24 +1,23 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:fontFamily">@font/main_font</item>
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
-        <!--<item name="android:fitsSystemWindows">true</item>-->
 
-        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+
+        <item name="android:windowBackground">@null</item>
 
         <item name="android:alertDialogTheme">@style/CustomDialog</item>
     </style>
 
     <style name="CustomDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:colorBackground">@color/colorPrimaryDark</item>
+        <item name="android:colorBackground">@color/colorPrimary</item>
     </style>
 
     <style name="StyleAppName">

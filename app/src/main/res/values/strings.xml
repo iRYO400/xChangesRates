@@ -2,14 +2,23 @@
     <string name="app_name" translatable="false">XChanges Rates</string>
     <string name="my_name" translatable="false">Akbolat Sadvakassov</string>
 
+    <string name="profile_subtitle" translatable="false">Mobile Developer</string>
+    <string name="profile_github" translatable="false">iRYO400</string>
+    <string name="profile_instagram" translatable="false">akbolat.ss</string>
+    <string name="profile_feedback" translatable="false">whitesteel400@gmail.com</string>
+    <string name="profile_more_from_me" translatable="false">iRYO400%27+Workshop</string>
+    <string name="profile_playstore_link" translatable="false">workshop.akbolatss.tagsnews</string>
+    <string name="profile_brief" translatable="false">Self-motivated developer. Have a strong background in Native Mobile Application Development.</string>
+
     <integer name="key_id">0</integer>
     <integer name="key_pos">1</integer>
 
     <string name="tvEquality" translatable="false">=</string>
     <string name="tvDoubleDots" translatable="false">:</string>
+
+
     <string name="tvError">Something goes wrong…</string>
 
-    <string name="snapshot_options">Опции снэпшота</string>
     <string name="no_snapshots">You didn\'t add any snapshot :(</string>
     <string name="toast_saving">Saving snapshot</string>
     <string name="menu_shoot">Take a Snapshot</string>
@@ -40,14 +49,6 @@
         <item>24 hours</item>
     </string-array>
 
-    <string name="profile_subtitle">Mobile Developer</string>
-    <string name="profile_github" translatable="false">iRYO400</string>
-    <string name="profile_instagram" translatable="false">akbolat.ss</string>
-    <string name="profile_feedback" translatable="false">whitesteel400@gmail.com</string>
-    <string name="profile_more_from_me" translatable="false">iRYO400%27+Workshop</string>
-    <string name="profile_playstore_link" translatable="false">workshop.akbolatss.tagsnews</string>
-
-
     <array name="menuOptions">
         <item>Snapshots</item>
         <item>Chart</item>
@@ -57,14 +58,30 @@
     <string name="splash_1">Data updated successfully</string>
     <string name="splash_2">Check your connection and restart app</string>
     <string name="splash_3">Can\'t update. Last update was</string>
-    <string name="profile_brief" translatable="false">Self-motivated developer. Have a strong background in Native Mobile Application Development.</string>
 
-    <string name="alert_save">Сохранить</string>
-    <string name="alert_cancel">Отмена</string>
-    <string name="alert_remove">Удалить</string>
-    <string name="alert_notifies">Настройки уведомлении</string>
-    <string name="alert_snap">Настройки снэпшота</string>
-    <string name="addNotify">Добавить уведомление</string>
-    <string name="tvNotifiesLimit">/5</string>
+    <string name="alert_save">Save</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="alert_remove">Delete</string>
+    <string name="alert_notifies">Notification settings</string>
+    <string name="alert_snap">Snapshot options</string>
+    <string name="addNotify">Add notification</string>
+    <string name="tvNotifiesLimit" translatable="false">/5</string>
+    <string name="tvExchanger">Exchanger</string>
+
+    <string name="showcase_snap_1">Thanks for using XChanges Rate! This is first time You launch app, so let\'s introduce basic functions.</string>
+    <string name="showcase_snap_2">Let\'s add Your first Snapshot. Click here.</string>
+    <string name="showcase_snap_3">Glad that You added! Now click on it and remember next.</string>
+    <string name="showcase_snap_4">One click is to update Snapshot data. Long click is to open Options.</string>
+
+    <string name="showcase_chart_1">This is the main control screen.</string>
+    <string name="showcase_chart_2">There You can select the Exchanger(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
+    <string name="showcase_chart_3">Coin(Bitcoin, Ethereum, etc)&#8230; &#8212;>></string>
+    <string name="showcase_chart_4">and Currency. Of course if it\'s available.</string>
+    <string name="showcase_chart_5">Also set History timestamp for the gorgeous diagram.</string>
+
+    <string name="showcase_main_1">And You can save it for quick access.</string>
+    <string name="showcase_main_2">Try it Yourself.</string>
+    <string name="showcase_main_3">What about notifications, You can set them here.</string>
+    <string name="showcase_main_4">Now You\'re ready to go on.</string>
 
 </resources>

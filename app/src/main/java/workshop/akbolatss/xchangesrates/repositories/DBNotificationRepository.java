@@ -55,37 +55,37 @@ public class DBNotificationRepository implements NotificationRepository {
                 NotificationDao notificationDao = mDaoSession.getNotificationDao();
                 Notification notification = new Notification();
                 notification.setIsActive(false);
-                notification.setName("08:00");
                 notification.setHour(8);
                 notification.setMinute(0);
+                notification.buildName();
                 notificationDao.insert(notification);
 
                 notification = new Notification();
                 notification.setIsActive(false);
-                notification.setName("12:00");
                 notification.setHour(13);
                 notification.setMinute(0);
+                notification.buildName();
                 notificationDao.insert(notification);
 
                 notification = new Notification();
                 notification.setIsActive(false);
-                notification.setName("15:00");
                 notification.setHour(15);
                 notification.setMinute(0);
+                notification.buildName();
                 notificationDao.insert(notification);
 
                 notification = new Notification();
                 notification.setIsActive(false);
-                notification.setName("18:00");
                 notification.setHour(18);
                 notification.setMinute(0);
+                notification.buildName();
                 notificationDao.insert(notification);
 
                 notification = new Notification();
                 notification.setIsActive(false);
-                notification.setName("21:00");
                 notification.setHour(21);
                 notification.setMinute(0);
+                notification.buildName();
                 notificationDao.insert(notification);
                 return true;
             }

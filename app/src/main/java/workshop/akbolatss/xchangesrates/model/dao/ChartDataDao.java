@@ -34,7 +34,8 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
         public final static Property Source = new Property(4, String.class, "source", false, "SOURCE");
         public final static Property IsActive = new Property(5, Boolean.class, "isActive", false, "IS_ACTIVE");
         public final static Property Timing = new Property(6, String.class, "timing", false, "TIMING");
-        public final static Property InfoId = new Property(7, Long.class, "infoId", false, "INFO_ID");
+        public final static Property IsLoading = new Property(7, Boolean.class, "isLoading", false, "IS_LOADING");
+        public final static Property InfoId = new Property(8, Long.class, "infoId", false, "INFO_ID");
     }
 
     private DaoSession daoSession;
@@ -60,7 +61,8 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
                 "\"SOURCE\" TEXT," + // 4: source
                 "\"IS_ACTIVE\" INTEGER," + // 5: isActive
                 "\"TIMING\" TEXT," + // 6: timing
-                "\"INFO_ID\" INTEGER);"); // 7: infoId
+                "\"IS_LOADING\" INTEGER," + // 7: isLoading
+                "\"INFO_ID\" INTEGER);"); // 8: infoId
     }
 
     /** Drops the underlying database table. */
@@ -107,6 +109,11 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
         if (timing != null) {
             stmt.bindString(7, timing);
         }
+ 
+        Boolean isLoading = entity.getIsLoading();
+        if (isLoading != null) {
+            stmt.bindLong(8, isLoading ? 1L: 0L);
+        }
     }
 
     @Override
@@ -147,6 +154,11 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
         if (timing != null) {
             stmt.bindString(7, timing);
         }
+ 
+        Boolean isLoading = entity.getIsLoading();
+        if (isLoading != null) {
+            stmt.bindLong(8, isLoading ? 1L: 0L);
+        }
     }
 
     @Override
@@ -169,7 +181,8 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // currency
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // source
             cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // isActive
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // timing
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // timing
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0 // isLoading
         );
         return entity;
     }
@@ -183,6 +196,7 @@ public class ChartDataDao extends AbstractDao<ChartData, Long> {
         entity.setSource(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setIsActive(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
         entity.setTiming(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setIsLoading(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
      }
     
     @Override

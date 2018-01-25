@@ -3,12 +3,10 @@ package workshop.akbolatss.xchangesrates.screens.charts;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,6 @@ import com.orhanobut.hawk.Hawk;
 import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,29 +36,27 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
+import me.toptas.fancyshowcase.FancyShowCaseQueue;
+import me.toptas.fancyshowcase.FancyShowCaseView;
+import me.toptas.fancyshowcase.OnCompleteListener;
 import me.yokeyword.fragmentation.ISupportFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
+import workshop.akbolatss.xchangesrates.base.LoadingView;
 import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
 import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
+import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_EXCHANGE_RESPONSE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_CODE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_POS;
-import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_XCHANGE_POS;
+import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOWCASE_1_DONE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_1;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_12;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24;
@@ -80,7 +75,7 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
 
     private ChartPresenter mPresenter;
     private Context mContext;
-    private onChartFragmentListener mListener;
+    private LoadingView mListener;
 
     @BindView(R.id.spinCurrencies)
     protected Spinner mSpinCurrencies;
@@ -144,6 +139,56 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
         onInitRV();
         onInitChart();
         onInitSpinner();
+
+        if (!Hawk.get(HAWK_SHOWCASE_1_DONE, false)) {
+            FancyShowCaseQueue showCaseQueue;
+
+            FancyShowCaseView showCase1 = new FancyShowCaseView.Builder(getActivity())
+                    .title(getResources().getString(R.string.showcase_chart_1))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build();
+
+            FancyShowCaseView showCase2 = new FancyShowCaseView.Builder(getActivity())
+                    .focusOn(mSpinXchanges)
+                    .title(getResources().getString(R.string.showcase_chart_2))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build();
+
+            FancyShowCaseView showCase3 = new FancyShowCaseView.Builder(getActivity())
+                    .focusOn(mSpinCoins)
+                    .title(getResources().getString(R.string.showcase_chart_3))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build();
+
+            FancyShowCaseView showCase4 = new FancyShowCaseView.Builder(getActivity())
+                    .focusOn(mSpinCurrencies)
+                    .title(getResources().getString(R.string.showcase_chart_4))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build();
+
+            FancyShowCaseView showCase5 = new FancyShowCaseView.Builder(getActivity())
+                    .focusOn(mRecyclerV)
+                    .title(getResources().getString(R.string.showcase_chart_5))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build();
+
+            showCaseQueue = new FancyShowCaseQueue()
+                    .add(showCase1)
+                    .add(showCase2)
+                    .add(showCase3)
+                    .add(showCase4)
+                    .add(showCase5);
+
+            showCaseQueue.setCompleteListener(new OnCompleteListener() {
+                @Override
+                public void onComplete() {
+                    ((MainActivity) getActivity()).onShowCase1();
+                }
+            });
+
+            showCaseQueue.show();
+            Hawk.put(HAWK_SHOWCASE_1_DONE, true);
+        }
     }
 
     private DaoSession provideDaoSession(Context context) {
@@ -159,6 +204,7 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
         for (int i = 0; i < mExchangeResponse.getData().size(); i++) {
             ids[i] = mExchangeResponse.getData().get(i).getCaption();
         }
+
         ArrayAdapter arrayAdapter = new ArrayAdapter<>(mContext, R.layout.custom_spinner_item, ids);
         arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         mSpinXchanges.setAdapter(arrayAdapter);
@@ -171,12 +217,12 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
         mLineChart.getDescription().setEnabled(false);
         mLineChart.getLegend().setEnabled(false);
         mLineChart.setNoDataTextColor(getResources().getColor(R.color.colorSpinTxt));
-        mLineChart.setMaxVisibleValueCount(12);
+        mLineChart.setMaxVisibleValueCount(16);
 
         IAxisValueFormatter xAxisFormatter = new DateXValueFormatter();
         XAxis xAxis = mLineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setLabelCount(5);
+        xAxis.setLabelCount(4);
         xAxis.setValueFormatter(xAxisFormatter);
         xAxis.setTextColor(getResources().getColor(R.color.colorInactive));
         xAxis.setDrawGridLines(false);
@@ -352,8 +398,8 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onChartFragmentListener) {
-            mListener = (onChartFragmentListener) context;
+        if (context instanceof LoadingView) {
+            mListener = (LoadingView) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement onChartFragmentListener");
@@ -372,11 +418,5 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
         if (mPresenter != null) {
             mPresenter.onViewDetached(this);
         }
-    }
-
-    public interface onChartFragmentListener {
-        void onShowLoading();
-
-        void onHideLoading();
     }
 }

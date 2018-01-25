@@ -156,7 +156,7 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
         notification.setHour(hour);
         notification.setMinute(minute);
         notification.setIsActive(true);
-        notification.setName(hour + ":" + minute);
+        notification.buildName();
         mAdapter.onAddItem(notification);
         mRecyclerV.smoothScrollToPosition(mAdapter.getItemCount() - 1);
     }
@@ -195,7 +195,7 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
 
     private void onActivateNotifications(List<Notification> notificationList) {
         for (int i = 0; i < notificationList.size(); i++) {
-            Log.d("TAG", "Notify " + notificationList.get(i).getName() + " " +notificationList.get(i).getId());
+//            Log.d("TAG", "Notify " + notificationList.get(i).getName() + " " + notificationList.get(i).getId());
             if (notificationList.get(i).getIsActive()) {
                 AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
                 Intent myIntent = new Intent(mContext, NotificationReceiver.class);
@@ -212,12 +212,12 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, notificationList.get(i).getId().intValue(), intent, PendingIntent.FLAG_NO_CREATE);
 
                 if (pendingIntent != null) {
-                    Log.d(TAG, "Not null");
+//                    Log.d(TAG, "Not null");
                     AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
                     amc.cancel(pendingIntent);
                     pendingIntent.cancel();
                 } else {
-                    Log.d(TAG, "Null");
+//                    Log.d(TAG, "Null");
                 }
             }
         }

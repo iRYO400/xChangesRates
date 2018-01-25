@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:paddingBottom="12dp"
     android:paddingEnd="24dp"
@@ -30,7 +29,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="12dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tvAddNotify"

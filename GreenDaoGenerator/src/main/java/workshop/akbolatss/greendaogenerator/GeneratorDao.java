@@ -25,16 +25,13 @@ public class GeneratorDao {
         Entity data = addChartResponseData(schema);
         Entity info = addChartResponseDataInfo(schema);
         Entity charts = addChartResponseDataChart(schema);
-        Entity notify = addNotification(schema);
+        addNotification(schema);
 
         Property infoProp = info.addLongProperty("infoId").getProperty();
         data.addToOne(info, infoProp);
 
         Property chartsProp = charts.addLongProperty("chartsId").getProperty();
         data.addToMany(charts, chartsProp, "charts");
-
-        Property notifyProp = notify.addLongProperty("notificationId").getProperty();
-        data.addToMany(notify, notifyProp);
     }
 
 
@@ -47,6 +44,7 @@ public class GeneratorDao {
         data.addStringProperty("source");
         data.addBooleanProperty("isActive");
         data.addStringProperty("timing");
+        data.addBooleanProperty("isLoading");
         return data;
     }
 

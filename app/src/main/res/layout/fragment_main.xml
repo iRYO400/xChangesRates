@@ -28,9 +28,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLines="1"
                 android:background="@drawable/bg_txt"
                 android:gravity="center_horizontal"
-                android:text="Exchanger"
+                android:text="@string/tvExchanger"
                 android:textColor="@color/colorSpinTxt"
                 android:textSize="@dimen/txtExchange" />
 

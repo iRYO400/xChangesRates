@@ -59,11 +59,11 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         Notification notification = mNotifications.get(itemPos);
         notification.setHour(hour);
         notification.setMinute(minute);
-        notification.setName(hour + ":" + minute);
+        notification.buildName();
         mNotifications.set(itemPos, notification);
-//        notifyItemChanged(itemPos);
-        notifyDataSetChanged();
-        Log.d("TAG", "onUpdateTime");
+        notifyItemChanged(itemPos);
+//        notifyDataSetChanged();
+//        Log.d("TAG", "onUpdateTime");
     }
 
     public void onUpdateState(boolean isActive, int itemPos) {
@@ -71,7 +71,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         notification.setIsActive(isActive);
         mNotifications.set(itemPos, notification);
 //        notifyItemChanged(itemPos);
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
     }
 
     public void onRemoveTime(int itemPos) {
@@ -128,7 +128,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    listener.onStateChanged(getAdapterPosition(), isChecked);
+                    onUpdateState(isChecked, getAdapterPosition());
+//                    listener.onStateChanged(getAdapterPosition(), isChecked);
                 }
             });
 
@@ -139,13 +140,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 }
             });
 
-            frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    listener.onRemoveTime(getAdapterPosition());
-                    return true;
-                }
-            });
+//            frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    listener.onRemoveTime(getAdapterPosition());
+//                    return false;
+//                }
+//            });
         }
     }
 }

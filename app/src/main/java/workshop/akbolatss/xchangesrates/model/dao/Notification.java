@@ -21,7 +21,6 @@ public class Notification {
     private Integer hour;
     private Integer minute;
     private Boolean isActive;
-    private Long notificationId;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -35,13 +34,12 @@ public class Notification {
     }
 
     @Generated
-    public Notification(Long id, String name, Integer hour, Integer minute, Boolean isActive, Long notificationId) {
+    public Notification(Long id, String name, Integer hour, Integer minute, Boolean isActive) {
         this.id = id;
         this.name = name;
         this.hour = hour;
         this.minute = minute;
         this.isActive = isActive;
-        this.notificationId = notificationId;
     }
 
     public Long getId() {
@@ -84,18 +82,18 @@ public class Notification {
         this.isActive = isActive;
     }
 
-    public Long getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(Long notificationId) {
-        this.notificationId = notificationId;
-    }
-
     // KEEP METHODS - put your custom methods here
     // KEEP METHODS END
 
     public void buildName(){
+        String sHour = getHour().toString();
+        if (getHour() < 10){
+            sHour = "0" + sHour;
+        }
+        String sMin = getMinute().toString();
+        if (getMinute() < 10){
+            sMin = "0" + sMin;
+        }
+        setName(sHour + ":" + sMin);
     }
-
 }

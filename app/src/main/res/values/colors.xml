@@ -3,10 +3,12 @@
     <color name="colorPrimary">#3A4652</color>
     <color name="colorPrimaryDark">#2C3641</color>
     <color name="colorAccent">#61F5FF</color>
+    <color name="colorAccentDark">#26C6DA</color>
 
     <color name="colorInactive">#6D7C8C</color>
     <color name="colorChartXY">#a3b9d1</color>
 
+    <color name="colorShowCaseBG">#FF2C3641</color>
 
     <color name="colorEditTxtBg">#2C3641</color>
 

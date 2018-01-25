@@ -29,16 +29,13 @@ public class ChartData {
     private String source;
     private Boolean isActive;
     private String timing;
+    private Boolean isLoading;
 
-    /**
-     * Used to resolve relations
-     */
+    /** Used to resolve relations */
     @Generated
     private transient DaoSession daoSession;
 
-    /**
-     * Used for active entity operations.
-     */
+    /** Used for active entity operations. */
     @Generated
     private transient ChartDataDao myDao;
 
@@ -49,14 +46,9 @@ public class ChartData {
     private transient Long chartDataInfo__resolvedKey;
 
     @ToMany(joinProperties = {
-            @JoinProperty(name = "id", referencedName = "chartsId")
+        @JoinProperty(name = "id", referencedName = "chartsId")
     })
     private List<ChartDataCharts> charts;
-
-    @ToMany(joinProperties = {
-            @JoinProperty(name = "id", referencedName = "notificationId")
-    })
-    private List<Notification> notificationList;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -70,7 +62,7 @@ public class ChartData {
     }
 
     @Generated
-    public ChartData(Long id, String exchange, String coin, String currency, String source, Boolean isActive, String timing) {
+    public ChartData(Long id, String exchange, String coin, String currency, String source, Boolean isActive, String timing, Boolean isLoading) {
         this.id = id;
         this.exchange = exchange;
         this.coin = coin;
@@ -78,11 +70,10 @@ public class ChartData {
         this.source = source;
         this.isActive = isActive;
         this.timing = timing;
+        this.isLoading = isLoading;
     }
 
-    /**
-     * called by internal mechanisms, do not call yourself.
-     */
+    /** called by internal mechanisms, do not call yourself. */
     @Generated
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
@@ -145,9 +136,15 @@ public class ChartData {
         this.timing = timing;
     }
 
-    /**
-     * To-one relationship, resolved on first access.
-     */
+    public Boolean getIsLoading() {
+        return isLoading;
+    }
+
+    public void setIsLoading(Boolean isLoading) {
+        this.isLoading = isLoading;
+    }
+
+    /** To-one relationship, resolved on first access. */
     @Generated
     public ChartDataInfo getChartDataInfo() {
         Long __key = chartDataInfo.getId();
@@ -157,7 +154,7 @@ public class ChartData {
             ChartDataInfo chartDataInfoNew = targetDao.load(__key);
             synchronized (this) {
                 chartDataInfo = chartDataInfoNew;
-                chartDataInfo__resolvedKey = __key;
+            	chartDataInfo__resolvedKey = __key;
             }
         }
         return chartDataInfo;
@@ -193,9 +190,7 @@ public class ChartData {
         }
     }
 
-    /**
-     * To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity.
-     */
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
     @Generated
     public List<ChartDataCharts> getCharts() {
         if (charts == null) {
@@ -203,7 +198,7 @@ public class ChartData {
             ChartDataChartsDao targetDao = daoSession.getChartDataChartsDao();
             List<ChartDataCharts> chartsNew = targetDao._queryChartData_Charts(id);
             synchronized (this) {
-                if (charts == null) {
+                if(charts == null) {
                     charts = chartsNew;
                 }
             }
@@ -211,44 +206,16 @@ public class ChartData {
         return charts;
     }
 
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
     @Generated
     public synchronized void resetCharts() {
         charts = null;
     }
 
     /**
-     * To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity.
-     */
-    @Generated
-    public List<Notification> getNotificationList() {
-        if (notificationList == null) {
-            __throwIfDetached();
-            NotificationDao targetDao = daoSession.getNotificationDao();
-            List<Notification> notificationListNew = targetDao._queryChartData_NotificationList(id);
-            synchronized (this) {
-                if (notificationList == null) {
-                    notificationList = notificationListNew;
-                }
-            }
-        }
-        return notificationList;
-    }
-
-    /**
-     * Resets a to-many relationship, making the next get call to query for a fresh result.
-     */
-    @Generated
-    public synchronized void resetNotificationList() {
-        notificationList = null;
-    }
-
-    /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
-     * Entity must attached to an entity context.
-     */
+    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+    * Entity must attached to an entity context.
+    */
     @Generated
     public void delete() {
         __throwIfDetached();
@@ -256,9 +223,9 @@ public class ChartData {
     }
 
     /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
-     * Entity must attached to an entity context.
-     */
+    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+    * Entity must attached to an entity context.
+    */
     @Generated
     public void update() {
         __throwIfDetached();
@@ -266,9 +233,9 @@ public class ChartData {
     }
 
     /**
-     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
-     * Entity must attached to an entity context.
-     */
+    * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+    * Entity must attached to an entity context.
+    */
     @Generated
     public void refresh() {
         __throwIfDetached();
@@ -285,4 +252,9 @@ public class ChartData {
     // KEEP METHODS - put your custom methods here
     // KEEP METHODS END
 
+
+    public void setCharts(List<ChartDataCharts> charts) {
+        resetCharts();
+        this.charts = charts;
+    }
 }
