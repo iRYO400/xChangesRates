@@ -4,7 +4,9 @@ mainClassName = "workshop.akbolatss.greendaogenerator.GeneratorDao"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'org.greenrobot:greendao-generator:3.2.2'
+    implementation 'org.greenrobot:greendao-generator:3.2.0'
+    //GreenDAO
+    implementation 'org.greenrobot:greendao:3.2.0'
 }
 
 sourceCompatibility = "1.7"

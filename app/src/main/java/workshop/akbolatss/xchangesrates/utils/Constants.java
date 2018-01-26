@@ -9,7 +9,7 @@ public class Constants {
 
     public static final String DEBUG_TAG = "DE_TAG";
     public static final String BASE_URL = "http://bitcoinstat.org/api_v3/";
-    public static final String DB_SNAPS_NAME = "snapshots-db";
+    public static final String DB_SNAPS_NAME = "xchanges_rates.db";
 //    public static final String BASE_URL = "https://api.coindesk.com/v1/bpi/";
 
     public static final String HAWK_FIRST_START = "IsFirstStart";

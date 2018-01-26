@@ -4,7 +4,9 @@ package workshop.akbolatss.greendaogenerator;
 import org.greenrobot.greendao.generator.DaoGenerator;
 import org.greenrobot.greendao.generator.Entity;
 import org.greenrobot.greendao.generator.Property;
+import org.greenrobot.greendao.generator.PropertyType;
 import org.greenrobot.greendao.generator.Schema;
+import org.greenrobot.greendao.generator.ToMany;
 
 public class GeneratorDao {
 
@@ -27,11 +29,21 @@ public class GeneratorDao {
         Entity charts = addChartResponseDataChart(schema);
         addNotification(schema);
 
-        Property infoProp = info.addLongProperty("infoId").getProperty();
-        data.addToOne(info, infoProp);
+        Property dataIdForInfo = info.addLongProperty("dataId").notNull().getProperty();
+        Property infoIdForData = data.addLongProperty("infoId").notNull().getProperty();
+        Property dataIdForCharts = charts.addLongProperty("dataId").notNull().getProperty();
 
-        Property chartsProp = charts.addLongProperty("chartsId").getProperty();
-        data.addToMany(charts, chartsProp, "charts");
+        info.addToOne(data, dataIdForInfo, "data"); // one-to-one (data.getInfo)
+        data.addToOne(info, infoIdForData, "info");
+
+        ToMany dataIdToCharts = data.addToMany(charts, dataIdForCharts);
+        dataIdToCharts.setName("charts");
+//        Property infoProp = info.addLongProperty("dataId").notNull().getProperty();
+//        Property dataProp = data.addLongProperty("infoId").getProperty();
+//        data.addToOne(info, infoProp, "info");
+
+//        Property chartsProp = charts.addLongProperty("dataId").notNull().getProperty();
+//        data.addToMany(charts, chartsProp, "charts");
     }
 
 

@@ -69,7 +69,7 @@ public class DaoMaster extends AbstractDaoMaster {
     /**
      * Calls {@link #createAllTables(Database, boolean)} in {@link #onCreate(Database)} -
      */
-    public static abstract class OpenHelper extends DatabaseOpenHelper {
+        public static abstract class OpenHelper extends DatabaseOpenHelper {
         public OpenHelper(Context context, String name) {
             super(context, name, SCHEMA_VERSION);
         }

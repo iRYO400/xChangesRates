@@ -31,6 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.R;
+import workshop.akbolatss.xchangesrates.app.ApplicationMain;
 import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
 import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.model.dao.Notification;
@@ -81,7 +82,7 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
         View view = layoutInflater.inflate(R.layout.fragment_notifications, null);
         unbinder = ButterKnife.bind(this, view);
 
-        mRepository = new DBNotificationRepository(provideDaoSession(getActivity()));
+        mRepository = new DBNotificationRepository(((ApplicationMain) getActivity().getApplication()).getDaoSession());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.CustomDialog);
         alertDialogBuilder.setView(view);
@@ -142,12 +143,6 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
     @Override
     public void onRemoveTime(int pos) {
         mAdapter.onRemoveTime(pos);
-    }
-
-    private DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
-        Database db = helper.getWritableDb();
-        return new DaoMaster(db).newSession();
     }
 
     @Override

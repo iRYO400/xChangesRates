@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.screens.splash;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.orhanobut.hawk.Hawk;
-
-import org.greenrobot.greendao.database.Database;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -19,13 +16,10 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
-import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
-import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse;
 import workshop.akbolatss.xchangesrates.repositories.DBNotificationRepository;
 import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
 
-import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_EXCHANGE_RESPONSE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_FIRST_START;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_CODE;
@@ -46,10 +40,9 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        mRepository = new DBNotificationRepository(provideDaoSession(this));
-
         unbinder = ButterKnife.bind(this);
+
+        mRepository = new DBNotificationRepository(((ApplicationMain) getApplication()).getDaoSession());
 
         countDownTimer = new CountDownTimer(700, 1000) {
             @Override
@@ -134,12 +127,6 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
-        Database db = helper.getWritableDb();
-        return new DaoMaster(db).newSession();
     }
 
     @Override

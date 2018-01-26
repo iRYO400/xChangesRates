@@ -2,7 +2,6 @@ package workshop.akbolatss.xchangesrates.app;
 
 import android.app.Application;
 import android.util.ArrayMap;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.orhanobut.hawk.Hawk;
 
+import org.greenrobot.greendao.database.Database;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,15 +25,17 @@ import java.util.concurrent.TimeUnit;
 import me.yokeyword.fragmentation.BuildConfig;
 import me.yokeyword.fragmentation.Fragmentation;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import workshop.akbolatss.xchangesrates.model.ExchangeModel;
+import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
+import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.networking.APIService;
+import workshop.akbolatss.xchangesrates.repositories.DBOpenHelper;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.BASE_URL;
-import static workshop.akbolatss.xchangesrates.utils.Constants.DEBUG_TAG;
+import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -42,15 +44,21 @@ import static workshop.akbolatss.xchangesrates.utils.Constants.DEBUG_TAG;
 
 public class ApplicationMain extends Application {
 
+    private static final boolean ENCRYPTED = false;
+
     private Retrofit mRetrofit;
 
     private static APIService mAPIService;
+
+    private DaoSession mDaoSession;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         Hawk.init(getApplicationContext()).build();
+
+        mDaoSession = provideDaoSession();
 
         // Gson кастомизация
         Gson gson = new GsonBuilder()
@@ -113,6 +121,16 @@ public class ApplicationMain extends Application {
                 .install();
 
         mAPIService = mRetrofit.create(APIService.class);
+    }
+
+    private DaoSession provideDaoSession() {
+        DBOpenHelper helper = new DBOpenHelper(this, DB_SNAPS_NAME);
+        Database db = ENCRYPTED ? helper.getEncryptedWritableDb("super-secret") : helper.getWritableDb();
+        return new DaoMaster(db).newSession();
+    }
+
+    public DaoSession getDaoSession() {
+        return mDaoSession;
     }
 
     public static APIService getAPIService() {

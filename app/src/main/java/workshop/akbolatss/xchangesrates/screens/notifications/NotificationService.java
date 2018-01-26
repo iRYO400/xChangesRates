@@ -15,8 +15,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-import org.greenrobot.greendao.database.Database;
-
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +34,7 @@ import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
+import workshop.akbolatss.xchangesrates.repositories.DBOpenHelper;
 import workshop.akbolatss.xchangesrates.screens.splash.SplashActivity;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
@@ -194,9 +193,7 @@ public class NotificationService extends Service {
     }
 
     private DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
-        Database db = helper.getWritableDb();
-        return new DaoMaster(db).newSession();
+        return new DaoMaster(new DBOpenHelper(context, DB_SNAPS_NAME).getWritableDb()).newSession();
     }
 
     @Override

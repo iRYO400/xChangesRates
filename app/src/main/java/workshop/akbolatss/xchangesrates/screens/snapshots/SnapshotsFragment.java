@@ -81,7 +81,7 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
         View view = inflater.inflate(R.layout.fragment_snapshots, container, false);
         unbinder = ButterKnife.bind(this, view);
 
-        mPresenter = new SnapshotsPresenter(new DBChartRepository(provideDaoSession(container.getContext()),
+        mPresenter = new SnapshotsPresenter(new DBChartRepository(((ApplicationMain) getActivity().getApplication()).getDaoSession(),
                 ApplicationMain.getAPIService()));
 
         return view;
@@ -130,12 +130,6 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
             showCaseQueue.show();
             Hawk.put(HAWK_SHOWCASE_0_DONE, true);
         }
-    }
-
-    private DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
-        Database db = helper.getWritableDb();
-        return new DaoMaster(db).newSession();
     }
 
     @Override

@@ -124,7 +124,7 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
         ButterKnife.bind(this, view);
         mContext = container.getContext();
 
-        mPresenter = new ChartPresenter(new DBChartRepository(provideDaoSession(container.getContext()),
+        mPresenter = new ChartPresenter(new DBChartRepository(((ApplicationMain) getActivity().getApplication()).getDaoSession(),
                 ApplicationMain.getAPIService()));
 
         return view;
@@ -189,12 +189,6 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
             showCaseQueue.show();
             Hawk.put(HAWK_SHOWCASE_1_DONE, true);
         }
-    }
-
-    private DaoSession provideDaoSession(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, DB_SNAPS_NAME);
-        Database db = helper.getWritableDb();
-        return new DaoMaster(db).newSession();
     }
 
     private void onInitSpinner() {
