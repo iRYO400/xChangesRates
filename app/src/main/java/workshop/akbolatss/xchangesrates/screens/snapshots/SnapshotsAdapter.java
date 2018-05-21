@@ -1,6 +1,7 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +30,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.R;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataCharts;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -40,7 +41,7 @@ import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
 
 public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.SnapshotsVH> {
 
-    private List<ChartData> mSnapshotModels;
+    private List<Snapshot> mSnapshotModels;
     private onSnapshotClickListener mListener;
 
     public SnapshotsAdapter(onSnapshotClickListener mListener) {
@@ -60,7 +61,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         holder.bind(mSnapshotModels.get(position), mListener);
     }
 
-    public void onAddItems(List<ChartData> modelList) {
+    public void onAddItems(List<Snapshot> modelList) {
         if (modelList != null) {
             mSnapshotModels.clear();
             mSnapshotModels.addAll(modelList);
@@ -68,25 +69,25 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
         }
     }
 
-    public List<ChartData> getSnapshotModels() {
+    public List<Snapshot> getSnapshotModels() {
         return mSnapshotModels;
     }
 
-    public void onUpdateSnapshot(ChartData data, int pos) {
+    public void onUpdateSnapshot(Snapshot data, int pos) {
         mSnapshotModels.set(pos, data);
         notifyItemChanged(pos);
     }
 
     public void onUpdateNotifyState(boolean isActive, String timing, int pos) {
-        ChartData data = mSnapshotModels.get(pos);
-        data.setIsActive(isActive);
+        Snapshot data = mSnapshotModels.get(pos);
+        data.setIsActiveForGlobal(isActive);
         data.setTiming(timing);
         mSnapshotModels.set(pos, data);
         notifyItemChanged(pos);
     }
 
-    public void onUpdateInfo(ChartDataInfo dataInfo, int pos) {
-        mSnapshotModels.get(pos).setChartDataInfo(dataInfo);
+    public void onUpdateInfo(SnapshotInfo info, int pos) {
+        mSnapshotModels.get(pos).setInfo(info);
         notifyItemChanged(pos);
     }
 
@@ -105,7 +106,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
 
     public interface onSnapshotClickListener {
 
-        public void onUpdateItem(ChartData model, int pos);
+        public void onUpdateItem(Snapshot model, int pos);
 
         public void onGetInfo(long key, int pos);
 
@@ -143,12 +144,12 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             onInitChart();
         }
 
-        public void bind(final ChartData model, final onSnapshotClickListener listener) {
+        public void bind(final Snapshot model, final onSnapshotClickListener listener) {
             String s = model.getCoin() + "/" + model.getCurrency();
             name.setText(s);
             exchanger.setText(model.getExchange());
 
-            if (model.getIsActive()) {
+            if (model.getIsActiveForGlobal()) {
                 imgNotifyState.setImageResource(R.drawable.ic_notifications_active_24dp);
             } else {
                 imgNotifyState.setImageResource(R.drawable.ic_notifications_inactive24dp);
@@ -158,6 +159,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
                 @Override
                 public void onClick(View v) {
                     frameLayout.setEnabled(false);
+                    frameLayout.setClickable(false);
                     progressBar.setVisibility(View.VISIBLE);
                     date.setVisibility(View.INVISIBLE);
                     time.setVisibility(View.INVISIBLE);
@@ -168,14 +170,14 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             frameLayout.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    listener.onOpenOptions(model.getId(), model.getIsActive(), model.getTiming(), getAdapterPosition());
+                    listener.onOpenOptions(model.getId(), model.getIsActiveForGlobal(), model.getTiming(), getAdapterPosition());
                     return true;
                 }
             });
 
 
             if (!model.isInfoNull()) {
-                bindInfo(model.getChartDataInfo());
+                bindInfo(model.getInfo());
             } else {
                 listener.onGetInfo(model.getId(), getAdapterPosition());
             }
@@ -183,7 +185,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             bindChart(model.getCharts());
         }
 
-        public void bindInfo(ChartDataInfo dataInfo) {
+        public void bindInfo(SnapshotInfo dataInfo) {
             currRate.setText(dataInfo.getLast());
             highRate.setText(dataInfo.getHigh());
             lowRate.setText(dataInfo.getLow());
@@ -206,9 +208,9 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
             yAxis1.setEnabled(false);
         }
 
-        private void bindChart(List<ChartDataCharts> chartsList) {
+        private void bindChart(List<SnapshotChart> chartsList) {
             rxCalculate(chartsList)
-                    .delay(2000, TimeUnit.MILLISECONDS)
+                    .delay(1500, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribeWith(new DisposableSingleObserver<LineData>() {
@@ -226,7 +228,7 @@ public class SnapshotsAdapter extends RecyclerView.Adapter<SnapshotsAdapter.Snap
                     });
         }
 
-        private Single<LineData> rxCalculate(final List<ChartDataCharts> chartsList) {
+        private Single<LineData> rxCalculate(final List<SnapshotChart> chartsList) {
             return Single.fromCallable(new Callable<LineData>() {
                 @Override
                 public LineData call() throws Exception {

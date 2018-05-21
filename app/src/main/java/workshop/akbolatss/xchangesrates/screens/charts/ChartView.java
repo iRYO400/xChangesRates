@@ -2,7 +2,6 @@ package workshop.akbolatss.xchangesrates.screens.charts;
 
 import workshop.akbolatss.xchangesrates.base.BaseView;
 import workshop.akbolatss.xchangesrates.base.LoadingView;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 
 /**
@@ -12,5 +11,5 @@ import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 
 public interface ChartView extends BaseView, LoadingView {
 
-    public void onLoadLineChart(ChartResponseData chartData);
+    void onLoadLineChart(ChartResponseData chartData);
 }

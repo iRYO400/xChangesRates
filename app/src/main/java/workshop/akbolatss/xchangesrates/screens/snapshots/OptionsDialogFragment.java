@@ -116,7 +116,7 @@ public class OptionsDialogFragment extends DialogFragment {
                 OptionsDialogListener mListener = (OptionsDialogListener) getTargetFragment();
                 long chartId = getArguments().getLong(BUNDLE_CHART_ID);
                 int pos = getArguments().getInt(BUNDLE_POSITION);
-                mListener.onRemoveSnapshot(chartId, pos);
+                mListener.onRemove(chartId, pos);
             }
         });
 
@@ -152,7 +152,7 @@ public class OptionsDialogFragment extends DialogFragment {
     public interface OptionsDialogListener {
         void onSaveChanges(long chartId, boolean isActive, String timing, int pos);
 
-        void onRemoveSnapshot(long chartId, int pos);
+        void onRemove(long chartId, int pos);
     }
 
     private String getTimingCode() {

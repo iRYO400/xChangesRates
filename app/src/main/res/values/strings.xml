@@ -64,7 +64,7 @@
     <string name="alert_remove">Delete</string>
     <string name="alert_notifies">Notification settings</string>
     <string name="alert_snap">Snapshot options</string>
-    <string name="addNotify">Add notification</string>
+    <string name="addNotify">Add snapshotNotification</string>
     <string name="tvNotifiesLimit" translatable="false">/5</string>
     <string name="tvExchanger">Exchanger</string>
 

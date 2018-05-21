@@ -1,7 +1,6 @@
 package workshop.akbolatss.xchangesrates.screens.notifications;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import workshop.akbolatss.xchangesrates.R;
-import workshop.akbolatss.xchangesrates.model.dao.Notification;
+import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -25,7 +24,7 @@ import workshop.akbolatss.xchangesrates.model.dao.Notification;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdapter.NotificationsVH> {
 
-    private List<Notification> mNotifications;
+    private List<GlobalNotification> mNotifications;
 
     private NotificationListener mListener;
 
@@ -41,13 +40,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         return new NotificationsVH(view);
     }
 
-    public void onAddItem(Notification notification) {
+    public void onAddItem(GlobalNotification notification) {
         mNotifications.add(notification);
 //        notifyItemInserted(mNotifications.size());
         notifyDataSetChanged();
     }
 
-    public void onAddItems(List<Notification> list) {
+    public void onAddItems(List<GlobalNotification> list) {
         if (list != null) {
             mNotifications.clear();
             mNotifications.addAll(list);
@@ -56,9 +55,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public void onUpdateTime(int hour, int minute, int itemPos) {
-        Notification notification = mNotifications.get(itemPos);
+        GlobalNotification notification = mNotifications.get(itemPos);
         notification.setHour(hour);
-        notification.setMinute(minute);
+        notification.setMinutes(minute);
         notification.buildName();
         mNotifications.set(itemPos, notification);
         notifyItemChanged(itemPos);
@@ -67,7 +66,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     public void onUpdateState(boolean isActive, int itemPos) {
-        Notification notification = mNotifications.get(itemPos);
+        GlobalNotification notification = mNotifications.get(itemPos);
         notification.setIsActive(isActive);
         mNotifications.set(itemPos, notification);
 //        notifyItemChanged(itemPos);
@@ -94,7 +93,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         }
     }
 
-    public List<Notification> getNotifications() {
+    public List<GlobalNotification> getNotifications() {
         return mNotifications;
     }
 
@@ -120,7 +119,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
             ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Notification notification, final NotificationListener listener) {
+        public void bind(GlobalNotification notification, final NotificationListener listener) {
 
             timing.setText(notification.getName());
             checkBox.setChecked(notification.getIsActive());
@@ -129,7 +128,6 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     onUpdateState(isChecked, getAdapterPosition());
-//                    listener.onStateChanged(getAdapterPosition(), isChecked);
                 }
             });
 

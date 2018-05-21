@@ -10,9 +10,9 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.base.BasePresenter;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataCharts;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
@@ -25,12 +25,12 @@ import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
 
 public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
 
-    private DBChartRepository mRepository;
+    DBChartRepository mRepository;
 
     @NonNull
     private CompositeDisposable mCompositeDisposable;
 
-    public SnapshotsPresenter(DBChartRepository mRepository) {
+    SnapshotsPresenter(DBChartRepository mRepository) {
         this.mRepository = mRepository;
     }
 
@@ -53,11 +53,11 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
         mRepository.getAllChartData()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableSingleObserver<List<ChartData>>() {
+                .subscribe(new DisposableSingleObserver<List<Snapshot>>() {
                     @Override
-                    public void onSuccess(List<ChartData> chartData) {
+                    public void onSuccess(List<Snapshot> chartData) {
                         if (chartData.size() > 0) {
-                            getView().getSnapshots(chartData);
+                            getView().onLoadSnapshots(chartData);
                             getView().onNoContent(false);
                         } else {
                             getView().onNoContent(true);
@@ -76,10 +76,10 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
         mCompositeDisposable.add(mRepository.getChartDataInfo(key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<ChartDataInfo>() {
+                .subscribeWith(new DisposableSingleObserver<SnapshotInfo>() {
                     @Override
-                    public void onSuccess(ChartDataInfo dataInfo) {
-                        getView().onLoadChartInfo(dataInfo, pos);
+                    public void onSuccess(SnapshotInfo dataInfo) {
+                        getView().onLoadInfo(dataInfo, pos);
                     }
 
                     @Override
@@ -88,12 +88,12 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                 }));
     }
 
-    public void onUpdateSnapshot(final ChartData data, final int pos) {
+    public void onUpdateSnapshot(final Snapshot snapshot, final int pos) {
         mCompositeDisposable.add(mRepository.getSnapshot(
-                data.getCoin(),
-                data.getExchange(),
-                data.getCurrency(),
-                data.getTiming()
+                snapshot.getCoin(),
+                snapshot.getExchange(),
+                snapshot.getCurrency(),
+                snapshot.getTiming()
         ).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ChartResponse, ChartResponseData>() {
@@ -111,16 +111,16 @@ public class SnapshotsPresenter extends BasePresenter<SnapshotsView> {
                 .subscribeWith(new DisposableSingleObserver<ChartDataMapper>() {
                     @Override
                     public void onSuccess(ChartDataMapper mapper) {
-                        ChartDataInfo dataInfo = mapper.getDataInfo();
-                        dataInfo.setInfoId(data.getId());
-                        dataInfo.setId(data.getChartDataInfo().getId());
+                        SnapshotInfo dataInfo = mapper.getDataInfo();
+                        dataInfo.setSnapshotId(snapshot.getId());
+                        dataInfo.setId(snapshot.getInfoId()); //TODO: getInfo().getId() or getInfoId() you should test that
 
-                        List<ChartDataCharts> chartsList = mapper.getChartsList();
-                        data.setCharts(chartsList);
+                        List<SnapshotChart> chartsList = mapper.getChartsList();
+                        snapshot.setCharts(chartsList);
 
-                        mRepository.onUpdateChartData(data, dataInfo, chartsList);
+                        mRepository.onUpdateChartData(snapshot, dataInfo, chartsList);
 
-                        getView().onLoadChart(data, pos);
+                        getView().onLoadChart(snapshot, pos);
                         getView().onHideLoading();
                     }
 

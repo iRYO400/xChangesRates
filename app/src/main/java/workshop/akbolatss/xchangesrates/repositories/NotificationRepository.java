@@ -3,7 +3,7 @@ package workshop.akbolatss.xchangesrates.repositories;
 import java.util.List;
 
 import io.reactivex.Single;
-import workshop.akbolatss.xchangesrates.model.dao.Notification;
+import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -12,7 +12,7 @@ import workshop.akbolatss.xchangesrates.model.dao.Notification;
 
 interface NotificationRepository {
 
-    public Single<List<Notification>> getAllNotifications();
+    public Single<List<GlobalNotification>> getAllNotifications();
 
     public Single<Boolean> initDefault();
 }

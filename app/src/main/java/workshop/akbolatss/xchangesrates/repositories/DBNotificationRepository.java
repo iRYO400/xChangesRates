@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
-import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
-import workshop.akbolatss.xchangesrates.model.dao.Notification;
-import workshop.akbolatss.xchangesrates.model.dao.NotificationDao;
+import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification;
+import workshop.akbolatss.xchangesrates.model.dao.GlobalNotificationDao;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -16,34 +15,34 @@ import workshop.akbolatss.xchangesrates.model.dao.NotificationDao;
 
 public class DBNotificationRepository implements NotificationRepository {
 
-    private DaoSession mDaoSession;
+    DaoSession mDaoSession;
 
     public DBNotificationRepository(DaoSession mDaoSession) {
         this.mDaoSession = mDaoSession;
     }
 
     @Override
-    public Single<List<Notification>> getAllNotifications() {
-        return Single.fromCallable(new Callable<List<Notification>>() {
+    public Single<List<GlobalNotification>> getAllNotifications() {
+        return Single.fromCallable(new Callable<List<GlobalNotification>>() {
             @Override
-            public List<Notification> call() throws Exception {
-                NotificationDao notificationDao = mDaoSession.getNotificationDao();
+            public List<GlobalNotification> call() throws Exception {
+                GlobalNotificationDao notificationDao = mDaoSession.getGlobalNotificationDao();
                 return notificationDao.loadAll();
             }
         });
     }
 
-    public Single<List<Notification>> onSaveChanges(final List<Notification> notificationList) {
-        return Single.fromCallable(new Callable<List<Notification>>() {
+    public Single<List<GlobalNotification>> onSaveChanges(final List<GlobalNotification> globalNotifications) {
+        return Single.fromCallable(new Callable<List<GlobalNotification>>() {
             @Override
-            public List<Notification> call() throws Exception {
-                NotificationDao notificationDao = mDaoSession.getNotificationDao();
+            public List<GlobalNotification> call() throws Exception {
+                GlobalNotificationDao notificationDao = mDaoSession.getGlobalNotificationDao();
                 notificationDao.deleteAll();
 
-                for (int i = 0; i < notificationList.size(); i++){
-                    notificationDao.insert(notificationList.get(i));
+                for (int i = 0; i < globalNotifications.size(); i++){
+                    notificationDao.insert(globalNotifications.get(i));
                 }
-                return notificationList;
+                return globalNotifications;
             }
         });
     }
@@ -52,41 +51,41 @@ public class DBNotificationRepository implements NotificationRepository {
         return Single.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                NotificationDao notificationDao = mDaoSession.getNotificationDao();
-                Notification notification = new Notification();
-                notification.setIsActive(false);
-                notification.setHour(8);
-                notification.setMinute(0);
-                notification.buildName();
-                notificationDao.insert(notification);
+                GlobalNotificationDao notificationDao = mDaoSession.getGlobalNotificationDao();
+                GlobalNotification snapshotNotification = new GlobalNotification();
+                snapshotNotification.setIsActive(false);
+                snapshotNotification.setHour(8);
+                snapshotNotification.setMinutes(0);
+                snapshotNotification.buildName();
+                notificationDao.insert(snapshotNotification);
 
-                notification = new Notification();
-                notification.setIsActive(false);
-                notification.setHour(13);
-                notification.setMinute(0);
-                notification.buildName();
-                notificationDao.insert(notification);
+                snapshotNotification = new GlobalNotification();
+                snapshotNotification.setIsActive(false);
+                snapshotNotification.setHour(13);
+                snapshotNotification.setMinutes(0);
+                snapshotNotification.buildName();
+                notificationDao.insert(snapshotNotification);
 
-                notification = new Notification();
-                notification.setIsActive(false);
-                notification.setHour(15);
-                notification.setMinute(0);
-                notification.buildName();
-                notificationDao.insert(notification);
+                snapshotNotification = new GlobalNotification();
+                snapshotNotification.setIsActive(false);
+                snapshotNotification.setHour(15);
+                snapshotNotification.setMinutes(0);
+                snapshotNotification.buildName();
+                notificationDao.insert(snapshotNotification);
 
-                notification = new Notification();
-                notification.setIsActive(false);
-                notification.setHour(18);
-                notification.setMinute(0);
-                notification.buildName();
-                notificationDao.insert(notification);
+                snapshotNotification = new GlobalNotification();
+                snapshotNotification.setIsActive(false);
+                snapshotNotification.setHour(18);
+                snapshotNotification.setMinutes(0);
+                snapshotNotification.buildName();
+                notificationDao.insert(snapshotNotification);
 
-                notification = new Notification();
-                notification.setIsActive(false);
-                notification.setHour(21);
-                notification.setMinute(0);
-                notification.buildName();
-                notificationDao.insert(notification);
+                snapshotNotification = new GlobalNotification();
+                snapshotNotification.setIsActive(false);
+                snapshotNotification.setHour(21);
+                snapshotNotification.setMinutes(0);
+                snapshotNotification.buildName();
+                notificationDao.insert(snapshotNotification);
                 return true;
             }
         });

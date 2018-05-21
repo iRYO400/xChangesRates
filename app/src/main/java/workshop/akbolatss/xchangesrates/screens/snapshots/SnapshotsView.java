@@ -4,8 +4,8 @@ import java.util.List;
 
 import workshop.akbolatss.xchangesrates.base.BaseView;
 import workshop.akbolatss.xchangesrates.base.LoadingView;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -14,11 +14,11 @@ import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
 
 public interface SnapshotsView extends BaseView, LoadingView {
 
-    public void getSnapshots(List<ChartData> chartDataList);
+    public void onLoadSnapshots(List<Snapshot> snapshotList);
 
-    public void onLoadChartInfo(ChartDataInfo dataInfo, int pos);
+    public void onLoadInfo(SnapshotInfo dataInfo, int pos);
 
-    public void onLoadChart(ChartData data, int pos);
+    public void onLoadChart(Snapshot data, int pos);
 
     public void onSaveNotifiesCount(int count);
 }

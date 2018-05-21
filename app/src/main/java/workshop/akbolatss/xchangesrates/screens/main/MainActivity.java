@@ -220,7 +220,7 @@ public class MainActivity extends SupportActivity implements DuoMenuView.OnMenuC
             public void run() {
                 onOptionClicked(1, null);
             }
-        }, 500);
+        }, 750);
     }
 
     public void onShowCase1() {

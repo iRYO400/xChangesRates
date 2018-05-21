@@ -12,13 +12,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
-import org.greenrobot.greendao.database.Database;
 
 import java.util.Calendar;
 import java.util.List;
@@ -32,13 +29,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
-import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
-import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
-import workshop.akbolatss.xchangesrates.model.dao.Notification;
+import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotNotification;
 import workshop.akbolatss.xchangesrates.repositories.DBNotificationRepository;
 
 import static android.content.Context.ALARM_SERVICE;
-import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 
 /**
  * Author: Akbolat Sadvakassov
@@ -70,8 +65,7 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
     }
 
     public static NotificationsDialogFragment newInstance() {
-        NotificationsDialogFragment fragment = new NotificationsDialogFragment();
-        return fragment;
+        return new NotificationsDialogFragment();
     }
 
     @NonNull
@@ -81,8 +75,6 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
         View view = layoutInflater.inflate(R.layout.fragment_notifications, null);
         unbinder = ButterKnife.bind(this, view);
-
-        mRepository = new DBNotificationRepository(((ApplicationMain) getActivity().getApplication()).getDaoSession());
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity(), R.style.CustomDialog);
         alertDialogBuilder.setView(view);
@@ -95,13 +87,15 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
         mRecyclerV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mRecyclerV.setAdapter(mAdapter);
 
+
+        mRepository = new DBNotificationRepository(((ApplicationMain) getActivity().getApplication()).getDaoSession());
         mRepository.getAllNotifications()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableSingleObserver<List<Notification>>() {
+                .subscribeWith(new DisposableSingleObserver<List<GlobalNotification>>() {
                     @Override
-                    public void onSuccess(List<Notification> list) {
-                        mAdapter.onAddItems(list);
+                    public void onSuccess(List<GlobalNotification> notifications) {
+                        mAdapter.onAddItems(notifications);
                     }
 
                     @Override
@@ -111,7 +105,6 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
 
         alertDialogBuilder.setPositiveButton(R.string.alert_save, this);
         alertDialogBuilder.setNegativeButton(R.string.alert_cancel, this);
-
         return alertDialogBuilder.create();
     }
 
@@ -147,9 +140,9 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
 
     @Override
     public void onAddTime(int hour, int minute) {
-        Notification notification = new Notification();
+        GlobalNotification notification = new GlobalNotification();
         notification.setHour(hour);
-        notification.setMinute(minute);
+        notification.setMinutes(minute);
         notification.setIsActive(true);
         notification.buildName();
         mAdapter.onAddItem(notification);
@@ -170,10 +163,10 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
                 mRepository.onSaveChanges(mAdapter.getNotifications())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
-                        .subscribeWith(new DisposableSingleObserver<List<Notification>>() {
+                        .subscribeWith(new DisposableSingleObserver<List<GlobalNotification>>() {
                             @Override
-                            public void onSuccess(List<Notification> notificationList) {
-                                onActivateNotifications(notificationList);
+                            public void onSuccess(List<GlobalNotification> notifications) {
+                                onActivateNotifications(notifications);
 //                                dialog.dismiss();
                             }
 
@@ -188,23 +181,23 @@ public class NotificationsDialogFragment extends DialogFragment implements Notif
         }
     }
 
-    private void onActivateNotifications(List<Notification> notificationList) {
-        for (int i = 0; i < notificationList.size(); i++) {
-//            Log.d("TAG", "Notify " + notificationList.get(i).getName() + " " + notificationList.get(i).getId());
-            if (notificationList.get(i).getIsActive()) {
+    private void onActivateNotifications(List<GlobalNotification> notifications) {
+        for (int i = 0; i < notifications.size(); i++) {
+//            Log.d("TAG", "Notify " + notifications.get(i).getName() + " " + notifications.get(i).getId());
+            if (notifications.get(i).getIsActive()) {
                 AlarmManager amc = (AlarmManager) mContext.getSystemService(ALARM_SERVICE);
                 Intent myIntent = new Intent(mContext, NotificationReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, notificationList.get(i).getId().intValue(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, notifications.get(i).getId().intValue(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, notificationList.get(i).getHour());
-                calendar.set(Calendar.MINUTE, notificationList.get(i).getMinute());
+                calendar.set(Calendar.HOUR_OF_DAY, notifications.get(i).getHour());
+                calendar.set(Calendar.MINUTE, notifications.get(i).getMinutes());
 
                 amc.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
             } else {
                 Intent intent = new Intent(mContext, NotificationReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, notificationList.get(i).getId().intValue(), intent, PendingIntent.FLAG_NO_CREATE);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, notifications.get(i).getId().intValue(), intent, PendingIntent.FLAG_NO_CREATE);
 
                 if (pendingIntent != null) {
 //                    Log.d(TAG, "Not null");

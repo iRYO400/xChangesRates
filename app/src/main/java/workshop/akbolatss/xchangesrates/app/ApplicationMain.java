@@ -37,11 +37,6 @@ import workshop.akbolatss.xchangesrates.repositories.DBOpenHelper;
 import static workshop.akbolatss.xchangesrates.utils.Constants.BASE_URL;
 import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 
-/**
- * Author: Akbolat Sadvakassov
- * Date: 20.11.2017
- */
-
 public class ApplicationMain extends Application {
 
     private static final boolean ENCRYPTED = false;

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataCharts;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataChart;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataInfo;
@@ -21,9 +21,9 @@ import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24;
 
 public class ChartDataMapper {
 
-    private ChartData data;
-    private ChartDataInfo dataInfo;
-    private List<ChartDataCharts> chartsList;
+    private Snapshot data;
+    private SnapshotInfo dataInfo;
+    private List<SnapshotChart> chartsList;
 
     public ChartDataMapper(ChartResponseData data, ChartResponseDataInfo dataInfo, List<ChartResponseDataChart> chartsList) {
         this.data = transformData(data);
@@ -31,79 +31,40 @@ public class ChartDataMapper {
         this.chartsList = transformCharts(chartsList);
     }
 
-    public ChartData getData() {
+    public Snapshot getData() {
         return data;
     }
 
-    public ChartDataInfo getDataInfo() {
+    public SnapshotInfo getDataInfo() {
         return dataInfo;
     }
 
-    public List<ChartDataCharts> getChartsList() {
+    public List<SnapshotChart> getChartsList() {
         return chartsList;
     }
 
-    public ChartData transformData(ChartResponseData responseData) {
-        ChartData chartData = null;
+    public Snapshot transformData(ChartResponseData responseData) {
+        Snapshot snapshot = null;
         if (responseData != null) {
-            chartData = new ChartData();
-            chartData.setCoin(responseData.getCoin());
-            chartData.setCurrency(responseData.getCurrency());
-            chartData.setExchange(responseData.getExchange());
-            chartData.setSource(responseData.getSource());
-            chartData.setIsActive(false);
-            chartData.setIsLoading(false);
-            chartData.setTiming(HOUR_24);
+            snapshot = new Snapshot();
+            snapshot.setCoin(responseData.getCoin());
+            snapshot.setCurrency(responseData.getCurrency());
+            snapshot.setExchange(responseData.getExchange());
+            snapshot.setSource(responseData.getSource());
+            snapshot.setIsActiveForGlobal(false);
+            snapshot.setTiming(HOUR_24);
+            snapshot.setIsIntervalEnabled(false);
+            snapshot.setIntervalNumber(10);
+            snapshot.setIntervalType(2);
+            snapshot.setIsNotifyPersistent(false);
         }
-        return chartData;
+        return snapshot;
     }
 
-    public Single<ChartData> transformD(final ChartResponseData responseData) {
-        return Single.fromCallable(new Callable<ChartData>() {
-            @Override
-            public ChartData call() throws Exception {
-                ChartData chartData = null;
-                if (responseData != null) {
-                    chartData = new ChartData();
-                    chartData.setCoin(responseData.getCoin());
-                    chartData.setCurrency(responseData.getCurrency());
-                    chartData.setExchange(responseData.getExchange());
-                    chartData.setSource(responseData.getSource());
-                }
-                return chartData;
-            }
-        });
-    }
-
-    public Single<ChartDataInfo> transformInfoD(final ChartResponseDataInfo dataInfo) {
-        return Single.fromCallable(new Callable<ChartDataInfo>() {
-            @Override
-            public ChartDataInfo call() throws Exception {
-                ChartDataInfo info = null;
-                if (dataInfo != null) {
-                    info = new ChartDataInfo();
-                    info.setBuy(dataInfo.getBuy());
-                    info.setChange(dataInfo.getChange());
-                    info.setChange24(dataInfo.getChange24());
-                    info.setHigh(dataInfo.getHigh());
-                    info.setLast(dataInfo.getLast());
-                    info.setLow(dataInfo.getLow());
-                    info.setMultiply(dataInfo.getMultiply());
-                    info.setSell(dataInfo.getSell());
-                    info.setStarted(dataInfo.getStarted());
-                    info.setTimestamp(dataInfo.getTimestamp());
-                    info.setUpdated(dataInfo.getUpdated());
-                    info.setVolume(dataInfo.getVolume());
-                }
-                return info;
-            }
-        });
-    }
-
-    public ChartDataInfo transformInfo(ChartResponseDataInfo dataInfo) {
-        ChartDataInfo info = null;
+    public SnapshotInfo transformInfo(ChartResponseDataInfo dataInfo) {
+        SnapshotInfo info = null;
         if (dataInfo != null) {
-            info = new ChartDataInfo();
+            info = new SnapshotInfo();
             info.setBuy(dataInfo.getBuy());
             info.setChange(dataInfo.getChange());
             info.setChange24(dataInfo.getChange24());
@@ -120,34 +81,12 @@ public class ChartDataMapper {
         return info;
     }
 
-    public Single<List<ChartDataCharts>> transformChartsD(final List<ChartResponseDataChart> list) {
-        return Single.fromCallable(new Callable<List<ChartDataCharts>>() {
-            @Override
-            public List<ChartDataCharts> call() throws Exception {
-                List<ChartDataCharts> chartsList = null;
-                if (list != null) {
-                    chartsList = new ArrayList<>();
-                    for (int i = 0; i < list.size(); i++) {
-                        ChartDataCharts dataCharts = new ChartDataCharts();
-                        dataCharts.setHigh(list.get(i).getHigh());
-                        dataCharts.setLow(list.get(i).getLow());
-                        dataCharts.setMarket(list.get(i).getMarket());
-                        dataCharts.setPrice(list.get(i).getPrice());
-                        dataCharts.setTimestamp(list.get(i).getTimestamp());
-                        chartsList.add(dataCharts);
-                    }
-                }
-                return chartsList;
-            }
-        });
-    }
-
-    public List<ChartDataCharts> transformCharts(List<ChartResponseDataChart> list) {
-        List<ChartDataCharts> chartsList = null;
+    public List<SnapshotChart> transformCharts(List<ChartResponseDataChart> list) {
+        List<SnapshotChart> chartsList = null;
         if (list != null) {
             chartsList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                ChartDataCharts dataCharts = new ChartDataCharts();
+                SnapshotChart dataCharts = new SnapshotChart();
                 dataCharts.setHigh(list.get(i).getHigh());
                 dataCharts.setLow(list.get(i).getLow());
                 dataCharts.setMarket(list.get(i).getMarket());
@@ -158,4 +97,68 @@ public class ChartDataMapper {
         }
         return chartsList;
     }
+
+    //    public Single<Snapshot> transformD(final ChartResponseData responseData) {
+//        return Single.fromCallable(new Callable<Snapshot>() {
+//            @Override
+//            public Snapshot call() throws Exception {
+//                Snapshot snapshot = null;
+//                if (responseData != null) {
+//                    snapshot = new Snapshot();
+//                    snapshot.setCoin(responseData.getCoin());
+//                    snapshot.setCurrency(responseData.getCurrency());
+//                    snapshot.setExchange(responseData.getExchange());
+//                    snapshot.setSource(responseData.getSource());
+//                }
+//                return snapshot;
+//            }
+//        });
+//    }
+//
+//    public Single<SnapshotInfo> transformInfoD(final ChartResponseDataInfo dataInfo) {
+//        return Single.fromCallable(new Callable<SnapshotInfo>() {
+//            @Override
+//            public SnapshotInfo call() throws Exception {
+//                SnapshotInfo info = null;
+//                if (dataInfo != null) {
+//                    info = new SnapshotInfo();
+//                    info.setBuy(dataInfo.getBuy());
+//                    info.setChange(dataInfo.getChange());
+//                    info.setChange24(dataInfo.getChange24());
+//                    info.setHigh(dataInfo.getHigh());
+//                    info.setLast(dataInfo.getLast());
+//                    info.setLow(dataInfo.getLow());
+//                    info.setMultiply(dataInfo.getMultiply());
+//                    info.setSell(dataInfo.getSell());
+//                    info.setStarted(dataInfo.getStarted());
+//                    info.setTimestamp(dataInfo.getTimestamp());
+//                    info.setUpdated(dataInfo.getUpdated());
+//                    info.setVolume(dataInfo.getVolume());
+//                }
+//                return info;
+//            }
+//        });
+//    }
+//
+//    public Single<List<SnapshotChart>> transformChartsD(final List<ChartResponseDataChart> list) {
+//        return Single.fromCallable(new Callable<List<SnapshotChart>>() {
+//            @Override
+//            public List<SnapshotChart> call() throws Exception {
+//                List<SnapshotChart> chartsList = null;
+//                if (list != null) {
+//                    chartsList = new ArrayList<>();
+//                    for (int i = 0; i < list.size(); i++) {
+//                        SnapshotChart dataCharts = new SnapshotChart();
+//                        dataCharts.setHigh(list.get(i).getHigh());
+//                        dataCharts.setLow(list.get(i).getLow());
+//                        dataCharts.setMarket(list.get(i).getMarket());
+//                        dataCharts.setPrice(list.get(i).getPrice());
+//                        dataCharts.setTimestamp(list.get(i).getTimestamp());
+//                        chartsList.add(dataCharts);
+//                    }
+//                }
+//                return chartsList;
+//            }
+//        });
+//    }
 }

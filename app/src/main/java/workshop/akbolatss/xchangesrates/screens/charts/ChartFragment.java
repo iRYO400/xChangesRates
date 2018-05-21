@@ -26,8 +26,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.orhanobut.hawk.Hawk;
 
-import org.greenrobot.greendao.database.Database;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,15 +42,12 @@ import me.yokeyword.fragmentation.SupportFragment;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
 import workshop.akbolatss.xchangesrates.base.LoadingView;
-import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
-import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
 import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter;
 
-import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_EXCHANGE_RESPONSE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_CODE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_HISTORY_POS;
@@ -317,6 +312,7 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
                     mPresenter.getExchangeModel().getCurrencies().keySet().toArray());
             arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
             mSpinCoins.setAdapter(arrayAdapter);
+            mSpinCoins.setSelection(0, false); // TODO: To Prevent Double CALL 
         }
     }
 
@@ -387,6 +383,12 @@ public class ChartFragment extends SupportFragment implements AdapterView.OnItem
 
     @Override
     public void onNoContent(boolean isEmpty) {
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        hideSoftInput();
     }
 
     @Override

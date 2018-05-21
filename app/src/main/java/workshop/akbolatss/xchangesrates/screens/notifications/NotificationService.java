@@ -25,11 +25,11 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataCharts;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
 import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
 import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
@@ -68,21 +68,22 @@ public class NotificationService extends Service {
         mContext = this;
         mRepository = new DBChartRepository(provideDaoSession(mContext), ApplicationMain.getAPIService());
         mCompositeDisposable = new CompositeDisposable();
-
+        Log.d(TAG, "onCreate");
     }
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "onStart");
         mRepository.getActiveChartData()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableSingleObserver<List<ChartData>>() {
+                .subscribe(new DisposableSingleObserver<List<Snapshot>>() {
                     @Override
-                    public void onSuccess(final List<ChartData> dataList) {
+                    public void onSuccess(final List<Snapshot> dataList) {
                         for (int i = 0; i < dataList.size(); i++) {
-                            final ChartData chartData = dataList.get(i);
-                            Log.d(TAG, " " + chartData.getCoin() + "/" + chartData.getCurrency());
+                            final Snapshot snapshot = dataList.get(i);
+                            Log.d(TAG, " " + snapshot.getCoin() + "/" + snapshot.getCurrency());
                             mCompositeDisposable.add(mRepository.getSnapshot(dataList.get(i).getCoin(),
                                     dataList.get(i).getExchange(),
                                     dataList.get(i).getCurrency(),
@@ -105,9 +106,9 @@ public class NotificationService extends Service {
                                         @Override
                                         public void accept(ChartDataMapper chartDataMapper) throws Exception {
                                             Log.d(TAG, "onSuccess 2");
-                                            ChartDataInfo info = chartDataMapper.getDataInfo();
+                                            SnapshotInfo info = chartDataMapper.getDataInfo();
                                             RemoteViews expandedView = new RemoteViews(getPackageName(), R.layout.notification_expanded);
-                                            expandedView.setTextViewText(R.id.content_title, chartData.getCoin().toUpperCase() + "/" + chartData.getCurrency().toUpperCase() + ": " + info.getLast() + " @ " + chartData.getExchange());
+                                            expandedView.setTextViewText(R.id.content_title, snapshot.getCoin().toUpperCase() + "/" + snapshot.getCurrency().toUpperCase() + ": " + info.getLast() + " @ " + snapshot.getExchange());
                                             expandedView.setTextViewText(R.id.content_high, info.getHigh());
                                             expandedView.setTextViewText(R.id.content_low, info.getLow());
                                             expandedView.setTextViewText(R.id.content_vol, info.getVolume().toString());
@@ -121,7 +122,7 @@ public class NotificationService extends Service {
                                             RemoteViews collapsedView = new RemoteViews(getPackageName(), R.layout.notification_collapsed);
 //                                            collapsedView.setImageViewResource(R.id.icon, R.mipmap.ic_main);
 //                                            collapsedView.setTextViewText(R.id.timestamp, DateUtils.formatDateTime(mContext, System.currentTimeMillis(), DateUtils.FORMAT_SHOW_TIME));
-                                            collapsedView.setTextViewText(R.id.content_title, chartData.getCoin().toUpperCase() + "/" + chartData.getCurrency().toUpperCase() + ": " + info.getLast() + " @ " + chartData.getExchange());
+                                            collapsedView.setTextViewText(R.id.content_title, snapshot.getCoin().toUpperCase() + "/" + snapshot.getCurrency().toUpperCase() + ": " + info.getLast() + " @ " + snapshot.getExchange());
                                             collapsedView.setTextViewText(R.id.content_high, info.getHigh());
                                             collapsedView.setTextViewText(R.id.content_low, info.getLow());
 
@@ -162,18 +163,18 @@ public class NotificationService extends Service {
                                                     notificationManager.createNotificationChannel(mChannel);
                                                 }
                                             }
-                                            notificationManager.notify(chartData.getId().intValue(), builder.build());
+                                            notificationManager.notify(snapshot.getId().intValue(), builder.build());
                                         }
                                     })
                                     .subscribeWith(new DisposableSingleObserver<ChartDataMapper>() {
                                         @Override
                                         public void onSuccess(ChartDataMapper mapper) {
-                                            ChartDataInfo dataInfo = mapper.getDataInfo();
-                                            dataInfo.setInfoId(chartData.getInfo().getInfoId());
-                                            dataInfo.setId(chartData.getInfo().getId());
-                                            chartData.setChartDataInfo(dataInfo);
-                                            List<ChartDataCharts> chartsList = mapper.getChartsList();
-                                            mRepository.onUpdateChartData(chartData, dataInfo, chartsList);
+                                            SnapshotInfo info = mapper.getDataInfo();
+                                            info.setSnapshotId(snapshot.getInfo().getSnapshotId());
+                                            info.setId(snapshot.getInfo().getId());
+                                            snapshot.setInfo(info);
+                                            List<SnapshotChart> chartsList = mapper.getChartsList();
+                                            mRepository.onUpdateChartData(snapshot, info, chartsList);
                                         }
 
                                         @Override

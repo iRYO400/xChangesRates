@@ -1,7 +1,5 @@
 package workshop.akbolatss.xchangesrates.model.response;
 
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-
 public class ChartResponse {
     private String request;
     private int code;

@@ -9,17 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.orhanobut.hawk.Hawk;
-
-import org.greenrobot.greendao.database.Database;
 
 import java.util.List;
 
@@ -33,15 +31,12 @@ import me.toptas.fancyshowcase.OnCompleteListener;
 import me.yokeyword.fragmentation.SupportFragment;
 import workshop.akbolatss.xchangesrates.R;
 import workshop.akbolatss.xchangesrates.app.ApplicationMain;
-import workshop.akbolatss.xchangesrates.model.dao.ChartData;
-import workshop.akbolatss.xchangesrates.model.dao.ChartDataInfo;
-import workshop.akbolatss.xchangesrates.model.dao.DaoMaster;
-import workshop.akbolatss.xchangesrates.model.dao.DaoSession;
+import workshop.akbolatss.xchangesrates.model.dao.Snapshot;
+import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository;
 import workshop.akbolatss.xchangesrates.screens.main.MainActivity;
 import workshop.akbolatss.xchangesrates.screens.notifications.NotificationsDialogFragment;
 
-import static workshop.akbolatss.xchangesrates.utils.Constants.DB_SNAPS_NAME;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_NOTIFIES_COUNT;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOWCASE_0_DONE;
 import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOWCASE_2_DONE;
@@ -49,7 +44,7 @@ import static workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOWCASE_2_D
 public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLayout.OnRefreshListener,
         SnapshotsAdapter.onSnapshotClickListener, SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
 
-    private SnapshotsPresenter mPresenter;
+    SnapshotsPresenter mPresenter;
 
     private onSnapshotListener mListener;
 
@@ -58,7 +53,7 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
 
     @BindView(R.id.recyclerView)
     protected RecyclerView mRecyclerV;
-    private SnapshotsAdapter mAdapter;
+    SnapshotsAdapter mAdapter;
 
     @BindView(R.id.tvNoContent)
     protected TextView mTvNoContent;
@@ -94,7 +89,7 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
             mPresenter.onViewAttached(this);
         }
 
-        mRefreshLayout.setColorSchemeResources(R.color.colorPrimaryDark);
+        mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setOnRefreshListener(this);
 
         mAdapter = new SnapshotsAdapter(this);
@@ -133,16 +128,6 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void onUpdateItem(ChartData model, int pos) {
-        mPresenter.onUpdateSnapshot(model, pos);
-    }
-
-    @Override
-    public void onGetInfo(long key, int pos) {
-        mPresenter.onLoadInfo(key, pos);
-    }
-
-    @Override
     public void onOpenOptions(long chartId, boolean isActive, String timing, int pos) {
         FragmentManager fm = getFragmentManager();
         OptionsDialogFragment dialogFragment = OptionsDialogFragment.newInstance(chartId, isActive, timing, pos);
@@ -158,8 +143,13 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void getSnapshots(List<ChartData> chartDataList) {
-        mAdapter.onAddItems(chartDataList);
+    public void onGetInfo(long key, int pos) {
+        mPresenter.onLoadInfo(key, pos);
+    }
+
+    @Override
+    public void onLoadSnapshots(List<Snapshot> snapshotList) {
+        mAdapter.onAddItems(snapshotList);
 
         if (Hawk.get(HAWK_SHOWCASE_2_DONE)) {
             new Handler().postDelayed(new Runnable() {
@@ -167,15 +157,16 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
                 public void run() {
                     if (mAdapter.getItemCount() > 0) {
                         FancyShowCaseQueue queue;
-                        View view1 = mRecyclerV.findViewHolderForLayoutPosition(0).itemView;
+                        View view = mRecyclerV.findViewHolderForLayoutPosition(0).itemView;
+                        FrameLayout fL = view.findViewById(R.id.frameLayout);
                         FancyShowCaseView showCase3 = new FancyShowCaseView.Builder(getActivity())
-                                .focusOn(view1.findViewById(R.id.frameLayout))
+                                .focusOn(fL)
                                 .title(getResources().getString(R.string.showcase_snap_3))
                                 .backgroundColor(R.color.colorShowCaseBG)
                                 .build();
 
                         FancyShowCaseView showCase4 = new FancyShowCaseView.Builder(getActivity())
-                                .focusOn(view1.findViewById(R.id.frameLayout))
+                                .focusOn(fL)
                                 .title(getResources().getString(R.string.showcase_snap_4))
                                 .backgroundColor(R.color.colorShowCaseBG)
                                 .build();
@@ -199,17 +190,19 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
-    public void onLoadChartInfo(ChartDataInfo dataInfo, int pos) {
+    public void onLoadInfo(SnapshotInfo dataInfo, int pos) {
         mAdapter.onUpdateInfo(dataInfo, pos);
     }
 
     @Override
-    public void onLoadChart(ChartData data, int pos) {
+    public void onLoadChart(Snapshot data, int pos) {
         mAdapter.onUpdateSnapshot(data, pos);
-        View view = mRecyclerV.findViewHolderForLayoutPosition(0).itemView;
+        View view = mRecyclerV.findViewHolderForLayoutPosition(pos).itemView;
         view.findViewById(R.id.progressBar).setVisibility(View.GONE);
         view.findViewById(R.id.tvDate).setVisibility(View.VISIBLE);
         view.findViewById(R.id.tvTime).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.frameLayout).setEnabled(true);
+        view.findViewById(R.id.frameLayout).setClickable(true);
     }
 
     @Override
@@ -222,7 +215,32 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
         mPresenter.getAllSnapshots();
     }
 
+    @Override
+    public void onSaveChanges(long chartId, boolean isActive, String timing, int pos) {
+        mPresenter.onUpdateOptions(chartId, isActive, timing);
+        mAdapter.onUpdateNotifyState(isActive, timing, pos);
+    }
+
+    @Override
+    public void onRemove(long chartId, int pos) {
+        mPresenter.onRemoveSnapshot(chartId);
+        mAdapter.onRemoveSnap(pos);
+    }
+
+    @OnClick(R.id.fabAdd)
+    protected void onAddSnapshot() {
+        mListener.onOpenChart();
+    }
+
+    @Override
+    public void onUpdateItem(Snapshot model, int pos) {
+        mPresenter.onUpdateSnapshot(model, pos);
+    }
+
     public void onUpdateSnapshots() {
+        if (mAdapter.getItemCount() <= 0){
+            return;
+        }
         onShowLoading();
         for (int i = 0; i < mAdapter.getSnapshotModels().size(); i++) {
             mPresenter.onUpdateSnapshot(mAdapter.getSnapshotModels().get(i), i);
@@ -254,30 +272,18 @@ public class SnapshotsFragment extends SupportFragment implements SwipeRefreshLa
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        hideSoftInput();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (mPresenter != null) {
             mPresenter.onViewDetached(this);
         }
     }
-
-    @Override
-    public void onSaveChanges(long chartId, boolean isActive, String timing, int pos) {
-        mPresenter.onUpdateOptions(chartId, isActive, timing);
-        mAdapter.onUpdateNotifyState(isActive, timing, pos);
-    }
-
-    @Override
-    public void onRemoveSnapshot(long chartId, int pos) {
-        mPresenter.onRemoveSnapshot(chartId);
-        mAdapter.onRemoveSnap(pos);
-    }
-
-    @OnClick(R.id.fabAdd)
-    protected void onAddSnapshot() {
-        mListener.onOpenChart();
-    }
-
 
     @Override
     public void onAttach(Context context) {

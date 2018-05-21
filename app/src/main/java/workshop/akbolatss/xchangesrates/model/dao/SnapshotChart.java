@@ -10,10 +10,10 @@ import org.greenrobot.greendao.annotation.Id;
 // KEEP INCLUDES END
 
 /**
- * Entity mapped to table "CHART_DATA_CHARTS".
+ * Entity mapped to table "SNAPSHOT_CHART".
  */
 @Entity
-public class ChartDataCharts {
+public class SnapshotChart {
 
     @Id(autoincrement = true)
     private Long id;
@@ -22,28 +22,28 @@ public class ChartDataCharts {
     private String low;
     private String price;
     private Long timestamp;
-    private Long chartsId;
+    private long snapshotId;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    @Generated
-    public ChartDataCharts() {
+    @Generated(hash = 1654824671)
+    public SnapshotChart() {
     }
 
-    public ChartDataCharts(Long id) {
+    public SnapshotChart(Long id) {
         this.id = id;
     }
 
-    @Generated
-    public ChartDataCharts(Long id, Float market, String high, String low, String price, Long timestamp, Long chartsId) {
+    @Generated(hash = 2028579848)
+    public SnapshotChart(Long id, Float market, String high, String low, String price, Long timestamp, long snapshotId) {
         this.id = id;
         this.market = market;
         this.high = high;
         this.low = low;
         this.price = price;
         this.timestamp = timestamp;
-        this.chartsId = chartsId;
+        this.snapshotId = snapshotId;
     }
 
     public Long getId() {
@@ -94,12 +94,12 @@ public class ChartDataCharts {
         this.timestamp = timestamp;
     }
 
-    public Long getChartsId() {
-        return chartsId;
+    public long getSnapshotId() {
+        return snapshotId;
     }
 
-    public void setChartsId(Long chartsId) {
-        this.chartsId = chartsId;
+    public void setSnapshotId(long snapshotId) {
+        this.snapshotId = snapshotId;
     }
 
     // KEEP METHODS - put your custom methods here
