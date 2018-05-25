@@ -11,6 +11,7 @@ import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseData;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataChart;
 import workshop.akbolatss.xchangesrates.model.response.ChartResponseDataInfo;
+import workshop.akbolatss.xchangesrates.utils.Constants;
 
 import static workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24;
 
@@ -52,7 +53,7 @@ public class ChartDataMapper {
             snapshot.setExchange(responseData.getExchange());
             snapshot.setSource(responseData.getSource());
             snapshot.setIsActiveForGlobal(false);
-            snapshot.setTiming(HOUR_24);
+            snapshot.setTiming(Constants.HOUR_24);
             snapshot.setIsIntervalEnabled(false);
             snapshot.setIntervalNumber(10);
             snapshot.setIntervalType(2);

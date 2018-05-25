@@ -1,0 +1,98 @@
+package workshop.akbolatss.xchangesrates.screens.splash
+
+import android.content.Intent
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.orhanobut.hawk.Hawk
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
+import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.app.ApplicationMain
+import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
+import workshop.akbolatss.xchangesrates.repositories.DBNotificationRepository
+import workshop.akbolatss.xchangesrates.screens.main.MainActivity
+import workshop.akbolatss.xchangesrates.utils.Constants
+import workshop.akbolatss.xchangesrates.utils.UtilityMethods
+
+class SplashActivity : AppCompatActivity() {
+
+    private var countDownTimer: CountDownTimer? = null
+
+    private var mRepository: DBNotificationRepository? = null //TODO: Let's make a Presenter for this
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_splash)
+
+        mRepository = DBNotificationRepository((application as ApplicationMain).daoSession)
+
+        countDownTimer = object : CountDownTimer(700, 1000) {
+            override fun onTick(l: Long) {}
+
+            override fun onFinish() {
+                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                finish()
+            }
+        }
+
+        initDefault()
+    }
+
+
+    private fun initDefault() {
+
+        if (!Hawk.contains(Constants.HAWK_FIRST_START)) {
+            Hawk.put(Constants.HAWK_HISTORY_POS, 0)
+            Hawk.put(Constants.HAWK_HISTORY_CODE, Constants.MINUTES_10)
+            Hawk.put(Constants.HAWK_FIRST_START, true)
+
+            mRepository!!.initDefault()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        onUpdateXChanges()
+                    }, {
+                    })
+        } else {
+            onUpdateXChanges()
+        }
+    }
+
+    private fun onUpdateXChanges() {
+        ApplicationMain.apiService.getExchanges()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .doAfterSuccess({ exchangeResponse ->
+                    Hawk.put(Constants.HAWK_EXCHANGE_RESPONSE, exchangeResponse)
+                    Hawk.put(Constants.HAWK_LAST_UPDATE, UtilityMethods.todayDate)
+                })
+                .subscribe(object : DisposableSingleObserver<ExchangeResponse>() {
+                    override fun onSuccess(exchangeResponse: ExchangeResponse) {
+                        Toast.makeText(this@SplashActivity, R.string.splash_1, Toast.LENGTH_LONG).show()
+                        countDownTimer!!.start()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        if (!Hawk.contains(Constants.HAWK_EXCHANGE_RESPONSE)) {
+                            Toast.makeText(this@SplashActivity, R.string.splash_2, Toast.LENGTH_LONG).show()
+                            countDownTimer = object : CountDownTimer(1500, 1000) {
+                                override fun onTick(l: Long) {
+
+                                }
+
+                                override fun onFinish() {
+                                    finish()
+                                }
+                            }.start()
+                        } else {
+                            val s = Hawk.get(Constants.HAWK_LAST_UPDATE, "")
+                            Toast.makeText(this@SplashActivity, R.string.splash_3.toString() + " " + s, Toast.LENGTH_LONG).show()
+                            countDownTimer!!.start()
+                        }
+                    }
+                })
+    }
+}

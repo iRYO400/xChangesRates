@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    android:tag="@string/tag_content"
     tools:context="workshop.akbolatss.xchangesrates.screens.main.MainActivity">
 
     <LinearLayout
