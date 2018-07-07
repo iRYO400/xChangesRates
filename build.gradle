@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.2.41'
+    ext.kotlin_version = '1.2.51'
     repositories {
         google()
         jcenter()
@@ -11,11 +11,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha02'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
 
-        classpath 'com.google.gms:google-services:3.3.1'
+        classpath 'com.google.gms:google-services:4.0.1'
         classpath 'io.fabric.tools:gradle:1.25.4'
     }
 
@@ -26,9 +26,6 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
-        maven {
-            url 'https://maven.google.com/'
-        }
     }
 }
 

@@ -3,7 +3,10 @@ package workshop.akbolatss.xchangesrates.screens.charts
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,10 +34,10 @@ import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
 import java.util.*
 
-class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, HorizontalBtnsAdapter.onBtnClickListener, ChartView, ISupportFragment {
+class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, HorizontalBtnsAdapter.onBtnClickListener, ChartView, ISupportFragment, View.OnFocusChangeListener, TextWatcher {
+
 
     private var mPresenter: ChartPresenter? = null
-    private var mContext: Context? = null
 
     private var mBtnsAdapter: HorizontalBtnsAdapter? = null
 
@@ -62,7 +65,6 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
-        mContext = container!!.context
 
         mPresenter = ChartPresenter(DBChartRepository((activity!!.application as ApplicationMain).daoSession,
                 ApplicationMain.apiService))
@@ -133,35 +135,47 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
             ids[i] = mExchangeResponse!!.data[i].caption
         }
 
-        val arrayAdapter = ArrayAdapter<String>(mContext, R.layout.custom_spinner_item, ids)
+        val arrayAdapter = ArrayAdapter<String>(_mActivity, R.layout.custom_spinner_item, ids)
         arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
         spinExchanges.adapter = arrayAdapter
         spinExchanges.onItemSelectedListener = this@ChartFragment
-        spinCoin!!.onItemSelectedListener = this@ChartFragment // Use in this order!
-        spinCurrencies!!.onItemSelectedListener = this@ChartFragment // !!!
+        spinCoin.onItemSelectedListener = this@ChartFragment // Use in this order!
+        spinCurrencies.onItemSelectedListener = this@ChartFragment // !!!
+
+        etCoin.addTextChangedListener(this)
+        etCurrency.addTextChangedListener(this)
+
+        etCoin.isFocusable = false
+        etCurrency.isFocusable = false
+
+        etCoin.onFocusChangeListener = this@ChartFragment
+        etCurrency.onFocusChangeListener = this@ChartFragment
     }
 
     private fun onInitChart() {
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
-        lineChart.setNoDataTextColor(resources.getColor(R.color.colorSpinTxt))
+        lineChart.setNoDataTextColor(ContextCompat.getColor(_mActivity, R.color.colorSpinTxt))
         lineChart.setMaxVisibleValueCount(16)
 
         val xAxisFormatter = DateXValueFormatter()
         val xAxis = lineChart.xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.labelCount = 4
+        xAxis.labelCount = 3
         xAxis.valueFormatter = xAxisFormatter
-        xAxis.textColor = resources.getColor(R.color.colorInactive)
+        xAxis.textColor = ContextCompat.getColor(_mActivity, R.color.colorInactive)
         xAxis.setDrawGridLines(false)
 
         val yAxis = lineChart.axisLeft
-        yAxis.textColor = resources.getColor(R.color.colorInactive)
+        yAxis.textColor = ContextCompat.getColor(_mActivity, R.color.colorInactive)
 
         val yAxis1 = lineChart.axisRight
         yAxis1.isEnabled = false
     }
 
+    /**
+     * Init history buttons
+     */
     private fun onInitRV() {
         val strings = ArrayList<String>()
         strings.add(Constants.MINUTES_10)
@@ -188,45 +202,30 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
         recyclerView.smoothScrollToPosition(selectedHistory)
     }
 
-    /**
-     * TextWatcher для крипты
-     */
-//    @OnTextChanged(R.id.etCoin)
-    fun onEtCoinChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-        if (isCoinEtFocused && charSequence.isNotEmpty()) {
-            try {
-                val buf = java.lang.Float.parseFloat(charSequence.toString().trim { it <= ' ' }) * mSelectedCurrencyRate
-                etCurrency!!.setText(buf.toString())
-            } catch (e: NumberFormatException) {
-                //                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * TextWatcher для валюты
-     */
-//    @OnTextChanged(R.id.etCurrency)
-    fun onEtCurrencyChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-        if (isCurrencyEtFocused && charSequence.isNotEmpty()) {
-            try {
-                val buf = java.lang.Float.parseFloat(charSequence.toString().trim { it <= ' ' }) / mSelectedCurrencyRate
-                etCoin!!.setText(buf.toString())
-            } catch (e: NumberFormatException) {
-                e.printStackTrace()
-            }
-
-        }
-    }
-
-    //    @OnFocusChange(R.id.etCoin, R.id.etCurrency, R.id.spinExchanges, R.id.spinCoin, R.id.spinCurrencies)
-    fun onEtFocusChanged(view: View, hasFocus: Boolean) {
+    override fun onFocusChange(view: View, hasFocus: Boolean) {
         if (view.id == R.id.etCoin) {
             isCoinEtFocused = hasFocus
             isCurrencyEtFocused = !hasFocus
         } else if (view.id == R.id.etCurrency) {
             isCoinEtFocused = !hasFocus
             isCurrencyEtFocused = hasFocus
+        }
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+        if (isCoinEtFocused && s.isNotEmpty()) {
+            val result = s.toString().toFloat() * mSelectedCurrencyRate
+            etCurrency.setText(result.toString())
+        }
+        if (isCurrencyEtFocused && s.isNotEmpty()) {
+            val result = s.toString().toFloat() * mSelectedCurrencyRate
+            etCoin.setText(result.toString())
         }
     }
 
@@ -238,7 +237,7 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
             mPresenter!!.mCoinCode = adapterView.selectedItem.toString()
 
             val strings = mPresenter!!.exchangeModel!!.currencies[mPresenter!!.exchangeModel!!.currencies.keys.toTypedArray()[i]]
-            strings?.sort()
+            strings!!.sorted()
 
             val arrayAdapter = ArrayAdapter(adapterView.context, R.layout.custom_spinner_item, strings)
             arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
@@ -275,11 +274,11 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
         set.mode = LineDataSet.Mode.CUBIC_BEZIER
         set.cubicIntensity = 0.2f
         set.lineWidth = 1.8f
-        set.color = mContext!!.resources.getColor(R.color.colorAccent)
+        set.color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
         set.circleRadius = 2f
         set.setCircleColor(Color.WHITE)
         set.valueTextColor = Color.WHITE
-        set.fillColor = mContext!!.resources.getColor(R.color.colorPrimaryDark)
+        set.fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
         set.fillAlpha = 100
 
         val lineData = LineData(set)
@@ -302,17 +301,9 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
     }
 
     fun onSaveSnapshot() {
-        Toast.makeText(mContext, R.string.toast_saving, Toast.LENGTH_SHORT).show()
+        Toast.makeText(_mActivity, R.string.toast_saving, Toast.LENGTH_SHORT).show()
         mPresenter!!.onSaveSnap()
     }
-
-    override fun onShowLoading() {
-    }
-
-    override fun onHideLoading() {
-    }
-
-    override fun onNoContent(isEmpty: Boolean) {}
 
     override fun onPause() {
         super.onPause()

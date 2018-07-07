@@ -9,7 +9,7 @@ import workshop.akbolatss.xchangesrates.model.response.ChartResponseData
  * Date: 04.01.2018
  */
 
-interface ChartView : BaseView, LoadingView {
+interface ChartView : BaseView {
 
     fun onLoadLineChart(chartData: ChartResponseData)
 }

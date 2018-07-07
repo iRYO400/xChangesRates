@@ -16,14 +16,10 @@ import java.util.*
 
 class NotificationsAdapter(private val mListener: NotificationListener) : RecyclerView.Adapter<NotificationsAdapter.NotificationsVH>() {
 
-    private val mNotifications: MutableList<GlobalNotification>?
+    private val mNotifications: MutableList<GlobalNotification> = ArrayList()
 
-    val notifications: List<GlobalNotification>?
+    val notifications: List<GlobalNotification>
         get() = mNotifications
-
-    init {
-        this.mNotifications = ArrayList()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationsVH {
         val inflater = LayoutInflater.from(parent.context)

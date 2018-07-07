@@ -65,15 +65,8 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
                     .backgroundColor(R.color.colorShowCaseBG)
                     .build()
 
-            val showCase2 = FancyShowCaseView.Builder(activity!!)
-                    .focusOn(fabAdd)
-                    .title(resources.getString(R.string.showcase_snap_2))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
             showCaseQueue = FancyShowCaseQueue()
                     .add(showCase1)
-                    .add(showCase2)
 
             showCaseQueue.show()
             Hawk.put(Constants.HAWK_SHOWCASE_0_DONE, true)
@@ -188,13 +181,11 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
     override fun onShowLoading() {
         progressBar.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        fabAdd.visibility = View.GONE
     }
 
     override fun onHideLoading() {
         progressBar.visibility = View.GONE
         recyclerView.visibility = View.VISIBLE
-        fabAdd.visibility = View.VISIBLE
         swipeRefresh.isRefreshing = false
     }
 

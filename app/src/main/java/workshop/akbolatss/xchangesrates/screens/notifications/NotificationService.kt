@@ -58,7 +58,7 @@ class NotificationService : Service() {
                                 .map { chartResponse -> chartResponse.data }
                                 .map { responseData -> ChartDataMapper(responseData, responseData.info, responseData.chart) }
                                 .doAfterSuccess { chartDataMapper ->
-                                    val info = chartDataMapper.dataInfo
+                                    val info = chartDataMapper.dataInfo!!
                                     val expandedView = RemoteViews(packageName, R.layout.notification_expanded)
                                     expandedView.setTextViewText(R.id.content_title, snapshot.coin.toUpperCase() + "/" + snapshot.currency.toUpperCase() + ": " + info.last + " @ " + snapshot.exchange)
                                     expandedView.setTextViewText(R.id.content_high, info.high)
@@ -117,11 +117,11 @@ class NotificationService : Service() {
 //                                    notificationManager.notify(snapshot.id!!.toInt(), builder.build())
                                 }
                                 .subscribe({ mapper ->
-                                    val info = mapper.dataInfo
+                                    val info = mapper.dataInfo!!
                                     info.snapshotId = snapshot.info.snapshotId
                                     info.id = snapshot.info.id
                                     snapshot.info = info
-                                    val chartsList = mapper.chartsList
+                                    val chartsList = mapper.chartsList!!
                                     mRepository!!.onUpdateChartData(snapshot, info, chartsList)
                                 }, {
 //                                    Log.d(TAG, "onError 2 " + it.message)

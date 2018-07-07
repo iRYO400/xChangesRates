@@ -36,6 +36,5 @@ class DateXValueFormatter : IAxisValueFormatter {
         } catch (ex: Exception) {
             return "xx"
         }
-
     }
 }

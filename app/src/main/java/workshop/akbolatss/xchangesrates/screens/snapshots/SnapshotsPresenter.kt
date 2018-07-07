@@ -70,11 +70,11 @@ class SnapshotsPresenter internal constructor(internal var mRepository: DBChartR
                 .map { chartResponse -> chartResponse.data }
                 .map { responseData -> ChartDataMapper(responseData, responseData.info, responseData.chart) }
                 .subscribe({ mapper ->
-                    val dataInfo = mapper.dataInfo
+                    val dataInfo = mapper.dataInfo!!
                     dataInfo.snapshotId = snapshot.id!!
                     dataInfo.id = snapshot.infoId //TODO: getInfo().getId() or getInfoId() you should test that
 
-                    val chartsList = mapper.chartsList
+                    val chartsList = mapper.chartsList!!
                     snapshot.charts = chartsList
 
                     mRepository.onUpdateChartData(snapshot, dataInfo, chartsList)

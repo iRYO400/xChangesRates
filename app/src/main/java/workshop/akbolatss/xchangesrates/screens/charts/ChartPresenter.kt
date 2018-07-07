@@ -16,16 +16,16 @@ class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter
     /**
      * Main model
      */
-    var exchangeModel: ExchangeModel? = null
+    lateinit var exchangeModel: ExchangeModel
 
     /**
      * Response от сервера
      */
-    var mChartData: ChartResponseData? = null
+    lateinit var mChartData: ChartResponseData
 
-    var mCoinCode: String? = null
-    var mCurrencyCode: String? = null
-    var mTerm: String? = null
+    lateinit var mCoinCode: String
+    lateinit var mCurrencyCode: String
+    lateinit var mTerm: String
 
     private var compositeDisposable: CompositeDisposable? = null
 
@@ -42,7 +42,7 @@ class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter
     }
 
     fun onUpdate() {
-        view.onShowLoading()
+//        view.onShowLoading()
         compositeDisposable!!.add(
                 mRepository.getQueryResult(mCoinCode,
                         exchangeModel!!.ident,
@@ -51,29 +51,29 @@ class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ response ->
-                            mChartData = response.data
-                            mChartData!!.coin = mCoinCode
-                            view.onLoadLineChart(mChartData!!)
-                            view.onHideLoading()
+                            mChartData = response.data!!
+                            mChartData.coin = mCoinCode
+                            view.onLoadLineChart(mChartData)
+//                            view.onHideLoading()
                         }, {
-                            view.onHideLoading()
+//                            view.onHideLoading()
                         }))
     }
 
     fun onSaveSnap() {
-        view.onShowLoading()
-        val mapper = ChartDataMapper(mChartData, mChartData!!.info, mChartData!!.chart)
+//        view.onShowLoading()
+        val mapper = ChartDataMapper(mChartData, mChartData.info, mChartData.chart)
         //        Flowable<Object> s = Single.concat(mapper.transformD(mChartData), //TODO Улучши, когда твои скиллы по RxJava 2 поднимутся
         //                mapper.transformInfoD(mChartData.getInfo()),
         //                mapper.transformChartsD(mChartData.getChart()));
         compositeDisposable!!.add(
-                mRepository.onAddChartData(mapper.data, mapper.dataInfo, mapper.chartsList)
+                mRepository.onAddChartData(mapper.data!!, mapper.dataInfo!!, mapper.chartsList!!)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            view.onHideLoading()
+//                            view.onHideLoading()
                         }, {
-                            view.onHideLoading()
+//                            view.onHideLoading()
                         })
         )
     }
