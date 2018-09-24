@@ -13,7 +13,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_notifications.*
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification
 import workshop.akbolatss.xchangesrates.repositories.DBNotificationRepository
 
@@ -55,15 +54,15 @@ class NotificationsDialogFragment : DialogFragment(), NotificationsAdapter.Notif
         recyclerView.adapter = mAdapter
 
 
-        mRepository = DBNotificationRepository((activity!!.application as ApplicationMain).daoSession)
-        mRepository!!.allNotifications
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({ notifications ->
-                    mAdapter!!.onAddItems(notifications)
-                }, {
-
-                })
+//        mRepository = DBNotificationRepository((activity!!.application as ApplicationMain).daoSession)
+//        mRepository!!.allNotifications
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe({ notifications ->
+//                    mAdapter!!.onAddItems(notifications)
+//                }, {
+//
+//                })
 
         alertDialogBuilder.setPositiveButton(R.string.alert_save, this)
         alertDialogBuilder.setNegativeButton(R.string.alert_cancel, this)
@@ -109,14 +108,14 @@ class NotificationsDialogFragment : DialogFragment(), NotificationsAdapter.Notif
             AlertDialog.BUTTON_POSITIVE -> {
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
-                mRepository!!.onSaveChanges(mAdapter!!.notifications)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({ notifications ->
-                            onActivateNotifications(notifications)
-                            //                                dialog.dismiss();
-                        }, {
-                        })
+//                mRepository!!.saveSnapshotChanges(mAdapter!!.notifications)
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe({ notifications ->
+//                            onActivateNotifications(notifications)
+//                            //                                dialog.dismiss();
+//                        }, {
+//                        })
             }
             AlertDialog.BUTTON_NEGATIVE -> dialog.cancel()
         }

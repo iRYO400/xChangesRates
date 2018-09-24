@@ -1,9 +1,10 @@
 package workshop.akbolatss.xchangesrates.repositories
 
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
-import workshop.akbolatss.xchangesrates.model.dao.Snapshot
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo
+import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse
 
 /**
@@ -13,23 +14,18 @@ import workshop.akbolatss.xchangesrates.model.response.ChartResponse
 
 interface ChartRepository {
 
-    val allChartData: Single<List<Snapshot>>
-
-    val activeChartData: Single<List<Snapshot>>
-
     fun getQueryResult(coin: String, exchange: String,
-                       currency: String, term: String): Single<ChartResponse>
-
-    fun getChartDataInfo(key: Long): Single<SnapshotInfo>
+                       currency: String, term: String): Observable<ChartResponse>
 
     fun getSnapshot(coin: String, exchange: String,
-                    currency: String, term: String): Single<ChartResponse>
+                    currency: String, term: String): Observable<ChartResponse>
 
-    fun onAddChartData(data: Snapshot, dataInfo: SnapshotInfo, dataCharts: List<SnapshotChart>): Single<Boolean>
+    val allChartData: Flowable<List<ChartData>>
 
-    fun onDeleteChartData(key: Long): Single<Int>
+    fun onAddChartData(chartData: ChartData): Single<Long>
 
-    fun onUpdateChartData(snapshot: Snapshot, dataInfo: SnapshotInfo, chartsList: List<SnapshotChart>)
+    fun onDeleteChartData(chartData: ChartData): Completable
 
-    fun onOptionsChanged(key: Long, isActive: Boolean, timing: String): Single<Int>
+    fun onUpdateChartData(chartData: ChartData): Observable<ChartData>
+    fun onDeleteChartData(id: Long): Completable
 }

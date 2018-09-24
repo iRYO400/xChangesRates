@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3A4652</color>
+    <color name="colorPrimary2">#323d49</color>
+
     <color name="colorPrimaryDark">#2C3641</color>
     <color name="colorAccent">#61F5FF</color>
-    <color name="colorAccentDark">#26C6DA</color>
+    <color name="colorAccentDark">#21acbe</color>
+    <color name="colorAccentDark2">#146b76</color>
 
     <color name="colorInactive">#6D7C8C</color>
     <color name="colorChartXY">#a3b9d1</color>
@@ -25,4 +28,5 @@
     <color name="colorSnapTxtDate">#6D7C8C</color>
 
     <color name="colorPrice">#000000</color>
+    <color name="colorWhite">#FFFFFFFF</color>
 </resources>

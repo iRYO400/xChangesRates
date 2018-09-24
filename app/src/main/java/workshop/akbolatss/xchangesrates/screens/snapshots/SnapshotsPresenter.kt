@@ -1,19 +1,18 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.base.BasePresenter
-import workshop.akbolatss.xchangesrates.model.dao.Snapshot
-import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper
+import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.model.response.ChartResponse
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.utils.Logger
 
-/**
- * Author: Akbolat Sadvakassov
- * Date: 04.01.2018
- */
 
-class SnapshotsPresenter internal constructor(internal var mRepository: DBChartRepository) : BasePresenter<SnapshotsView>() {
+class SnapshotsPresenter internal constructor(private var mRepository: DBChartRepository) : BasePresenter<SnapshotsView>() {
 
     private lateinit var mCompositeDisposable: CompositeDisposable
 
@@ -24,19 +23,19 @@ class SnapshotsPresenter internal constructor(internal var mRepository: DBChartR
 
     override fun onViewDetached(view: SnapshotsView?) {
         super.onViewDetached(view)
-        if (mCompositeDisposable != null) {
+        if (::mCompositeDisposable.isInitialized) {
             mCompositeDisposable.clear()
         }
     }
 
     fun getAllSnapshots() {
         view.onShowLoading()
-        mRepository.allChartData
-                .subscribeOn(Schedulers.io())
+        mCompositeDisposable.add(mRepository.allChartData
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe({ chartData ->
                     if (chartData.isNotEmpty()) {
-                        view.onLoadSnapshots(chartData)
+                        view.loadChartDatas(chartData)
                         view.onNoContent(false)
                     } else {
                         view.onNoContent(true)
@@ -44,58 +43,99 @@ class SnapshotsPresenter internal constructor(internal var mRepository: DBChartR
                     view.onHideLoading()
                 }
                         , {
+                    it.printStackTrace()
+                    view.onError(it.message!!)
                     view.onHideLoading()
                 })
+        )
     }
 
-    fun onLoadInfo(key: Long, pos: Int) {
-        mCompositeDisposable.add(mRepository.getChartDataInfo(key)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ dataInfo ->
-                    view.onLoadInfo(dataInfo, pos)
-                }, {
-
-                }))
-    }
-
-    fun onUpdateSnapshot(snapshot: Snapshot, pos: Int) {
+    fun onUpdateSnapshot(chartData: ChartData, pos: Int) {
         mCompositeDisposable.add(mRepository.getSnapshot(
-                snapshot.coin,
-                snapshot.exchange,
-                snapshot.currency,
-                snapshot.timing
-        ).subscribeOn(Schedulers.io())
+                chartData.coin,
+                chartData.exchange,
+                chartData.currency,
+                chartData.timingName)
+                .map { chartResponse ->
+                    chartResponse.data
+                }
+                .map { newChartData ->
+                    newChartData.id = chartData.id
+                    newChartData.coin = chartData.coin
+                    newChartData.timingName = chartData.timingName
+                    newChartData.timingIndex = chartData.timingIndex
+                    newChartData.options = chartData.options
+                    newChartData.isNotificationEnabled = chartData.isNotificationEnabled
+                    newChartData
+                }
+                .flatMap { newChartData ->
+                    mRepository.onUpdateChartData(newChartData)
+                }
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map { chartResponse -> chartResponse.data }
-                .map { responseData -> ChartDataMapper(responseData, responseData.info, responseData.chart) }
-                .subscribe({ mapper ->
-                    val dataInfo = mapper.dataInfo!!
-                    dataInfo.snapshotId = snapshot.id!!
-                    dataInfo.id = snapshot.infoId //TODO: getInfo().getId() or getInfoId() you should test that
-
-                    val chartsList = mapper.chartsList!!
-                    snapshot.charts = chartsList
-
-                    mRepository.onUpdateChartData(snapshot, dataInfo, chartsList)
-
-                    view.onLoadChart(snapshot, pos)
-                    view.onHideLoading()
+                .subscribe({ newChartData ->
+                    view.loadChartData(newChartData, pos)
                 }
                         , {
-                    view.onHideLoading()
-                }))
+                    it.printStackTrace()
+                    view.onError(it.message!!)
+                    view.onErrorChartItem(pos)
+                })
+        )
 
     }
 
-    fun onUpdateOptions(chartId: Long, isActive: Boolean, timing: String) {
-        mCompositeDisposable.add(mRepository.onOptionsChanged(chartId, isActive, timing)
+    fun onUpdateOptions(chartData: ChartData, pos: Int) {
+        mCompositeDisposable.add(mRepository.onUpdateChartData(chartData)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ count ->
-                    view.onSaveNotifiesCount(count!!)
+                .subscribe({
+                    Logger.i("Updated Snapshot")
+                    view.loadChartData(it, pos)
+
+//                    checkForService()
                 }
                         , {
+                    it.printStackTrace()
+                    Logger.e("Updating failed ${it.message}")
+                }))
+    }
+
+    private fun checkForService() {
+        var shouldStartService = false
+        mCompositeDisposable.add(mRepository.allObservable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .toObservable()
+                .flatMapIterable {
+                    it
+                }
+                .filter {
+                    it.isNotificationEnabled
+                }
+                .doOnNext {
+                    if (it.options.isSmartEnabled) {
+                        if (it.options.intervalUpdateIndex >= 8) {
+                            // Enqueue worker
+                            view.enqueueWorker(it)
+                        } else {
+                            // start service
+                            shouldStartService = true
+                        }
+                    } else {
+                        // start service
+                        shouldStartService = true
+                    }
+                }
+                .toList()
+                .subscribe({ list ->
+                    view.toast("Size of NotificationEnabled guys ${list.size}")
+                    if (shouldStartService) {
+                        view.startService()
+                    }
+
+                    view.stopService()
+                }, {
 
                 }))
     }
@@ -104,10 +144,54 @@ class SnapshotsPresenter internal constructor(internal var mRepository: DBChartR
         mCompositeDisposable.add(mRepository.onDeleteChartData(chartId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({ count ->
-                    view.onSaveNotifiesCount(count!!)
+                .subscribe({
+                    Logger.i("Successfully Removed")
+//                    checkForService()
                 }, {
-
+                    it.printStackTrace()
+                    Logger.e("Removing failed ${it.message}")
                 }))
+    }
+
+    fun onUpdateAllSnapshots(list: MutableList<ChartData>) {
+        view.onShowLoading()
+        mCompositeDisposable.add(Observable.fromIterable(list)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap { oldChartData ->
+                    Observable.zip(Observable.just(oldChartData),
+                            mRepository.getSnapshot(
+                                    oldChartData.coin,
+                                    oldChartData.exchange,
+                                    oldChartData.currency,
+                                    oldChartData.timingName)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread()),
+                            BiFunction<ChartData, ChartResponse, ChartData> { chartData, chartResponse ->
+                                val newChartData: ChartData = chartResponse.data
+                                newChartData.id = chartData.id
+                                newChartData.coin = chartData.coin
+                                newChartData.timingName = chartData.timingName
+                                newChartData.timingIndex = chartData.timingIndex
+                                newChartData.isNotificationEnabled = chartData.isNotificationEnabled
+                                newChartData.options = chartData.options
+                                newChartData
+                            }
+                    )
+                }
+                .doOnNext { newChartData ->
+                    mRepository.onUpdateChartData(newChartData)
+                }
+                .toList()
+                .subscribe({
+                    view.loadChartDatas(it)
+                    view.onHideLoading()
+                }, {
+                    getAllSnapshots()
+                    it.printStackTrace()
+                    view.onError(it.localizedMessage)
+                    view.onHideLoading()
+                })
+        )
     }
 }

@@ -1,7 +1,8 @@
 package workshop.akbolatss.xchangesrates.networking
 
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse
@@ -20,9 +21,9 @@ interface APIService {
 
     @GET("chart")
     fun getCurrency(@Query("coin") coin: String, @Query("exchange") exchange: String,
-                    @Query("currency") currency: String, @Query("term") term: String): Single<ChartResponse>
+                    @Query("currency") currency: String, @Query("term") term: String): Observable<ChartResponse>
 
     @GET("chart")
     fun getSnapshot(@Query("coin") coin: String, @Query("exchange") exchange: String,
-                    @Query("currency") currency: String, @Query("term") term: String): Single<ChartResponse>
+                    @Query("currency") currency: String, @Query("term") term: String): Observable<ChartResponse>
 }

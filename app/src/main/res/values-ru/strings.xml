@@ -70,4 +70,11 @@
     <string name="showcase_main_2">Попробуйте.</string>
     <string name="showcase_main_3">Что насчет уведомлении, Вы можете настроить их здесь.</string>
     <string name="showcase_main_4">Теперь вы готовы к использованию.</string>
+    <string name="tv5s">5 секунд</string>
+    <string name="tv15min">15 минут</string>
+    <string name="tv2weeks">2 недели</string>
+    <string name="bottom_bar_snapshots">Снэпшоты</string>
+    <string name="bottom_bar_charts">Чарты</string>
+    <string name="notification_switch">Включить уведомления</string>
+    <string name="notification_smart_switch">Умные уведомления</string>
 </resources>

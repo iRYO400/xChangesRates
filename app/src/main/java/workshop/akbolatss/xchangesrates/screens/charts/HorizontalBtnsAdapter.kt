@@ -26,8 +26,9 @@ import java.util.*
  * Date: 15.12.2017
  */
 
-class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSelectedPos: Int, private val mListener: onBtnClickListener) : RecyclerView.Adapter<HorizontalBtnsAdapter.HorizontalBtnsVH>() {
-    private val mBtnsList: MutableList<Button>
+class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSelectedPos: Int, private val mListener: OnBtnClickListener) : RecyclerView.Adapter<HorizontalBtnsAdapter.HorizontalBtnsVH>() {
+
+    private val mItemViewList: MutableList<View>
 
     private val mInternalListener = View.OnClickListener { view ->
         val id = view.getTag(R.integer.key_id).toString()
@@ -38,7 +39,7 @@ class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSel
     }
 
     init {
-        this.mBtnsList = ArrayList()
+        this.mItemViewList = ArrayList()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalBtnsVH {
@@ -56,15 +57,15 @@ class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSel
                     false, mListener)
         }
 
-//        holder.button!!.setOnClickListener(mInternalListener)
-//        holder.button!!.setTag(R.integer.key_id, mBtnIds[position])
-//        holder.button!!.setTag(R.integer.key_pos, position)
-//        mBtnsList.add(holder.button)
+        holder.itemView.setOnClickListener(mInternalListener)
+        holder.itemView.setTag(R.integer.key_id, mBtnIds[position])
+        holder.itemView.setTag(R.integer.key_pos, position)
+        mItemViewList.add(holder.itemView)
     }
 
     private fun onUpdateBtns(selectedPos: Int) {
-        for (i in mBtnsList.indices) {
-            mBtnsList[i].isSelected = selectedPos == i
+        for (i in mItemViewList.indices) {
+            mItemViewList[i].isSelected = selectedPos == i
         }
         notifyDataSetChanged()
     }
@@ -73,13 +74,13 @@ class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSel
         return mBtnIds?.size ?: 0
     }
 
-    interface onBtnClickListener {
+    interface OnBtnClickListener {
         fun onBtnClick(id: String, pos: Int)
     }
 
     inner class HorizontalBtnsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(s: String, isSelected: Boolean, mListener: onBtnClickListener) {
+        fun bind(s: String, isSelected: Boolean, mListener: OnBtnClickListener) {
             var str = ""
             val context = itemView.context
             when (s) {

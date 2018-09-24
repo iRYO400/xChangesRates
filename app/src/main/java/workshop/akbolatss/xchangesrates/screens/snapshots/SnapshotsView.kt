@@ -2,8 +2,8 @@ package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import workshop.akbolatss.xchangesrates.base.BaseView
 import workshop.akbolatss.xchangesrates.base.LoadingView
-import workshop.akbolatss.xchangesrates.model.dao.Snapshot
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo
+import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.model.response.ChartInfo
 
 /**
  * Author: Akbolat Sadvakassov
@@ -12,11 +12,21 @@ import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo
 
 interface SnapshotsView : BaseView, LoadingView {
 
-    fun onLoadSnapshots(snapshotList: List<Snapshot>)
+    /**
+     * Loading all snapshots to RecyclerView
+     */
+    fun loadChartDatas(chartDataList: List<ChartData>)
 
-    fun onLoadInfo(dataInfo: SnapshotInfo, pos: Int)
+    /**
+     * Loading single snapshot to RV
+     */
+    fun loadChartData(chartData: ChartData, pos: Int)
 
-    fun onLoadChart(data: Snapshot, pos: Int)
 
-    fun onSaveNotifiesCount(count: Int)
+    fun onErrorChartItem(pos: Int)
+    fun startService()
+    fun stopService()
+    fun toast(s: String)
+    fun enqueueWorker(it: ChartData)
+    fun dequeueWorker(chartData: ChartData)
 }

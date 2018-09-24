@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_arrow_high"
+            android:drawableStart="@drawable/ic_round_arrow_drop_up_24"
             android:text="High: "
             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 
@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_arrow_low"
+            android:drawableStart="@drawable/ic_round_arrow_drop_down_24"
             android:text="Low: "
             android:textAppearance="@style/TextAppearance.Compat.Notification" />
 

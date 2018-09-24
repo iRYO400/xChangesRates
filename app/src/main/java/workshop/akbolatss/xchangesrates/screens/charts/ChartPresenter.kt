@@ -1,15 +1,16 @@
 package workshop.akbolatss.xchangesrates.screens.charts
 
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.base.BasePresenter
 import workshop.akbolatss.xchangesrates.model.ExchangeModel
-import workshop.akbolatss.xchangesrates.model.mapper.ChartDataMapper
-import workshop.akbolatss.xchangesrates.model.response.ChartResponse
-import workshop.akbolatss.xchangesrates.model.response.ChartResponseData
+import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.model.response.ChartOptions
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.utils.Constants
+import java.util.ArrayList
 
 class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter<ChartView>() {
 
@@ -17,15 +18,25 @@ class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter
      * Main model
      */
     lateinit var exchangeModel: ExchangeModel
-
+    var exchangeModelPos: Int = 0
     /**
-     * Response от сервера
+     * Chart Model
      */
-    lateinit var mChartData: ChartResponseData
-
-    lateinit var mCoinCode: String
-    lateinit var mCurrencyCode: String
+    lateinit var mChartData: ChartData
+    /**
+     * Timing, e.g. 10min, 1h, 3h, 12h, 1 day, etc.
+     */
     lateinit var mTerm: String
+    /**
+     * ID of crypto valency, btc, eth...
+     */
+    lateinit var mCoinCode: String
+    var coinCodePos: Int = 0
+    /**
+     * ID of standard valency, KZT, USD...
+     */
+    lateinit var mCurrencyCode: String
+    var currencyCodePos: Int = 0
 
     private var compositeDisposable: CompositeDisposable? = null
 
@@ -45,36 +56,61 @@ class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter
 //        view.onShowLoading()
         compositeDisposable!!.add(
                 mRepository.getQueryResult(mCoinCode,
-                        exchangeModel!!.ident,
+                        exchangeModel.ident,
                         mCurrencyCode,
                         mTerm)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ response ->
-                            mChartData = response.data!!
+                            mChartData = response.data
                             mChartData.coin = mCoinCode
                             view.onLoadLineChart(mChartData)
 //                            view.onHideLoading()
                         }, {
-//                            view.onHideLoading()
+                            //                            view.onHideLoading()
                         }))
     }
 
-    fun onSaveSnap() {
-//        view.onShowLoading()
-        val mapper = ChartDataMapper(mChartData, mChartData.info, mChartData.chart)
-        //        Flowable<Object> s = Single.concat(mapper.transformD(mChartData), //TODO Улучши, когда твои скиллы по RxJava 2 поднимутся
-        //                mapper.transformInfoD(mChartData.getInfo()),
-        //                mapper.transformChartsD(mChartData.getChart()));
+    fun saveChartData() {
+        mChartData.coin = mCoinCode
+        mChartData.currency = mCurrencyCode
+        mChartData.timingName = "12h"
+        mChartData.timingIndex = 3 // 12 hours
+        mChartData.options = ChartOptions()
+        mChartData.options.isSmartEnabled = true
+        mChartData.isNotificationEnabled = false
         compositeDisposable!!.add(
-                mRepository.onAddChartData(mapper.data!!, mapper.dataInfo!!, mapper.chartsList!!)
-                        .subscribeOn(Schedulers.io())
+                mRepository.onAddChartData(mChartData)
                         .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
                         .subscribe({
-//                            view.onHideLoading()
+                            view.toast("Successfully saved!")
+                            mChartData.id = it
+                            view.onSaveSnapshot(true, mChartData)
                         }, {
-//                            view.onHideLoading()
+                            view.onSaveSnapshot(false, mChartData)
+                            it.printStackTrace()
+                            Log.e("TAG", "Error: ${it.message}")
+                            view.toast("Failed saving! >(")
                         })
         )
+    }
+
+
+    fun generateButtons(): ArrayList<String> {
+        val strings = ArrayList<String>()
+        strings.add(Constants.MINUTES_10)
+        strings.add(Constants.HOUR_1)
+        strings.add(Constants.HOUR_3)
+        strings.add(Constants.HOUR_12)
+        strings.add(Constants.HOUR_24)
+        strings.add(Constants.WEEK)
+        strings.add(Constants.MONTH)
+        strings.add(Constants.MONTH_3)
+        strings.add(Constants.MONTH_6)
+        strings.add(Constants.YEAR_1)
+        strings.add(Constants.YEAR_2)
+        strings.add(Constants.YEAR_5)
+        return strings
     }
 }

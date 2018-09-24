@@ -14,10 +14,10 @@
 -->
 
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetBottom="@dimen/abc_button_inset_vertical_material"
     android:insetLeft="@dimen/abc_button_inset_horizontal_material"
+    android:insetTop="@dimen/abc_button_inset_vertical_material"
     android:insetRight="@dimen/abc_button_inset_horizontal_material"
-    android:insetTop="@dimen/abc_button_inset_vertical_material">
+    android:insetBottom="@dimen/abc_button_inset_vertical_material">
     <ripple android:color="?android:attr/colorControlHighlight">
         <item>
             <!-- As we can't use themed ColorStateLists in L, we'll use a Drawable selector which

@@ -43,13 +43,17 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="@dimen/etText" />
 
-            <Spinner
-                android:id="@+id/spinExchanges"
+            <TextView
+                android:id="@+id/tvExchanger"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/bg_spinner"
-                android:gravity="end" />
+                android:background="@drawable/bg_txt"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:text="Kraken"
+                android:textColor="@color/colorSpinTxt"
+                android:textSize="@dimen/txtExchange" />
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -112,26 +116,34 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.3" />
 
-            <Spinner
-                android:id="@+id/spinCoin"
+            <TextView
+                android:id="@+id/tvCoin"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/bg_spinner"
-                android:gravity="end" />
+                android:background="@drawable/bg_txt"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:text="BTC"
+                android:textColor="@color/colorSpinTxt"
+                android:textSize="@dimen/txtExchange" />
 
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.25" />
-
-            <Spinner
-                android:id="@+id/spinCurrencies"
+            <TextView
+                android:id="@+id/tvCurrency"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/bg_spinner"
-                android:gravity="end" />
+                android:background="@drawable/bg_txt"
+                android:gravity="center_horizontal"
+                android:maxLines="1"
+                android:text="USD"
+                android:textColor="@color/colorSpinTxt"
+                android:textSize="@dimen/txtExchange" />
+
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -165,7 +177,7 @@
             android:id="@+id/lineChart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="2dp" />
+            android:layout_marginBottom="24dp"
+            />
     </LinearLayout>
 </LinearLayout>

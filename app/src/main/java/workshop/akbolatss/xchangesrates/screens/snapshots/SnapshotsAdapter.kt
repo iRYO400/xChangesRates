@@ -1,5 +1,8 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
+import android.annotation.SuppressLint
+import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +11,16 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.rv_snapshot.view.*
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.model.dao.Snapshot
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotChart
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo
+import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.model.response.ChartInfo
+import workshop.akbolatss.xchangesrates.model.response.ChartItem
+import workshop.akbolatss.xchangesrates.utils.UtilityMethods.convertTime
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -24,16 +29,9 @@ import java.util.concurrent.TimeUnit
  * Date: 18.12.2017
  */
 
-class SnapshotsAdapter(private val mListener: onSnapshotClickListener) : RecyclerView.Adapter<SnapshotsAdapter.SnapshotsVH>() {
+class SnapshotsAdapter(private val mListener: OnSnapshotListener) : RecyclerView.Adapter<SnapshotsAdapter.SnapshotsVH>() {
 
-    private val mSnapshotModels: MutableList<Snapshot>?
-
-    val snapshotModels: List<Snapshot>?
-        get() = mSnapshotModels
-
-    init {
-        this.mSnapshotModels = ArrayList()
-    }
+    val mList: MutableList<ChartData> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnapshotsVH {
         val inflater = LayoutInflater.from(parent.context)
@@ -42,51 +40,39 @@ class SnapshotsAdapter(private val mListener: onSnapshotClickListener) : Recycle
     }
 
     override fun onBindViewHolder(holder: SnapshotsVH, position: Int) {
-        holder.bind(mSnapshotModels!![position], mListener)
+        holder.bind(mList[position], mListener)
     }
 
-    fun onAddItems(modelList: List<Snapshot>?) {
-        if (modelList != null) {
-            mSnapshotModels!!.clear()
-            mSnapshotModels.addAll(modelList)
-            notifyDataSetChanged()
-        }
+    /**
+     * Add snapshots
+     */
+    fun onAddItems(modelList: List<ChartData>) {
+//        val diffResult = DiffUtil.calculateDiff(SnapshotDiffUtillCallback(mList, modelList))
+        mList.clear()
+        mList.addAll(modelList)
+        notifyDataSetChanged()
+//        diffResult.dispatchUpdatesTo(this)
     }
 
-    fun onUpdateSnapshot(data: Snapshot, pos: Int) {
-        mSnapshotModels!![pos] = data
+    /**
+     * Update snapshot
+     */
+    fun onUpdateSnapshot(chartData: ChartData, pos: Int) {
+        mList[pos] = chartData
         notifyItemChanged(pos)
-    }
-
-    fun onUpdateNotifyState(isActive: Boolean, timing: String, pos: Int) {
-        val data = mSnapshotModels!![pos]
-        data.isActiveForGlobal = isActive
-        data.timing = timing
-        mSnapshotModels[pos] = data
-        notifyItemChanged(pos)
-    }
-
-    fun onUpdateInfo(info: SnapshotInfo, pos: Int) {
-        mSnapshotModels!![pos].info = info
-        notifyItemChanged(pos)
-    }
-
-    fun onRemoveSnap(pos: Int) {
-        mSnapshotModels!!.removeAt(pos)
-        notifyItemRemoved(pos)
     }
 
     override fun getItemCount(): Int {
-        return mSnapshotModels?.size ?: 0
+        return mList.size
     }
 
-    interface onSnapshotClickListener {
+    interface OnSnapshotListener {
 
-        fun onUpdateItem(model: Snapshot, pos: Int)
+        fun onUpdateItem(chartData: ChartData, pos: Int)
 
-        fun onGetInfo(key: Long, pos: Int)
+        fun onOpenOptions(chartId: Long, pos: Int)
 
-        fun onOpenOptions(chartId: Long, isActive: Boolean, timing: String, pos: Int)
+        fun enableNotification(chartData: ChartData, pos: Int)
     }
 
     inner class SnapshotsVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -94,53 +80,50 @@ class SnapshotsAdapter(private val mListener: onSnapshotClickListener) : Recycle
             onInitChart()
         }
 
-        fun bind(model: Snapshot, listener: onSnapshotClickListener) {
-            val s = model.coin + "/" + model.currency
+        fun bind(chartData: ChartData, listener: OnSnapshotListener) {
+            val s = chartData.coin + "/" + chartData.currency
             itemView.tvSnapName.text = s
-            itemView.tvExchanger.text = model.exchange
+            itemView.tvExchanger.text = chartData.exchange
 
-            if (model.isActiveForGlobal!!) {
-                itemView.imgNotifyState.setImageResource(R.drawable.ic_notifications_active_24dp)
+            if (chartData.isNotificationEnabled) {
+                itemView.imgNotifyState.setImageResource(R.drawable.ic_round_notifications_active_24)
             } else {
-                itemView.imgNotifyState.setImageResource(R.drawable.ic_notifications_inactive24dp)
+                itemView.imgNotifyState.setImageResource(R.drawable.ic_round_notifications_none_24)
             }
 
-            itemView.frameLayout.setOnClickListener(View.OnClickListener {
-                itemView.frameLayout.isEnabled = false
-                itemView.frameLayout.isClickable = false
-                itemView.progressBar.visibility = View.VISIBLE
-                itemView.tvDate.visibility = View.INVISIBLE
-                itemView.tvTime.visibility = View.INVISIBLE
-                listener.onUpdateItem(model, adapterPosition)
-            })
+            itemView.snapshotView.setOnClickListener {
+                listener.onUpdateItem(chartData, adapterPosition)
+            }
 
-            itemView.frameLayout.setOnLongClickListener(View.OnLongClickListener {
-                listener.onOpenOptions(model.id!!, model.isActiveForGlobal!!, model.timing, adapterPosition)
+            itemView.snapshotView.setOnLongClickListener {
+                listener.onOpenOptions(chartData.id, adapterPosition)
                 true
-            })
-
-
-            if (!model.isInfoNull) {
-                bindInfo(model.info)
-            } else {
-                listener.onGetInfo(model.id!!, adapterPosition)
             }
 
-            bindChart(model.charts)
+            itemView.flNotify.setOnClickListener {
+                listener.enableNotification(chartData, adapterPosition)
+            }
+
+            itemView.flOptions.setOnClickListener {
+                listener.onOpenOptions(chartData.id, adapterPosition)
+            }
+
+            bindInfo(chartData.info)
+            bindChart(chartData.chart)
         }
 
-        fun bindInfo(dataInfo: SnapshotInfo) {
-            itemView.tvCurrRate.text = dataInfo.last
-            itemView.tvHighRate.text = dataInfo.high
-            itemView.tvLowRate.text = dataInfo.low
-            val timestamp = dataInfo.updated.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            itemView.tvDate.text = timestamp[0]
-            itemView.tvTime.text = timestamp[1]
+        private fun bindInfo(chartInfo: ChartInfo) {
+            itemView.tvCurrRate.text = chartInfo.last
+            itemView.tvHighRate.text = chartInfo.high
+            itemView.tvLowRate.text = chartInfo.low
+            itemView.tvTime.text = convertTime(chartInfo.timestamp!! * 1000)
         }
 
         private fun onInitChart() {
             itemView.lineChart.description.isEnabled = false
             itemView.lineChart.legend.isEnabled = false
+            itemView.lineChart.setTouchEnabled(false)
+            itemView.lineChart.setViewPortOffsets(8f, 0f, 0f, 0f)
 
             val xAxis = itemView.lineChart.xAxis
             xAxis.isEnabled = false
@@ -152,37 +135,45 @@ class SnapshotsAdapter(private val mListener: onSnapshotClickListener) : Recycle
             yAxis1.isEnabled = false
         }
 
-        private fun bindChart(chartsList: List<SnapshotChart>) {
+        @SuppressLint("CheckResult")
+        private fun bindChart(chartsList: List<ChartItem>) {
             rxCalculate(chartsList)
-                    .delay(1500, TimeUnit.MILLISECONDS)
+                    .delay(1000, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({ lineData ->
                         itemView.lineChart.clear()
                         itemView.lineChart.data = lineData
-                        itemView.lineChart.invalidate()
+                        itemView.lineChart.notifyDataSetChanged()
                     }, {
 
                     })
         }
 
-        private fun rxCalculate(chartsList: List<SnapshotChart>): Single<LineData> {
-            return Single.fromCallable {
-                val entries = ArrayList<Entry>()
-                for (i in chartsList.indices) {
-                    entries.add(BarEntry(i.toFloat(),
-                            java.lang.Float.parseFloat(chartsList[i].price)))
-                }
-
-                val set = LineDataSet(entries, "")
-                set.setDrawCircles(false)
-                set.mode = LineDataSet.Mode.CUBIC_BEZIER
-                set.lineWidth = 1f
-                val lineData = LineData(set)
-                lineData.setDrawValues(false)
-                lineData.isHighlightEnabled = false
-                lineData
-            }
+        private fun rxCalculate(chartsList: List<ChartItem>): Single<LineData> {
+            return Observable.fromIterable(chartsList)
+                    .map { chartItem ->
+                        BarEntry(chartItem.timestamp!!.toFloat(),
+                                chartItem.price!!.toFloat())
+                    }
+                    .toList()
+                    .map {
+                        val dataSet = LineDataSet(it as List<Entry>, "")
+                        dataSet.setDrawCircles(false)
+                        dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+                        dataSet.cubicIntensity = 0.4f
+                        dataSet.lineWidth = 1f
+                        dataSet.color = ContextCompat.getColor(itemView.context, R.color.colorAccent)
+                        dataSet.setDrawFilled(true)
+                        dataSet.fillDrawable = ContextCompat.getDrawable(itemView.context, R.drawable.bg_chart_round)
+                        dataSet
+                    }
+                    .map { dataSet ->
+                        val lineData = LineData(dataSet)
+                        lineData.setDrawValues(false)
+                        lineData.isHighlightEnabled = false
+                        lineData
+                    }
         }
     }
 }

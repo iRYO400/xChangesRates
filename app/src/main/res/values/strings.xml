@@ -41,6 +41,74 @@
     <string name="tv2y">2 years</string>
     <string name="tv5y">5 years</string>
 
+    <string-array name="array_history_timing">
+        <item>10 minutes</item>
+        <item>Hour</item>
+        <item>3 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>3 months</item>
+        <item>Half a year</item>
+        <item>Year</item>
+        <item>2 years</item>
+        <item>5 years</item>
+    </string-array>
+
+    <string-array name="array_interval_updates">
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>5 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>48 hours</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+    </string-array>
+
+    <string-array name="array_interval_updates_smart">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>5 hours</item>
+        <item>12 hours</item>
+        <item>24 hours</item>
+        <item>48 hours</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+    </string-array>
+
+    <!--<string name="tv5s">5 seconds</string>-->
+    <!--<string name="tv10s">10 seconds</string>-->
+    <!--<string name="tv15s">15 seconds</string>-->
+    <!--<string name="tv30s">30 seconds</string>-->
+    <!--<string name="tv1min">1 minute</string>-->
+    <!--<string name="tv2min">2 minutes</string>-->
+    <!--<string name="tv5min">5 minutes</string>-->
+    <!--<string name="tv10min">10 minutes</string>-->
+    <string name="tv15min">15 minutes</string>
+    <!--<string name="tv30min">30 minutes</string>-->
+    <!--<string name="tv1hour">1 hour</string>-->
+    <!--<string name="tv2hour">2 hours</string>-->
+    <!--<string name="tv5hour">5 hours</string>-->
+    <!--<string name="tv12hour">12 hours</string>-->
+    <!--<string name="tv24hour">24 hours</string>-->
+    <!--<string name="tv48hour">48 hours</string>-->
+    <!--<string name="tv1week">1 week</string>-->
+    <string name="tv2weeks">2 weeks</string>
+
     <string-array name="array_time">
         <item>10 minutes</item>
         <item>Hour</item>
@@ -83,5 +151,11 @@
     <string name="showcase_main_2">Try it Yourself.</string>
     <string name="showcase_main_3">What about notifications, You can set them here.</string>
     <string name="showcase_main_4">Now You\'re ready to go on.</string>
+    <string name="bottom_bar_snapshots">Snapshots</string>
+    <string name="bottom_bar_charts">Charts</string>
+    <string name="notification_switch">Notification</string>
+    <string name="notification_smart_switch">Smart(Battery save)</string>
+    <string name="notification_sticked_switch" translatable="false">Sticked</string>
+    <string name="tv5s">5 seconds</string>
 
 </resources>

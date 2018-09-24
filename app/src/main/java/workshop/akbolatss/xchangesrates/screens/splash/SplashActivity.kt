@@ -21,13 +21,9 @@ class SplashActivity : AppCompatActivity() {
 
     private var countDownTimer: CountDownTimer? = null
 
-    private var mRepository: DBNotificationRepository? = null //TODO: Let's make a Presenter for this
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
-        mRepository = DBNotificationRepository((application as ApplicationMain).daoSession)
 
         countDownTimer = object : CountDownTimer(700, 1000) {
             override fun onTick(l: Long) {}
@@ -48,14 +44,7 @@ class SplashActivity : AppCompatActivity() {
             Hawk.put(Constants.HAWK_HISTORY_POS, 0)
             Hawk.put(Constants.HAWK_HISTORY_CODE, Constants.MINUTES_10)
             Hawk.put(Constants.HAWK_FIRST_START, true)
-
-            mRepository!!.initDefault()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                        onUpdateXChanges()
-                    }, {
-                    })
+            onUpdateXChanges()
         } else {
             onUpdateXChanges()
         }
@@ -65,10 +54,10 @@ class SplashActivity : AppCompatActivity() {
         ApplicationMain.apiService.getExchanges()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .doAfterSuccess({ exchangeResponse ->
+                .doAfterSuccess { exchangeResponse ->
                     Hawk.put(Constants.HAWK_EXCHANGE_RESPONSE, exchangeResponse)
                     Hawk.put(Constants.HAWK_LAST_UPDATE, UtilityMethods.todayDate)
-                })
+                }
                 .subscribe(object : DisposableSingleObserver<ExchangeResponse>() {
                     override fun onSuccess(exchangeResponse: ExchangeResponse) {
                         Toast.makeText(this@SplashActivity, R.string.splash_1, Toast.LENGTH_LONG).show()
@@ -76,6 +65,7 @@ class SplashActivity : AppCompatActivity() {
                     }
 
                     override fun onError(e: Throwable) {
+                        e.printStackTrace()
                         if (!Hawk.contains(Constants.HAWK_EXCHANGE_RESPONSE)) {
                             Toast.makeText(this@SplashActivity, R.string.splash_2, Toast.LENGTH_LONG).show()
                             countDownTimer = object : CountDownTimer(1500, 1000) {

@@ -1,15 +1,21 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.support.constraint.ConstraintLayout
+import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.work.*
 import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.fragment_snapshots.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
@@ -17,17 +23,21 @@ import me.toptas.fancyshowcase.FancyShowCaseView
 import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
-import workshop.akbolatss.xchangesrates.model.dao.Snapshot
-import workshop.akbolatss.xchangesrates.model.dao.SnapshotInfo
+import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
-import workshop.akbolatss.xchangesrates.screens.main.MainActivity
-import workshop.akbolatss.xchangesrates.screens.notifications.NotificationsDialogFragment
+import workshop.akbolatss.xchangesrates.screens.notifications.NotificationService
+import workshop.akbolatss.xchangesrates.screens.notifications.NotificationWorker
 import workshop.akbolatss.xchangesrates.utils.Constants
+import workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOULD_OFF
+import workshop.akbolatss.xchangesrates.utils.Constants.WORKER_INPUT_ID
+import workshop.akbolatss.xchangesrates.utils.Logger
+import workshop.akbolatss.xchangesrates.utils.UtilityMethods
+import java.util.concurrent.TimeUnit
 
-class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListener, SnapshotsAdapter.onSnapshotClickListener, SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
 
-    internal var mPresenter: SnapshotsPresenter? = null
+class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListener, SnapshotsAdapter.OnSnapshotListener, SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
 
+    private lateinit var mPresenter: SnapshotsPresenter
 
     private lateinit var mAdapter: SnapshotsAdapter
 
@@ -35,28 +45,225 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_snapshots, container, false)
 
-        mPresenter = SnapshotsPresenter(DBChartRepository((activity!!.application as ApplicationMain).daoSession,
-                ApplicationMain.apiService))
+        mPresenter = SnapshotsPresenter(DBChartRepository(ApplicationMain.apiService,
+                ApplicationMain.instance.appDatabase.chartDataDao()))
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (mPresenter != null) {
-            mPresenter!!.onViewAttached(this)
-        }
+        mPresenter.onViewAttached(this)
 
+        initView()
+
+        Handler().postDelayed({
+            mPresenter.getAllSnapshots()
+
+            showStartupShowCase()
+        }, 500)
+    }
+
+    private fun initView() {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
         swipeRefresh.setOnRefreshListener(this)
 
         mAdapter = SnapshotsAdapter(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.isNestedScrollingEnabled = true
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = GridLayoutManager(_mActivity, 2)
         recyclerView.adapter = mAdapter
+    }
 
-        Handler().postDelayed({ mPresenter!!.getAllSnapshots() }, 500)
+    override fun onOpenOptions(chartId: Long, pos: Int) {
+        val fm = fragmentManager
+        val dialogFragment = OptionsDialogFragment.newInstance(chartId, pos)
+        dialogFragment.setTargetFragment(this@SnapshotsFragment, 300)
+        dialogFragment.show(fm!!, "fm")
+    }
+
+    /**
+     * Load all snapshots from DB
+     */
+    override fun loadChartDatas(chartDataList: List<ChartData>) {
+        mAdapter.onAddItems(chartDataList)
+    }
+
+    /**
+     * Update single snapshot
+     */
+    override fun onUpdateItem(chartData: ChartData, pos: Int) {
+        val view = recyclerView.findViewHolderForAdapterPosition(pos)!!.itemView
+        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+        view.findViewById<ImageView>(R.id.imgError).visibility = View.GONE
+        view.findViewById<TextView>(R.id.tvTime).visibility = View.INVISIBLE
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isEnabled = false
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isClickable = false
+        mPresenter.onUpdateSnapshot(chartData, pos)
+    }
+
+    /**
+     * Loading to adapter updated single snapshot
+     */
+    override fun loadChartData(chartData: ChartData, pos: Int) {
+        val view = recyclerView.findViewHolderForAdapterPosition(pos)!!.itemView
+        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+        view.findViewById<ImageView>(R.id.imgError).visibility = View.GONE
+        view.findViewById<TextView>(R.id.tvTime).visibility = View.VISIBLE
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isEnabled = true
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isClickable = true
+        mAdapter.onUpdateSnapshot(chartData, pos)
+    }
+
+    /**
+     * Error occurred, when updating single snapshot
+     */
+    override fun onErrorChartItem(pos: Int) {
+        val view = recyclerView.findViewHolderForAdapterPosition(pos)!!.itemView
+        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
+        view.findViewById<ImageView>(R.id.imgError).visibility = View.VISIBLE
+        view.findViewById<TextView>(R.id.tvTime).visibility = View.INVISIBLE
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isEnabled = true
+        view.findViewById<ConstraintLayout>(R.id.snapshotView).isClickable = true
+    }
+
+    /**
+     * SwipeRefresh
+     */
+    override fun onRefresh() {
+        mPresenter.getAllSnapshots()
+    }
+
+    /**
+     * Save edited changes
+     */
+    override fun saveSnapshotChanges(chartData: ChartData, lastNotificationState: Boolean, pos: Int) {
+        if (lastNotificationState && chartData.isNotificationEnabled) { // Was enabled, then still enabled. Maybe changed timing
+            dequeueWorker(chartData)
+            UtilityMethods.clearOngoinNotification(chartData, _mActivity)
+            enqueueWorker(chartData)
+        }
+        if (lastNotificationState && !chartData.isNotificationEnabled) { // Was enabled, then disabled, So dequeue it
+            dequeueWorker(chartData)
+            UtilityMethods.clearOngoinNotification(chartData, _mActivity)
+        }
+        if (!lastNotificationState && chartData.isNotificationEnabled) { // Was disabled, then enabled. So only enqueue it
+            enqueueWorker(chartData)
+        }
+        if (!lastNotificationState && !chartData.isNotificationEnabled) { // Was disabled, then still disabled. Nothing to do
+        }
+
+        mPresenter.onUpdateOptions(chartData, pos)
+    }
+
+    override fun enableNotification(chartData: ChartData, pos: Int) {
+        val lastState = chartData.isNotificationEnabled
+        chartData.isNotificationEnabled = !chartData.isNotificationEnabled
+        saveSnapshotChanges(chartData, lastState, pos)
+    }
+
+    /**
+     * Remove snapshot from database
+     */
+    override fun removeSnapshot(chartData: ChartData, pos: Int) {
+        dequeueWorker(chartData)
+        UtilityMethods.clearOngoinNotification(chartData, _mActivity)
+        UtilityMethods.deleteNotificationChannel(chartData, _mActivity)
+        mAdapter.notifyItemRemoved(pos)
+        mPresenter.onRemoveSnapshot(chartData.id)
+    }
+
+    override fun toast(s: String) {
+        Toast.makeText(_mActivity, s, Toast.LENGTH_LONG).show()
+    }
+
+    override fun enqueueWorker(chartData: ChartData) {
+        val myConstraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiresCharging(false)
+                .build()
+
+        val inputData = Data.Builder()
+                .putLong(WORKER_INPUT_ID, chartData.id)
+                .build()
+
+        val seconds = UtilityMethods.calculateInterval(chartData.options.intervalUpdateIndex)
+        Logger.i("Seconds is $seconds")
+        val notificationWork = PeriodicWorkRequestBuilder<NotificationWorker>(seconds, TimeUnit.SECONDS)
+                .setConstraints(myConstraints)
+                .setInputData(inputData)
+                .build()
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork(UtilityMethods.generateChannelId(chartData), ExistingPeriodicWorkPolicy.KEEP, notificationWork)
+    }
+
+    override fun dequeueWorker(chartData: ChartData) {
+
+        WorkManager.getInstance().cancelUniqueWork(UtilityMethods.generateChannelId(chartData))
+    }
+
+    /**
+     * Enables service. If there more than 0 snapshots with isNotificationEnabled
+     */
+    override fun startService() {
+        Hawk.put(HAWK_SHOULD_OFF, false)
+        val mServiceIntent = Intent(_mActivity, NotificationService::class.java)
+        ContextCompat.startForegroundService(_mActivity, mServiceIntent)
+    }
+
+    override fun stopService() {
+        if (NotificationService.isRunning) {
+            Logger.i("Service is running")
+            Hawk.put(HAWK_SHOULD_OFF, true)
+            val serviceIntent = Intent(_mActivity, NotificationService::class.java)
+            _mActivity.stopService(serviceIntent)
+        }
+    }
+
+    fun updateAllSnapshots() {
+        if (mAdapter.itemCount <= 0) {
+            return
+        }
+
+        mPresenter.onUpdateAllSnapshots(mAdapter.mList)
+    }
+
+    /**
+     * No content state
+     */
+    override fun onNoContent(isEmpty: Boolean) {
+        if (isEmpty) {
+            tvNoContent.visibility = View.VISIBLE
+        } else {
+            tvNoContent.visibility = View.GONE
+        }
+    }
+
+    /**
+     * Show loading state
+     */
+    override fun onShowLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+    }
+
+    /**
+     * Hide loading state
+     */
+    override fun onHideLoading() {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        swipeRefresh.isRefreshing = false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mPresenter.onViewDetached(this)
+    }
+
+    /**
+     * Show ShowCase at startup
+     */
+    private fun showStartupShowCase() {
 
         if (!Hawk.get(Constants.HAWK_SHOWCASE_0_DONE, false)) {
             val showCaseQueue: FancyShowCaseQueue
@@ -73,132 +280,12 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
         }
     }
 
-    override fun onOpenOptions(chartId: Long, isActive: Boolean, timing: String, pos: Int) {
-        val fm = fragmentManager
-        val dialogFragment = OptionsDialogFragment.newInstance(chartId, isActive, timing, pos)
-        dialogFragment.setTargetFragment(this@SnapshotsFragment, 300)
-        dialogFragment.show(fm!!, "fm")
+    fun showItemShowCase() {
+
     }
 
-    fun onNotificationsDialog() {
-        val fm = fragmentManager
-        val dialogFragment = NotificationsDialogFragment.newInstance()
-        dialogFragment.setTargetFragment(this@SnapshotsFragment, 400)
-        dialogFragment.show(fm!!, "fm")
-    }
-
-    override fun onGetInfo(key: Long, pos: Int) {
-        mPresenter!!.onLoadInfo(key, pos)
-    }
-
-    override fun onLoadSnapshots(snapshotList: List<Snapshot>) {
-        mAdapter.onAddItems(snapshotList)
-
-        if (Hawk.get(Constants.HAWK_SHOWCASE_2_DONE)) {
-            Handler().postDelayed({
-                if (mAdapter.itemCount > 0) {
-                    val queue: FancyShowCaseQueue
-                    val view = recyclerView.findViewHolderForLayoutPosition(0).itemView
-                    val fL = view.findViewById(R.id.frameLayout) as FrameLayout
-                    val showCase3 = FancyShowCaseView.Builder(activity!!)
-                            .focusOn(fL)
-                            .title(resources.getString(R.string.showcase_snap_3))
-                            .backgroundColor(R.color.colorShowCaseBG)
-                            .build()
-
-                    val showCase4 = FancyShowCaseView.Builder(activity!!)
-                            .focusOn(fL)
-                            .title(resources.getString(R.string.showcase_snap_4))
-                            .backgroundColor(R.color.colorShowCaseBG)
-                            .build()
-
-                    queue = FancyShowCaseQueue()
-                            .add(showCase3)
-                            .add(showCase4)
-                    queue.setCompleteListener { (activity as MainActivity).onShowCase2() }
-
-                    queue.show()
-                    Hawk.put(Constants.HAWK_SHOWCASE_2_DONE, false)
-                }
-            }, 500)
-        }
-    }
-
-    override fun onLoadInfo(dataInfo: SnapshotInfo, pos: Int) {
-        mAdapter.onUpdateInfo(dataInfo, pos)
-    }
-
-    override fun onLoadChart(data: Snapshot, pos: Int) {
-        mAdapter.onUpdateSnapshot(data, pos)
-        val view = recyclerView.findViewHolderForLayoutPosition(pos).itemView
-        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
-        view.findViewById<TextView>(R.id.tvDate).visibility = View.VISIBLE
-        view.findViewById<TextView>(R.id.tvTime).visibility = View.VISIBLE
-        view.findViewById<FrameLayout>(R.id.frameLayout).isEnabled = true
-        view.findViewById<FrameLayout>(R.id.frameLayout).isClickable = true
-    }
-
-    override fun onSaveNotifiesCount(count: Int) {
-        Hawk.put(Constants.HAWK_NOTIFIES_COUNT, count)
-    }
-
-    override fun onRefresh() {
-        mPresenter!!.getAllSnapshots()
-    }
-
-    override fun onSaveChanges(chartId: Long, isActive: Boolean, timing: String, pos: Int) {
-        mPresenter!!.onUpdateOptions(chartId, isActive, timing)
-        mAdapter.onUpdateNotifyState(isActive, timing, pos)
-    }
-
-    override fun onRemove(chartId: Long, pos: Int) {
-        mPresenter!!.onRemoveSnapshot(chartId)
-        mAdapter.onRemoveSnap(pos)
-    }
-
-    override fun onUpdateItem(model: Snapshot, pos: Int) {
-        mPresenter!!.onUpdateSnapshot(model, pos)
-    }
-
-    fun onUpdateSnapshots() {
-        if (mAdapter.itemCount <= 0) {
-            return
-        }
-        onShowLoading()
-        for (i in 0 until mAdapter.snapshotModels!!.size) {
-            mPresenter!!.onUpdateSnapshot(mAdapter.snapshotModels!![i], i)
-        }
-    }
-
-    override fun onNoContent(isEmpty: Boolean) {
-        if (isEmpty) {
-            tvNoContent.visibility = View.VISIBLE
-        } else {
-            tvNoContent.visibility = View.GONE
-        }
-    }
-
-    override fun onShowLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-    }
-
-    override fun onHideLoading() {
-        progressBar.visibility = View.GONE
-        recyclerView.visibility = View.VISIBLE
-        swipeRefresh.isRefreshing = false
-    }
-
-    override fun onPause() {
-        super.onPause()
-        hideSoftInput()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (mPresenter != null) {
-            mPresenter!!.onViewDetached(this)
-        }
+    override fun onError(message: String) {
+        Logger.e("SnapshotFragment: $message")
     }
 
     companion object {

@@ -8,21 +8,6 @@ import workshop.akbolatss.xchangesrates.BuildConfig
  */
 class Logger {
     companion object {
-
-        private const val TAG = "XChangesRate"
-
-        fun l(msg: String) {
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, msg)
-            }
-        }
-
-        fun l(name: String, msg: String) {
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "$name: $msg")
-            }
-        }
-
         fun i(name: String, msg: String) {
             if (BuildConfig.DEBUG) {
                 Log.d(name, msg)
@@ -31,19 +16,25 @@ class Logger {
 
         fun i(s: String) {
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, s)
-            }
-        }
-
-        fun e(name: String, msg: String) {
-            if (BuildConfig.DEBUG) {
-                Log.e(name, msg)
+                val maxLogSize = 1000
+                for (i in 0..s.length / maxLogSize) {
+                    val start = i * maxLogSize
+                    var end = (i + 1) * maxLogSize
+                    end = if (end > s.length) s.length else end
+                    Log.d("XChangesRate, Debug", s.substring(start, end))
+                }
             }
         }
 
         fun e(s: String) {
             if (BuildConfig.DEBUG) {
-                Log.e(TAG, s)
+                val maxLogSize = 1000
+                for (i in 0..s.length / maxLogSize) {
+                    val start = i * maxLogSize
+                    var end = (i + 1) * maxLogSize
+                    end = if (end > s.length) s.length else end
+                    Log.e("XChangesRate, Error", s.substring(start, end))
+                }
             }
         }
     }

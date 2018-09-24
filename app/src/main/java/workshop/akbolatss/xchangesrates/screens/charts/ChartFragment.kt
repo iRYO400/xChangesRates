@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.screens.charts
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -10,8 +9,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarEntry
@@ -19,27 +16,30 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.orhanobut.hawk.Hawk
+import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_main.*
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
-import me.yokeyword.fragmentation.ISupportFragment
 import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
-import workshop.akbolatss.xchangesrates.model.response.ChartResponseData
+import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.model.response.ChartItem
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
-import workshop.akbolatss.xchangesrates.screens.main.MainActivity
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
-import java.util.*
+import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
-class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, HorizontalBtnsAdapter.onBtnClickListener, ChartView, ISupportFragment, View.OnFocusChangeListener, TextWatcher {
+class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListener, PickerDialog.PickerDialogListener, ChartView, TextWatcher {
 
+    private lateinit var mPresenter: ChartPresenter
 
-    private var mPresenter: ChartPresenter? = null
-
-    private var mBtnsAdapter: HorizontalBtnsAdapter? = null
+    private lateinit var mBtnsAdapter: HorizontalBtnsAdapter
 
     private var mExchangeResponse: ExchangeResponse? = null
     /**
@@ -55,6 +55,8 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
      */
     private var isCurrencyEtFocused: Boolean = false
 
+    private lateinit var mDisposable: Disposable
+
     companion object {
 
         fun newInstance(): ChartFragment {
@@ -66,81 +68,55 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        mPresenter = ChartPresenter(DBChartRepository((activity!!.application as ApplicationMain).daoSession,
-                ApplicationMain.apiService))
+        mPresenter = ChartPresenter(DBChartRepository(ApplicationMain.apiService,
+                ApplicationMain.instance.appDatabase.chartDataDao()))
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (mPresenter != null) {
-            mPresenter!!.onViewAttached(this)
-        }
+        mPresenter.onViewAttached(this)
+
         onInitRV()
         onInitChart()
         onInitSpinner()
-
-        if (!Hawk.get(Constants.HAWK_SHOWCASE_1_DONE, false)) {
-            val showCaseQueue: FancyShowCaseQueue
-
-            val showCase1 = FancyShowCaseView.Builder(activity!!)
-                    .title(resources.getString(R.string.showcase_chart_1))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
-            val showCase2 = FancyShowCaseView.Builder(activity!!)
-                    .focusOn(spinExchanges)
-                    .title(resources.getString(R.string.showcase_chart_2))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
-            val showCase3 = FancyShowCaseView.Builder(activity!!)
-                    .focusOn(spinCoin)
-                    .title(resources.getString(R.string.showcase_chart_3))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
-            val showCase4 = FancyShowCaseView.Builder(activity!!)
-                    .focusOn(spinCurrencies)
-                    .title(resources.getString(R.string.showcase_chart_4))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
-            val showCase5 = FancyShowCaseView.Builder(activity!!)
-                    .focusOn(recyclerView)
-                    .title(resources.getString(R.string.showcase_chart_5))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
-
-            showCaseQueue = FancyShowCaseQueue()
-                    .add(showCase1)
-                    .add(showCase2)
-                    .add(showCase3)
-                    .add(showCase4)
-                    .add(showCase5)
-
-            showCaseQueue.setCompleteListener { (activity as MainActivity).onShowCase1() }
-
-            showCaseQueue.show()
-            Hawk.put(Constants.HAWK_SHOWCASE_1_DONE, true)
-        }
     }
 
     private fun onInitSpinner() {
         mExchangeResponse = Hawk.get(Constants.HAWK_EXCHANGE_RESPONSE)
+        mPresenter.exchangeModel = mExchangeResponse!!.data[0]
+        mPresenter.mCoinCode = mPresenter.exchangeModel.currencies.keys.first()
+        mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[mPresenter.mCoinCode]!![0]
+        mPresenter.onUpdate()
 
-        val ids = arrayOfNulls<String>(mExchangeResponse!!.data.size)
-        for (i in 0 until mExchangeResponse!!.data.size) {
-            ids[i] = mExchangeResponse!!.data[i].caption
+        val exchangerCodes = ArrayList<String>()
+        for (exchanger in mExchangeResponse!!.data) {
+            exchangerCodes.add(exchanger.caption)
         }
 
-        val arrayAdapter = ArrayAdapter<String>(_mActivity, R.layout.custom_spinner_item, ids)
-        arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
-        spinExchanges.adapter = arrayAdapter
-        spinExchanges.onItemSelectedListener = this@ChartFragment
-        spinCoin.onItemSelectedListener = this@ChartFragment // Use in this order!
-        spinCurrencies.onItemSelectedListener = this@ChartFragment // !!!
+        tvExchanger.setOnClickListener {
+            val fm = fragmentManager
+            val dialogFragment = PickerDialog.newInstance(PICKER_TYPE.EXCHANGER, exchangerCodes, mPresenter.exchangeModelPos)
+            dialogFragment.setTargetFragment(this@ChartFragment, 100)
+            dialogFragment.show(fm!!, "fm")
+        }
+
+        tvCoin.setOnClickListener {
+            val arrayList = mPresenter.exchangeModel.currencies.keys.toMutableList()
+            val fm = fragmentManager
+            val dialogFragment = PickerDialog.newInstance(PICKER_TYPE.COIN, arrayList as ArrayList<String>, mPresenter.coinCodePos)
+            dialogFragment.setTargetFragment(this@ChartFragment, 200)
+            dialogFragment.show(fm!!, "fm")
+        }
+
+        tvCurrency.setOnClickListener {
+            val arrayList = mPresenter.exchangeModel.currencies.getValue(mPresenter.mCoinCode)
+            val fm = fragmentManager
+            val dialogFragment = PickerDialog.newInstance(PICKER_TYPE.CURRENCY, arrayList as ArrayList<String>, mPresenter.currencyCodePos)
+            dialogFragment.setTargetFragment(this@ChartFragment, 300)
+            dialogFragment.show(fm!!, "fm")
+        }
 
         etCoin.addTextChangedListener(this)
         etCurrency.addTextChangedListener(this)
@@ -148,9 +124,16 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
         etCoin.isFocusable = false
         etCurrency.isFocusable = false
 
-        etCoin.onFocusChangeListener = this@ChartFragment
-        etCurrency.onFocusChangeListener = this@ChartFragment
+        etCoin.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            isCoinEtFocused = hasFocus
+            isCurrencyEtFocused = !hasFocus
+        }
+        etCurrency.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+            isCoinEtFocused = !hasFocus
+            isCurrencyEtFocused = hasFocus
+        }
     }
+
 
     private fun onInitChart() {
         lineChart.description.isEnabled = false
@@ -177,39 +160,17 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
      * Init history buttons
      */
     private fun onInitRV() {
-        val strings = ArrayList<String>()
-        strings.add(Constants.MINUTES_10)
-        strings.add(Constants.HOUR_1)
-        strings.add(Constants.HOUR_3)
-        strings.add(Constants.HOUR_12)
-        strings.add(Constants.HOUR_24)
-        strings.add(Constants.WEEK)
-        strings.add(Constants.MONTH)
-        strings.add(Constants.MONTH_3)
-        strings.add(Constants.MONTH_6)
-        strings.add(Constants.YEAR_1)
-        strings.add(Constants.YEAR_2)
-        strings.add(Constants.YEAR_5)
+        val strings = mPresenter.generateButtons()
 
         val selectedHistory = Hawk.get<Int>(Constants.HAWK_HISTORY_POS).toInt()
-        mPresenter!!.mTerm = Hawk.get(Constants.HAWK_HISTORY_CODE, Constants.HOUR_24)
+        mPresenter.mTerm = Hawk.get(Constants.HAWK_HISTORY_CODE, Constants.HOUR_24)
 
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
 
         mBtnsAdapter = HorizontalBtnsAdapter(strings, selectedHistory, this)
         recyclerView.adapter = mBtnsAdapter
-        recyclerView.smoothScrollToPosition(selectedHistory)
-    }
-
-    override fun onFocusChange(view: View, hasFocus: Boolean) {
-        if (view.id == R.id.etCoin) {
-            isCoinEtFocused = hasFocus
-            isCurrencyEtFocused = !hasFocus
-        } else if (view.id == R.id.etCurrency) {
-            isCoinEtFocused = !hasFocus
-            isCurrencyEtFocused = hasFocus
-        }
+        recyclerView.scrollToPosition(selectedHistory)
     }
 
     override fun afterTextChanged(s: Editable?) {
@@ -229,80 +190,150 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
         }
     }
 
-    override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-        if (adapterView.id == spinCurrencies!!.id) {
-            mPresenter!!.mCurrencyCode = adapterView.selectedItem.toString()
-            mPresenter!!.onUpdate()
-        } else if (adapterView.id == spinCoin!!.id) {
-            mPresenter!!.mCoinCode = adapterView.selectedItem.toString()
 
-            val strings = mPresenter!!.exchangeModel!!.currencies[mPresenter!!.exchangeModel!!.currencies.keys.toTypedArray()[i]]
-            strings!!.sorted()
+    /**
+     * NumberPicker Dialog listener
+     */
+    override fun itemSelected(intValue: Int, stringValue: String, pickType: PICKER_TYPE) {
+        when (pickType) {
+            PICKER_TYPE.EXCHANGER -> {
+                mPresenter.exchangeModel = mExchangeResponse!!.data[intValue]
+                tvExchanger.text = mPresenter.exchangeModel.caption
 
-            val arrayAdapter = ArrayAdapter(adapterView.context, R.layout.custom_spinner_item, strings)
-            arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
-            spinCurrencies!!.adapter = arrayAdapter
-        } else if (adapterView.id == spinExchanges!!.id) {
+                val coin = mPresenter.exchangeModel.currencies.keys.first()
+                mPresenter.mCoinCode = coin
+                tvCoin.text = coin
 
-            mPresenter!!.exchangeModel = mExchangeResponse!!.data[i]
+                mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[coin]!![0]
+                tvCurrency.text = mPresenter.exchangeModel.currencies[coin]!![0]
 
-            val arrayAdapter = ArrayAdapter<Any>(adapterView.context, R.layout.custom_spinner_item,
-                    mPresenter!!.exchangeModel!!.currencies.keys.toTypedArray())
-            arrayAdapter.setDropDownViewResource(R.layout.custom_spinner_dropdown_item)
-            spinCoin.adapter = arrayAdapter
-            spinCoin.setSelection(0, false) // TODO: To Prevent Double CALL
+                mPresenter.exchangeModelPos = intValue
+            }
+            PICKER_TYPE.COIN -> {
+                mPresenter.mCoinCode = stringValue
+                tvCoin.text = stringValue
+
+                mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[stringValue]!![0]
+                tvCurrency.text = mPresenter.exchangeModel.currencies[stringValue]!![0]
+
+                mPresenter.coinCodePos = intValue
+            }
+            PICKER_TYPE.CURRENCY -> {
+                mPresenter.mCurrencyCode = stringValue
+                tvCurrency.text = stringValue
+
+                mPresenter.currencyCodePos = intValue
+            }
+        }
+
+        mPresenter.onUpdate()
+    }
+
+
+    /**
+     * Helper showcase. Used only on first opening this screen
+     */
+    fun showStartupShowCase() {
+        if (!Hawk.get(Constants.HAWK_SHOWCASE_1_DONE, false)) {
+            val showCaseQueue: FancyShowCaseQueue
+
+            val showCase1 = FancyShowCaseView.Builder(activity!!)
+                    .title(resources.getString(R.string.showcase_chart_1))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build()
+
+            val showCase2 = FancyShowCaseView.Builder(activity!!)
+                    .focusOn(tvExchanger)
+                    .title(resources.getString(R.string.showcase_chart_2))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build()
+
+            val showCase3 = FancyShowCaseView.Builder(activity!!)
+                    .focusOn(tvCoin)
+                    .title(resources.getString(R.string.showcase_chart_3))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build()
+
+            val showCase4 = FancyShowCaseView.Builder(activity!!)
+                    .focusOn(tvCurrency)
+                    .title(resources.getString(R.string.showcase_chart_4))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build()
+
+            val showCase5 = FancyShowCaseView.Builder(activity!!)
+                    .focusOn(recyclerView)
+                    .title(resources.getString(R.string.showcase_chart_5))
+                    .backgroundColor(R.color.colorShowCaseBG)
+                    .build()
+
+            showCaseQueue = FancyShowCaseQueue()
+                    .add(showCase1)
+                    .add(showCase2)
+                    .add(showCase3)
+                    .add(showCase4)
+                    .add(showCase5)
+
+//            showCaseQueue.setCompleteListener { (activity as MainActivity).onShowCase1() }
+
+            showCaseQueue.show()
+            Hawk.put(Constants.HAWK_SHOWCASE_1_DONE, true)
         }
     }
 
-    override fun onNothingSelected(adapterView: AdapterView<*>) {}
-
-    override fun onLoadLineChart(chartData: ChartResponseData) {
-        mSelectedCurrencyRate = java.lang.Float.parseFloat(chartData.info.last)
+    override fun onLoadLineChart(chartData: ChartData) {
+        mSelectedCurrencyRate = chartData.info.last!!.toFloat()
 
         etCoin!!.setText(1.toString())
         etCurrency!!.setText(chartData.info.last)
 
-        val entries = ArrayList<Entry>()
-        for (i in 0 until chartData.chart.size) {
-            entries.add(BarEntry(chartData.chart[i].timestamp.toFloat(),
-                    java.lang.Float.parseFloat(chartData.chart[i].price)))
-        }
+        mDisposable = fillLineData(chartData.chart)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe { lineData ->
+                    lineChart.data = lineData
+                    lineChart.invalidate()
+                }
+    }
 
-        val set = LineDataSet(entries, "")
-        set.setDrawFilled(true)
-        set.setDrawCircles(true)
-        set.mode = LineDataSet.Mode.CUBIC_BEZIER
-        set.cubicIntensity = 0.2f
-        set.lineWidth = 1.8f
-        set.color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
-        set.circleRadius = 2f
-        set.setCircleColor(Color.WHITE)
-        set.valueTextColor = Color.WHITE
-        set.fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
-        set.fillAlpha = 100
-
-        val lineData = LineData(set)
-        lineData.setValueTextSize(9f)
-        lineData.isHighlightEnabled = false
-
-        lineChart.data = lineData
-        lineChart.invalidate()
+    private fun fillLineData(chartsList: List<ChartItem>): Single<LineData> {
+        return Observable.fromIterable(chartsList)
+                .map { chartItem ->
+                    BarEntry(chartItem.timestamp!!.toFloat(),
+                            chartItem.price!!.toFloat())
+                }
+                .toList()
+                .map {
+                    val dataSet = LineDataSet(it as List<Entry>, "")
+                    dataSet.setDrawFilled(true)
+                    dataSet.setDrawCircles(true)
+                    dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+                    dataSet.cubicIntensity = 0.2f
+                    dataSet.lineWidth = 1.8f
+                    dataSet.color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
+                    dataSet.circleRadius = 1.4f
+                    dataSet.setCircleColor(Color.WHITE)
+                    dataSet.valueTextColor = Color.WHITE
+                    dataSet.fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
+                    dataSet.fillAlpha = 100
+                    dataSet
+                }
+                .map { dataSet ->
+                    val lineData = LineData(dataSet)
+                    lineData.setValueTextSize(9f)
+                    lineData.isHighlightEnabled = false
+                    lineData
+                }
     }
 
     override fun onBtnClick(id: String, pos: Int) {
-        mPresenter!!.mTerm = id
-        mPresenter!!.onUpdate()
+        mPresenter.mTerm = id
+        mPresenter.onUpdate()
         Hawk.put(Constants.HAWK_HISTORY_CODE, id)
         Hawk.put(Constants.HAWK_HISTORY_POS, pos)
     }
 
-    fun onUpdate() {
-        mPresenter!!.onUpdate()
-    }
-
     fun onSaveSnapshot() {
-        Toast.makeText(_mActivity, R.string.toast_saving, Toast.LENGTH_SHORT).show()
-        mPresenter!!.onSaveSnap()
+        mPresenter.saveChartData()
     }
 
     override fun onPause() {
@@ -310,10 +341,21 @@ class ChartFragment : SupportFragment(), AdapterView.OnItemSelectedListener, Hor
         hideSoftInput()
     }
 
+    override fun onSaveSnapshot(isSuccess: Boolean, chartData: ChartData) {
+        if (isSuccess)
+            UtilityMethods.createNotificationChannel(chartData, _mActivity)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        if (mPresenter != null) {
-            mPresenter!!.onViewDetached(this)
+        if (::mDisposable.isInitialized)
+            mDisposable.dispose()
+        if (::mPresenter.isInitialized) {
+            mPresenter.onViewDetached(this)
         }
+    }
+
+    override fun toast(message: String) {
+        Toast.makeText(_mActivity, message, Toast.LENGTH_SHORT).show()
     }
 }

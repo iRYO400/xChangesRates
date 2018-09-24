@@ -12,4 +12,6 @@ interface LoadingView {
     fun onHideLoading()
 
     fun onNoContent(isEmpty: Boolean)
+
+    fun onError(message: String)
 }

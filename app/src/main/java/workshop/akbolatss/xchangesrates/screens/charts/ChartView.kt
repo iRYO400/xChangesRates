@@ -1,8 +1,7 @@
 package workshop.akbolatss.xchangesrates.screens.charts
 
 import workshop.akbolatss.xchangesrates.base.BaseView
-import workshop.akbolatss.xchangesrates.base.LoadingView
-import workshop.akbolatss.xchangesrates.model.response.ChartResponseData
+import workshop.akbolatss.xchangesrates.model.response.ChartData
 
 /**
  * Author: Akbolat Sadvakassov
@@ -11,5 +10,7 @@ import workshop.akbolatss.xchangesrates.model.response.ChartResponseData
 
 interface ChartView : BaseView {
 
-    fun onLoadLineChart(chartData: ChartResponseData)
+    fun onLoadLineChart(chartData: ChartData)
+    fun toast(message: String)
+    fun onSaveSnapshot(isSuccess: Boolean, chartData: ChartData)
 }

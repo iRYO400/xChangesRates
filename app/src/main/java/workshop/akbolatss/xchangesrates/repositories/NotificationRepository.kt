@@ -1,7 +1,6 @@
 package workshop.akbolatss.xchangesrates.repositories
 
 import io.reactivex.Single
-import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification
 
 /**
  * Author: Akbolat Sadvakassov
@@ -10,7 +9,7 @@ import workshop.akbolatss.xchangesrates.model.dao.GlobalNotification
 
 internal interface NotificationRepository {
 
-    val allNotifications: Single<List<GlobalNotification>>
+//    val allNotifications: Single<List<GlobalNotification>>
 
     fun initDefault(): Single<Boolean>
 }
