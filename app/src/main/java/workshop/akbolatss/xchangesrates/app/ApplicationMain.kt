@@ -18,6 +18,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import workshop.akbolatss.xchangesrates.model.ExchangeModel
 import workshop.akbolatss.xchangesrates.networking.APIService
+import workshop.akbolatss.xchangesrates.networking.adapter.ExchangeTypeAdapter
 import workshop.akbolatss.xchangesrates.room.AppDataBase
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Constants.BASE_URL
@@ -35,7 +36,6 @@ class ApplicationMain : Application() {
 
     companion object {
 
-        private const val ENCRYPTED = false
 
         lateinit var instance: ApplicationMain
 
@@ -49,7 +49,6 @@ class ApplicationMain : Application() {
 
         mGson = buildGson()
         appDatabase = Room.databaseBuilder(applicationContext, AppDataBase::class.java, Constants.DB_SNAPS_NAME_NEW)
-//                .addMigrations(MIGRATION_1_2)
                 .build()
 
         val logging = HttpLoggingInterceptor()
@@ -79,38 +78,7 @@ class ApplicationMain : Application() {
 
     private fun buildGson(): Gson {
         return GsonBuilder()
-                .registerTypeAdapter(ExchangeModel::class.java, JsonDeserializer<ExchangeModel> { json, _, _ ->
-                    var exchangeModel: ExchangeModel? = null
-                    val jsonObject: JSONObject?
-                    try {
-                        jsonObject = JSONObject(json.toString())
-                        val iterator = jsonObject.keys()
-                        iterator.next() // skip id
-                        iterator.next() // skip caption
-
-                        val listMap = ArrayMap<String, List<String>>()
-                        var buffCurrency: MutableList<String>? = null
-                        var buff = ""
-                        while (iterator.hasNext()) {
-                            buff = iterator.next().toString()
-
-                            buffCurrency = ArrayList()
-                            for (i in 0 until jsonObject.getJSONArray(buff).length()) {
-                                buffCurrency.add(jsonObject.getJSONArray(buff).getString(i))
-                            }
-                            listMap[buff] = buffCurrency
-                        }
-
-                        exchangeModel = ExchangeModel(
-                                jsonObject.getString("ident"),
-                                jsonObject.getString("caption"),
-                                listMap)
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-
-                    exchangeModel
-                })
+                .registerTypeAdapter(ExchangeModel::class.java, ExchangeTypeAdapter())
                 .create()
     }
 }

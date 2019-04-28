@@ -2,9 +2,6 @@ package workshop.akbolatss.xchangesrates.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
@@ -13,7 +10,6 @@ import android.support.v4.app.NotificationManagerCompat
 import android.text.format.DateUtils
 import android.util.Log
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.screens.notifications.NotificationService
 import workshop.akbolatss.xchangesrates.utils.Constants.NOTIFICATION_CHANNEL_ID
 import workshop.akbolatss.xchangesrates.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import java.text.ParseException
@@ -82,10 +78,16 @@ object UtilityMethods {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
+    /**
+     * Generate Channel Id
+     */
     fun generateChannelId(chartData: ChartData): String {
         return "${chartData.coin}/${chartData.currency} ${chartData.id}"
     }
 
+    /**
+     * Create default notification channel
+     */
     fun createDefaultNotificationChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -99,6 +101,10 @@ object UtilityMethods {
         }
     }
 
+    /**
+     * Create specific notificaition channel
+     * @see generateChannelId(chartData)
+     */
     fun createNotificationChannel(chartData: ChartData, context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -112,13 +118,9 @@ object UtilityMethods {
         }
     }
 
-    fun clearOngoinNotification(chartData: ChartData, context: Context) {
-        if (!chartData.isNotificationEnabled) {
-            val mNotificationManager = NotificationManagerCompat.from(context)
-            mNotificationManager.cancel(chartData.id.toInt())
-        }
-    }
-
+    /**
+     * Remove notification channel
+     */
     fun deleteNotificationChannel(chartData: ChartData, context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val manager = context.getSystemService(NotificationManager::class.java)
@@ -126,6 +128,15 @@ object UtilityMethods {
         }
     }
 
+    /**
+     * Remove Ongoing notification
+     */
+    fun clearOngoinNotification(chartData: ChartData, context: Context) {
+        if (!chartData.isNotificationEnabled) {
+            val mNotificationManager = NotificationManagerCompat.from(context)
+            mNotificationManager.cancel(chartData.id.toInt())
+        }
+    }
 
     fun calculateInterval(intervalUpdateIndex: Int): Long {
         when (intervalUpdateIndex) {

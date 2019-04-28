@@ -24,8 +24,6 @@ interface SnapshotsView : BaseView, LoadingView {
 
 
     fun onErrorChartItem(pos: Int)
-    fun startService()
-    fun stopService()
     fun toast(s: String)
     fun enqueueWorker(it: ChartData)
     fun dequeueWorker(chartData: ChartData)

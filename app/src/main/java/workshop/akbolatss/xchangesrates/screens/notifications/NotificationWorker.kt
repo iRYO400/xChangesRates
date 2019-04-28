@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 import androidx.work.Worker
+import androidx.work.WorkerParameters
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -16,8 +17,8 @@ import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Logger
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
-class NotificationWorker : Worker() {
-
+class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
+    : Worker(appContext, workerParams) {
 
     private lateinit var mRepository: DBChartRepository
     private lateinit var mCompositeDisposable: CompositeDisposable
@@ -29,14 +30,12 @@ class NotificationWorker : Worker() {
         mCompositeDisposable = CompositeDisposable()
         mNotificationManager = NotificationManagerCompat.from(applicationContext)
 
+        doTheJob()
 
-        startWork()
-
-
-        return Result.SUCCESS
+        return Result.success()
     }
 
-    private fun startWork() {
+    private fun doTheJob() {
         val id = inputData.getLong(Constants.WORKER_INPUT_ID, 0)
         Logger.i("StartWork. Id of chartData is $id")
         mCompositeDisposable.add(mRepository.onGetById(id)

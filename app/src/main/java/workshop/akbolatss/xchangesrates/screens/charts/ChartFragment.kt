@@ -237,30 +237,30 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
         if (!Hawk.get(Constants.HAWK_SHOWCASE_1_DONE, false)) {
             val showCaseQueue: FancyShowCaseQueue
 
-            val showCase1 = FancyShowCaseView.Builder(activity!!)
+            val showCase1 = FancyShowCaseView.Builder(_mActivity)
                     .title(resources.getString(R.string.showcase_chart_1))
                     .backgroundColor(R.color.colorShowCaseBG)
                     .build()
 
-            val showCase2 = FancyShowCaseView.Builder(activity!!)
+            val showCase2 = FancyShowCaseView.Builder(_mActivity)
                     .focusOn(tvExchanger)
                     .title(resources.getString(R.string.showcase_chart_2))
                     .backgroundColor(R.color.colorShowCaseBG)
                     .build()
 
-            val showCase3 = FancyShowCaseView.Builder(activity!!)
+            val showCase3 = FancyShowCaseView.Builder(_mActivity)
                     .focusOn(tvCoin)
                     .title(resources.getString(R.string.showcase_chart_3))
                     .backgroundColor(R.color.colorShowCaseBG)
                     .build()
 
-            val showCase4 = FancyShowCaseView.Builder(activity!!)
+            val showCase4 = FancyShowCaseView.Builder(_mActivity)
                     .focusOn(tvCurrency)
                     .title(resources.getString(R.string.showcase_chart_4))
                     .backgroundColor(R.color.colorShowCaseBG)
                     .build()
 
-            val showCase5 = FancyShowCaseView.Builder(activity!!)
+            val showCase5 = FancyShowCaseView.Builder(_mActivity)
                     .focusOn(recyclerView)
                     .title(resources.getString(R.string.showcase_chart_5))
                     .backgroundColor(R.color.colorShowCaseBG)

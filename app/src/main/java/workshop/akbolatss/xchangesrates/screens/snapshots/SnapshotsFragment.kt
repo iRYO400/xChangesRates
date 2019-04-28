@@ -1,13 +1,10 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,17 +22,18 @@ import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
-import workshop.akbolatss.xchangesrates.screens.notifications.NotificationService
 import workshop.akbolatss.xchangesrates.screens.notifications.NotificationWorker
 import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.Constants.HAWK_SHOULD_OFF
 import workshop.akbolatss.xchangesrates.utils.Constants.WORKER_INPUT_ID
 import workshop.akbolatss.xchangesrates.utils.Logger
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 import java.util.concurrent.TimeUnit
 
 
-class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListener, SnapshotsAdapter.OnSnapshotListener, SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
+class SnapshotsFragment : SupportFragment(),
+        SwipeRefreshLayout.OnRefreshListener,
+        SnapshotsAdapter.OnSnapshotListener,
+        SnapshotsView, OptionsDialogFragment.OptionsDialogListener {
 
     private lateinit var mPresenter: SnapshotsPresenter
 
@@ -70,7 +68,7 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
 
         mAdapter = SnapshotsAdapter(this)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = GridLayoutManager(_mActivity, 2)
+        recyclerView.layoutManager = GridLayoutManager(_mActivity, 2, GridLayoutManager.VERTICAL, false)
         recyclerView.adapter = mAdapter
     }
 
@@ -201,23 +199,6 @@ class SnapshotsFragment : SupportFragment(), SwipeRefreshLayout.OnRefreshListene
         WorkManager.getInstance().cancelUniqueWork(UtilityMethods.generateChannelId(chartData))
     }
 
-    /**
-     * Enables service. If there more than 0 snapshots with isNotificationEnabled
-     */
-    override fun startService() {
-        Hawk.put(HAWK_SHOULD_OFF, false)
-        val mServiceIntent = Intent(_mActivity, NotificationService::class.java)
-        ContextCompat.startForegroundService(_mActivity, mServiceIntent)
-    }
-
-    override fun stopService() {
-        if (NotificationService.isRunning) {
-            Logger.i("Service is running")
-            Hawk.put(HAWK_SHOULD_OFF, true)
-            val serviceIntent = Intent(_mActivity, NotificationService::class.java)
-            _mActivity.stopService(serviceIntent)
-        }
-    }
 
     fun updateAllSnapshots() {
         if (mAdapter.itemCount <= 0) {

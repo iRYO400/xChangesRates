@@ -12,8 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
-import workshop.akbolatss.xchangesrates.repositories.DBNotificationRepository
-import workshop.akbolatss.xchangesrates.screens.main.MainActivity
+import workshop.akbolatss.xchangesrates.screens.MainActivity
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 

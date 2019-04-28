@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.main
+package workshop.akbolatss.xchangesrates.screens
 
 import android.os.Bundle
 import com.luseen.spacenavigation.SpaceItem

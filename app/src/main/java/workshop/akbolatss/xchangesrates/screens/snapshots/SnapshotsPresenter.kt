@@ -101,45 +101,6 @@ class SnapshotsPresenter internal constructor(private var mRepository: DBChartRe
                 }))
     }
 
-    private fun checkForService() {
-        var shouldStartService = false
-        mCompositeDisposable.add(mRepository.allObservable
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .flatMapIterable {
-                    it
-                }
-                .filter {
-                    it.isNotificationEnabled
-                }
-                .doOnNext {
-                    if (it.options.isSmartEnabled) {
-                        if (it.options.intervalUpdateIndex >= 8) {
-                            // Enqueue worker
-                            view.enqueueWorker(it)
-                        } else {
-                            // start service
-                            shouldStartService = true
-                        }
-                    } else {
-                        // start service
-                        shouldStartService = true
-                    }
-                }
-                .toList()
-                .subscribe({ list ->
-                    view.toast("Size of NotificationEnabled guys ${list.size}")
-                    if (shouldStartService) {
-                        view.startService()
-                    }
-
-                    view.stopService()
-                }, {
-
-                }))
-    }
-
     fun onRemoveSnapshot(chartId: Long) {
         mCompositeDisposable.add(mRepository.onDeleteChartData(chartId)
                 .observeOn(AndroidSchedulers.mainThread())
