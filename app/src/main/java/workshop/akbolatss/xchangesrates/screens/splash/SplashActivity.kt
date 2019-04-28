@@ -12,6 +12,7 @@ import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
+import workshop.akbolatss.xchangesrates.networking.APIService
 import workshop.akbolatss.xchangesrates.screens.MainActivity
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
@@ -36,9 +37,7 @@ class SplashActivity : AppCompatActivity() {
         initDefault()
     }
 
-
     private fun initDefault() {
-
         if (!Hawk.contains(Constants.HAWK_FIRST_START)) {
             Hawk.put(Constants.HAWK_HISTORY_POS, 0)
             Hawk.put(Constants.HAWK_HISTORY_CODE, Constants.MINUTES_10)
@@ -50,7 +49,9 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun onUpdateXChanges() {
-        ApplicationMain.apiService.getExchanges()
+        val apiService = ApplicationMain.getRetrofit().create(APIService::class.java)
+
+        apiService.getExchanges()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .doAfterSuccess { exchangeResponse ->

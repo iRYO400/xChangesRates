@@ -17,7 +17,7 @@ import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Logger
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
-class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
+class NotificationWorker(private val appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
     private lateinit var mRepository: DBChartRepository
@@ -25,8 +25,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters)
     private lateinit var mNotificationManager: NotificationManagerCompat
 
     override fun doWork(): Result {
-        mRepository = DBChartRepository(ApplicationMain.apiService,
-                ApplicationMain.instance.appDatabase.chartDataDao())
+        mRepository = DBChartRepository(appContext)
         mCompositeDisposable = CompositeDisposable()
         mNotificationManager = NotificationManagerCompat.from(applicationContext)
 

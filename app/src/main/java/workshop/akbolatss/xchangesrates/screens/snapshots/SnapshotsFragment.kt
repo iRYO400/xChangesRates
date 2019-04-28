@@ -43,8 +43,7 @@ class SnapshotsFragment : SupportFragment(),
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_snapshots, container, false)
 
-        mPresenter = SnapshotsPresenter(DBChartRepository(ApplicationMain.apiService,
-                ApplicationMain.instance.appDatabase.chartDataDao()))
+        mPresenter = SnapshotsPresenter(DBChartRepository(activity!!.applicationContext))
 
         return view
     }

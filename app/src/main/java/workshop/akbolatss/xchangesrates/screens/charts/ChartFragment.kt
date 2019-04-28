@@ -68,8 +68,7 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        mPresenter = ChartPresenter(DBChartRepository(ApplicationMain.apiService,
-                ApplicationMain.instance.appDatabase.chartDataDao()))
+        mPresenter = ChartPresenter(DBChartRepository(activity!!.applicationContext))
 
         return view
     }

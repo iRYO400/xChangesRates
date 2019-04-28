@@ -4,11 +4,11 @@ import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.arch.persistence.room.TypeConverters
-import workshop.akbolatss.xchangesrates.room.RoomConvertors
+import workshop.akbolatss.xchangesrates.room.RoomConverters
 
 
 @Entity
-@TypeConverters(RoomConvertors::class)
+@TypeConverters(RoomConverters::class)
 data class ChartData(
         @PrimaryKey(autoGenerate = true)
         var id: Long,

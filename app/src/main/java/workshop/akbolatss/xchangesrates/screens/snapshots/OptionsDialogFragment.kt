@@ -65,7 +65,7 @@ class OptionsDialogFragment : DialogFragment() {
         }
 
         mCompositeDisposable = CompositeDisposable()
-        mChartDataDao = ApplicationMain.instance.appDatabase.chartDataDao()
+        mChartDataDao = ApplicationMain.getRoom(activity!!.applicationContext).chartDataDao()
         mCompositeDisposable.add(mChartDataDao.getById(arguments!!.getLong(Constants.BUNDLE_CHART_ID))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
