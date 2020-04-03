@@ -11,6 +11,7 @@
     <application
         android:name=".app.ApplicationMain"
         android:allowBackup="true"
+        android:appComponentFactory="whateverString"
         android:icon="@mipmap/ic_main"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_main"
@@ -19,12 +20,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
-        <activity
-            android:name=".screens.MainActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.splash.SplashActivity"
-            android:screenOrientation="portrait">
+
+        <activity android:name=".screens.MainActivity" />
+
+        <activity android:name=".screens.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
