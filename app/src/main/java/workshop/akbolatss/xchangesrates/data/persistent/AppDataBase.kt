@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.room
+package workshop.akbolatss.xchangesrates.data.persistent
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartInfo
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
+import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
 
 @Database(entities = [(ChartData::class), (ChartInfo::class), (ChartItem::class)], version = 1)
 abstract class AppDataBase : RoomDatabase() {

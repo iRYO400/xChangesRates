@@ -19,8 +19,8 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
 import workshop.akbolatss.xchangesrates.screens.notifications.NotificationWorker
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Constants.WORKER_INPUT_ID
@@ -42,7 +42,7 @@ class SnapshotsFragment : SupportFragment(),
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_snapshots, container, false)
 
-        mPresenter = SnapshotsPresenter(DBChartRepository(activity!!.applicationContext))
+        mPresenter = SnapshotsPresenter(ChartRepositoryImpl(activity!!.applicationContext))
 
         return view
     }

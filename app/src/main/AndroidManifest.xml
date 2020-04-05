@@ -21,7 +21,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:appComponentFactory">
 
-        <activity android:name=".screens.MainActivity" />
+        <activity android:name=".presentation.root.RootActivity" />
 
         <activity android:name=".screens.splash.SplashActivity">
             <intent-filter>

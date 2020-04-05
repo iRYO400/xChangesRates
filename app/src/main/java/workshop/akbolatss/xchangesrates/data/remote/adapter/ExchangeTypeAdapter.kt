@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.networking.adapter
+package workshop.akbolatss.xchangesrates.data.remote.adapter
 
 import android.util.ArrayMap
 import com.google.gson.JsonDeserializationContext

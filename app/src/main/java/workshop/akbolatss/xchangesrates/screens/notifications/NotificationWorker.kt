@@ -11,7 +11,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Logger
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
@@ -19,12 +19,12 @@ import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 class NotificationWorker(private val appContext: Context, workerParams: WorkerParameters)
     : Worker(appContext, workerParams) {
 
-    private lateinit var mRepository: DBChartRepository
+    private lateinit var mRepository: ChartRepositoryImpl
     private lateinit var mCompositeDisposable: CompositeDisposable
     private lateinit var mNotificationManager: NotificationManagerCompat
 
     override fun doWork(): Result {
-        mRepository = DBChartRepository(appContext)
+        mRepository = ChartRepositoryImpl(appContext)
         mCompositeDisposable = CompositeDisposable()
         mNotificationManager = NotificationManagerCompat.from(applicationContext)
 

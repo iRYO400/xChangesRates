@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.repositories
+package workshop.akbolatss.xchangesrates.domain.repository
 
 import io.reactivex.Completable
 import io.reactivex.Flowable

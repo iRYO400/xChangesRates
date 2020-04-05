@@ -12,8 +12,8 @@ import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
-import workshop.akbolatss.xchangesrates.networking.APIService
-import workshop.akbolatss.xchangesrates.screens.MainActivity
+import workshop.akbolatss.xchangesrates.data.remote.service.APIService
+import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
@@ -29,7 +29,7 @@ class SplashActivity : AppCompatActivity() {
             override fun onTick(l: Long) {}
 
             override fun onFinish() {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                startActivity(Intent(this@SplashActivity, RootActivity::class.java))
                 finish()
             }
         }

@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.repositories
+package workshop.akbolatss.xchangesrates.data.repository
 
 import io.reactivex.Single
 
@@ -7,7 +7,7 @@ import io.reactivex.Single
  * Date: 20.01.2018
  */
 
-class DBNotificationRepository() {
+class NotificationRepositoryImpl() {
 
 //    override val allNotifications: Single<List<GlobalNotification>>
 //        get() = Single.fromCallable {

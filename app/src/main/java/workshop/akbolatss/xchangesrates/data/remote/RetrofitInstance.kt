@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.networking
+package workshop.akbolatss.xchangesrates.data.remote
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -9,7 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import workshop.akbolatss.xchangesrates.BuildConfig
 import workshop.akbolatss.xchangesrates.model.ExchangeModel
-import workshop.akbolatss.xchangesrates.networking.adapter.ExchangeTypeAdapter
+import workshop.akbolatss.xchangesrates.data.remote.adapter.ExchangeTypeAdapter
 import java.util.concurrent.TimeUnit
 
 class RetrofitInstance {

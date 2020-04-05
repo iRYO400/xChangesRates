@@ -1,86 +1,79 @@
-package workshop.akbolatss.xchangesrates.screens
+package workshop.akbolatss.xchangesrates.presentation.root
 
 import android.os.Bundle
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
-import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.activity_main.*
+import kz.jgroup.pos.util.EventObserver
 import me.yokeyword.fragmentation.SupportActivity
-import me.yokeyword.fragmentation.SupportFragment
+import org.koin.androidx.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.screens.charts.ChartFragment
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment
-import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.UtilityMethods.createDefaultNotificationChannel
 
-const val FIRST = 0
-const val SECOND = 1
-const val COUNT = 2
+class RootActivity : SupportActivity(), SpaceOnClickListener {
 
-class MainActivity : SupportActivity(), SpaceOnClickListener {
-
-    private var mCurrentPosition = 0 //TODO: Save in SaveInstance!!!
-    private val mFragments = arrayOfNulls<SupportFragment>(COUNT)
+    private val viewModel by currentScope.viewModel<RootViewModel>(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initSpaceView(savedInstanceState)
+        initFragments()
+        observeViewModel()
+    }
 
-        val firstFragment = findFragment(SnapshotsFragment::class.java)
-        if (firstFragment == null) {
-            mFragments[FIRST] = SnapshotsFragment.newInstance()
-            mFragments[SECOND] = ChartFragment.newInstance()
-            loadMultipleRootFragment(R.id.flContainer, FIRST,
-                    mFragments[FIRST],
-                    mFragments[SECOND])
-        } else {
-            mFragments[FIRST] = firstFragment
-            mFragments[SECOND] = findFragment(ChartFragment::class.java)
-        }
-
-        initView(savedInstanceState)
-
-        if (!Hawk.contains(Constants.HAWK_CHANNEL_CREATED)) {
-            Hawk.put(Constants.HAWK_CHANNEL_CREATED, true)
-            createDefaultNotificationChannel(this)
+    private fun initFragments() {
+        if (findFragment(ScreenState.CHART.fragment) == null
+                || findFragment(ScreenState.SNAPSHOTS.fragment) == null) {
+            loadMultipleRootFragment(R.id.flContainer, 0,
+                    SnapshotsFragment.newInstance(),
+                    ChartFragment.newInstance()
+            )
         }
     }
 
-
-    private fun initView(savedInstanceState: Bundle?) {
+    private fun initSpaceView(savedInstanceState: Bundle?) {
         spaceView.initWithSaveInstanceState(savedInstanceState)
         spaceView.addSpaceItem(SpaceItem(getString(R.string.bottom_bar_snapshots), R.drawable.ic_round_insert_chart_outlined_24))
         spaceView.addSpaceItem(SpaceItem(getString(R.string.bottom_bar_charts), R.drawable.ic_round_score_24))
         spaceView.setSpaceOnClickListener(this)
     }
 
+    private fun observeViewModel() {
+        viewModel.screenState.observe(this, EventObserver { state ->
+            when (state) {
+                ScreenState.SNAPSHOTS -> {
+                    val fragment = findFragment(state.fragment)
+                    showHideFragment(fragment)
+//                    findFragment(SnapshotsFragment::class.java).showItemShowCase()
+                    spaceView.changeCenterButtonIcon(R.drawable.ic_round_refresh)
+                }
+                ScreenState.CHART -> {
+                    val fragment = findFragment(state.fragment)
+                    showHideFragment(fragment)
+//                    findFragment(ChartFragment::class.java).showStartupShowCase()
+                    spaceView.changeCenterButtonIcon(R.drawable.ic_round_add)
+                }
+            }
+        })
+    }
+
     override fun onCentreButtonClick() {
-        if (mCurrentPosition == FIRST) {
-            findFragment(SnapshotsFragment::class.java).updateAllSnapshots()
-        } else if (mCurrentPosition == SECOND) {
+        if (topFragment is ChartFragment) {
             findFragment(ChartFragment::class.java).onSaveSnapshot()
+        } else if (topFragment is SnapshotsFragment) {
+            findFragment(SnapshotsFragment::class.java).updateAllSnapshots()
         }
     }
 
-    override fun onItemReselected(itemIndex: Int, itemName: String?) {
-    }
+    override fun onItemReselected(itemIndex: Int, itemName: String?) = Unit
 
     override fun onItemClick(itemIndex: Int, itemName: String?) {
         when (itemIndex) {
-            0 -> {
-                showHideFragment(mFragments[FIRST], mFragments[mCurrentPosition])
-                spaceView.changeCenterButtonIcon(R.drawable.ic_round_refresh)
-                mCurrentPosition = FIRST
-
-                findFragment(SnapshotsFragment::class.java).showItemShowCase()
-            }
-            1 -> {
-                showHideFragment(mFragments[SECOND], mFragments[mCurrentPosition])
-                spaceView.changeCenterButtonIcon(R.drawable.ic_round_add)
-                mCurrentPosition = SECOND
-
-                findFragment(ChartFragment::class.java).showStartupShowCase()
-            }
+            0 -> viewModel.showList()
+            1 -> viewModel.showCharts()
         }
     }
 

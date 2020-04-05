@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import workshop.akbolatss.xchangesrates.room.RoomConverters
+import workshop.akbolatss.xchangesrates.data.persistent.converter.RoomConverters
 
 
 @Entity

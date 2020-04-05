@@ -6,10 +6,14 @@ import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.BuildConfig
 import me.yokeyword.fragmentation.Fragmentation
 import retrofit2.Retrofit
-import workshop.akbolatss.xchangesrates.networking.RetrofitInstance
-import workshop.akbolatss.xchangesrates.room.AppDataBase
-import workshop.akbolatss.xchangesrates.room.RoomInstance
+import workshop.akbolatss.xchangesrates.data.persistent.AppDataBase
+import workshop.akbolatss.xchangesrates.data.persistent.RoomInstance
+import workshop.akbolatss.xchangesrates.data.remote.RetrofitInstance
+import workshop.akbolatss.xchangesrates.di.KoinInjector
+import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Constants.BASE_URL
+import workshop.akbolatss.xchangesrates.utils.UtilityMethods
+import workshop.akbolatss.xchangesrates.utils.logging.TimberLogImplementation
 
 
 class ApplicationMain : Application() {
@@ -30,8 +34,16 @@ class ApplicationMain : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        TimberLogImplementation.init()
+        initKoin()
         initHawk()
         initFragmentation()
+
+        initNotificationChannel()
+    }
+
+    private fun initKoin() {
+        KoinInjector.init(this)
     }
 
     private fun initHawk() {
@@ -43,5 +55,12 @@ class ApplicationMain : Application() {
                 .stackViewMode(Fragmentation.BUBBLE)
                 .debug(BuildConfig.DEBUG)
                 .install()
+    }
+
+    private fun initNotificationChannel() {
+        if (!Hawk.contains(Constants.HAWK_CHANNEL_CREATED)) {
+            Hawk.put(Constants.HAWK_CHANNEL_CREATED, true)
+            UtilityMethods.createDefaultNotificationChannel(this)
+        }
     }
 }

@@ -8,11 +8,11 @@ import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.base.BasePresenter
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse
-import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
 import workshop.akbolatss.xchangesrates.utils.Logger
 
 
-class SnapshotsPresenter internal constructor(private var mRepository: DBChartRepository) : BasePresenter<SnapshotsView>() {
+class SnapshotsPresenter internal constructor(private var mRepository: ChartRepositoryImpl) : BasePresenter<SnapshotsView>() {
 
     private lateinit var mCompositeDisposable: CompositeDisposable
 

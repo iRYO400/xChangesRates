@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.room
+package workshop.akbolatss.xchangesrates.data.persistent
 
 import android.content.Context
 import androidx.room.Room

@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.repositories
+package workshop.akbolatss.xchangesrates.data.repository
 
 import android.content.Context
 import io.reactivex.Completable
@@ -6,13 +6,14 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
+import workshop.akbolatss.xchangesrates.domain.repository.ChartRepository
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartResponse
-import workshop.akbolatss.xchangesrates.networking.APIService
-import workshop.akbolatss.xchangesrates.room.ChartDataDao
+import workshop.akbolatss.xchangesrates.data.remote.service.APIService
+import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
 
 
-class DBChartRepository(context: Context) : ChartRepository {
+class ChartRepositoryImpl(context: Context) : ChartRepository {
 
     private val mApiService: APIService = ApplicationMain.getRetrofit().create(APIService::class.java)
     private val mChartDataDao: ChartDataDao = ApplicationMain.getRoom(context).chartDataDao()

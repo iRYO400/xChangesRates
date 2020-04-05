@@ -8,11 +8,11 @@ import workshop.akbolatss.xchangesrates.base.BasePresenter
 import workshop.akbolatss.xchangesrates.model.ExchangeModel
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartOptions
-import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
 import workshop.akbolatss.xchangesrates.utils.Constants
 import java.util.ArrayList
 
-class ChartPresenter(private val mRepository: DBChartRepository) : BasePresenter<ChartView>() {
+class ChartPresenter(private val mRepository: ChartRepositoryImpl) : BasePresenter<ChartView>() {
 
     /**
      * Main model

@@ -29,7 +29,7 @@ import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
-import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
+import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
@@ -70,7 +70,7 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        mPresenter = ChartPresenter(DBChartRepository(activity!!.applicationContext))
+        mPresenter = ChartPresenter(ChartRepositoryImpl(activity!!.applicationContext))
 
         return view
     }

@@ -18,7 +18,7 @@ import net.cachapa.expandablelayout.ExpandableLayout
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.room.ChartDataDao
+import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Logger
 

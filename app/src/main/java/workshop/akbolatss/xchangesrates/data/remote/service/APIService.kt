@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.networking
+package workshop.akbolatss.xchangesrates.data.remote.service
 
 import io.reactivex.Observable
 import io.reactivex.Single
