@@ -189,12 +189,15 @@ class SnapshotsFragment : SupportFragment(),
                 .setInputData(inputData)
                 .build()
 
-        WorkManager.getInstance().enqueueUniquePeriodicWork(UtilityMethods.generateChannelId(chartData), ExistingPeriodicWorkPolicy.KEEP, notificationWork)
+        context?.let {
+            WorkManager.getInstance(it).enqueueUniquePeriodicWork(UtilityMethods.generateChannelId(chartData), ExistingPeriodicWorkPolicy.KEEP, notificationWork)
+        }
     }
 
     override fun dequeueWorker(chartData: ChartData) {
-
-        WorkManager.getInstance().cancelUniqueWork(UtilityMethods.generateChannelId(chartData))
+        context?.let {
+            WorkManager.getInstance(it).cancelUniqueWork(UtilityMethods.generateChannelId(chartData))
+        }
     }
 
 
