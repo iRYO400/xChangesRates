@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-def room_version = "1.1.1" // or, for latest rc, use "1.1.1-rc1"
 def work_version = "1.0.1"
 
 android {
@@ -47,7 +46,7 @@ ext {
     swipe_refresh = "1.0.0"
     timber ="4.7.1"
 
-    room = "2.2.5"
+    room_version = "2.2.5"
 }
 
 
@@ -68,9 +67,9 @@ dependencies {
     implementation "android.arch.work:work-runtime-ktx:$work_version" // use -ktx for Kotlin
 
     //Room
-    implementation "android.arch.persistence.room:runtime:$room_version"
-    implementation "android.arch.persistence.room:rxjava2:$room_version"
-    kapt "android.arch.persistence.room:compiler:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     //Show Case
     implementation 'com.github.faruktoptas:FancyShowCaseView:1.0.1'
