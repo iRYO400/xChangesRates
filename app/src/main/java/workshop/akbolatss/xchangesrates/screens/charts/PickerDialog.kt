@@ -2,11 +2,11 @@ package workshop.akbolatss.xchangesrates.screens.charts
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.Window
 import android.widget.NumberPicker
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import workshop.akbolatss.xchangesrates.R
 
 

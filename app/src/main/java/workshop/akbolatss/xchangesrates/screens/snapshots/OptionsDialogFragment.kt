@@ -3,14 +3,14 @@ package workshop.akbolatss.xchangesrates.screens.snapshots
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -21,7 +21,6 @@ import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.room.ChartDataDao
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Logger
-import java.util.concurrent.TimeUnit
 
 class OptionsDialogFragment : DialogFragment() {
 
@@ -229,7 +228,7 @@ class OptionsDialogFragment : DialogFragment() {
         return "10min"
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         if (::mCompositeDisposable.isInitialized)
             mCompositeDisposable.clear()
         super.onDismiss(dialog)

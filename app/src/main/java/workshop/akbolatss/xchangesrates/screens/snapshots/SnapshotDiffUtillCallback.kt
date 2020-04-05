@@ -1,6 +1,6 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 
 class SnapshotDiffUtillCallback(private val oldList: List<ChartData> = ArrayList(),

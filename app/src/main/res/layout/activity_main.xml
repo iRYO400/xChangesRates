@@ -16,6 +16,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
         app:centre_button_color="@color/colorAccentDark"
-        app:space_background_color="@color/colorPrimaryDark"
-        app:centre_button_icon="@drawable/ic_round_refresh" />
+        app:centre_button_icon="@drawable/ic_round_refresh"
+        app:space_background_color="@color/colorPrimaryDark" />
 </FrameLayout>

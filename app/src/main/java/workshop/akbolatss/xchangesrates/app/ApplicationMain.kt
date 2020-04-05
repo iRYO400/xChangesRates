@@ -1,21 +1,14 @@
 package workshop.akbolatss.xchangesrates.app
 
 import android.app.Application
-import android.arch.persistence.room.Room
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.BuildConfig
 import me.yokeyword.fragmentation.Fragmentation
 import retrofit2.Retrofit
-import workshop.akbolatss.xchangesrates.model.ExchangeModel
-import workshop.akbolatss.xchangesrates.networking.APIService
 import workshop.akbolatss.xchangesrates.networking.RetrofitInstance
-import workshop.akbolatss.xchangesrates.networking.adapter.ExchangeTypeAdapter
 import workshop.akbolatss.xchangesrates.room.AppDataBase
 import workshop.akbolatss.xchangesrates.room.RoomInstance
-import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Constants.BASE_URL
 
 

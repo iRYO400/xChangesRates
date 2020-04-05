@@ -1,10 +1,9 @@
 package workshop.akbolatss.xchangesrates.screens.charts
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rv_btn.view.*
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_1

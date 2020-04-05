@@ -2,9 +2,9 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     style="@style/StyleSpinner"
-    android:singleLine="true"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     android:drawableEnd="@drawable/ic_arrow_drop_down_24dp"
-    android:ellipsize="marquee" />
+    android:ellipsize="marquee"
+    android:padding="10dp"
+    android:singleLine="true" />

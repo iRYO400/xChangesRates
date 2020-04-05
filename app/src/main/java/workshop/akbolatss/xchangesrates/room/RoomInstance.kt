@@ -1,7 +1,7 @@
 package workshop.akbolatss.xchangesrates.room
 
-import android.arch.persistence.room.Room
 import android.content.Context
+import androidx.room.Room
 import workshop.akbolatss.xchangesrates.utils.Constants
 
 class RoomInstance {

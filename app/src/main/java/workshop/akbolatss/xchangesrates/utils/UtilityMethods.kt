@@ -6,9 +6,9 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
-import android.support.v4.app.NotificationManagerCompat
 import android.text.format.DateUtils
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.utils.Constants.NOTIFICATION_CHANNEL_ID
 import workshop.akbolatss.xchangesrates.utils.Constants.NOTIFICATION_CHANNEL_NAME

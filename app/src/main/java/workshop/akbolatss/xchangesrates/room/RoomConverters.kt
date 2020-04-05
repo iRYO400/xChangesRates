@@ -1,6 +1,6 @@
 package workshop.akbolatss.xchangesrates.room
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import com.google.gson.reflect.TypeToken
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
 import workshop.akbolatss.xchangesrates.networking.RetrofitInstance

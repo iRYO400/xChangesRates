@@ -2,14 +2,14 @@ package workshop.akbolatss.xchangesrates.screens.charts
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
@@ -26,7 +26,6 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
 import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
@@ -42,14 +41,17 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
     private lateinit var mBtnsAdapter: HorizontalBtnsAdapter
 
     private var mExchangeResponse: ExchangeResponse? = null
+
     /**
      * Коэффициент курса выбранной валюты
      */
     private var mSelectedCurrencyRate: Float = 0.toFloat()
+
     /**
      * Фокус на mEtCoin
      */
     private var isCoinEtFocused: Boolean = false
+
     /**
      * Фокус на mEtCurrency
      */

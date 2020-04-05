@@ -1,9 +1,8 @@
 package workshop.akbolatss.xchangesrates.room
 
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import io.reactivex.Flowable
-import io.reactivex.Observable
 import io.reactivex.Single
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 

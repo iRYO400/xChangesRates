@@ -2,9 +2,6 @@ package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import android.os.Bundle
 import android.os.Handler
-import android.support.constraint.ConstraintLayout
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +9,9 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.work.*
 import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.fragment_snapshots.*
@@ -19,7 +19,6 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.app.ApplicationMain
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.repositories.DBChartRepository
 import workshop.akbolatss.xchangesrates.screens.notifications.NotificationWorker
