@@ -16,6 +16,10 @@
         <item name="android:alertDialogTheme">@style/CustomDialog</item>
     </style>
 
+    <style name="Theme.RoundedDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/background_dialog</item>
+    </style>
+
     <style name="CustomDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:colorBackground">@color/colorPrimaryDark</item>
     </style>

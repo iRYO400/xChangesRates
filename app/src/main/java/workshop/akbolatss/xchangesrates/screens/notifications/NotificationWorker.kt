@@ -24,7 +24,7 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
     private lateinit var mNotificationManager: NotificationManagerCompat
 
     override fun doWork(): Result {
-        mRepository = ChartRepositoryImpl(appContext)
+//        mRepository = ChartRepositoryImpl(appContext)
         mCompositeDisposable = CompositeDisposable()
         mNotificationManager = NotificationManagerCompat.from(applicationContext)
 

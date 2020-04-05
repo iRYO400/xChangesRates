@@ -70,7 +70,7 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        mPresenter = ChartPresenter(ChartRepositoryImpl(activity!!.applicationContext))
+//        mPresenter = ChartPresenter(ChartRepositoryImpl(activity!!.applicationContext))
 
         return view
     }

@@ -200,4 +200,47 @@ object UtilityMethods {
         }
         return 1000
     }
+
+    fun getHistoryTimingName(pos: Int): String {
+        when (pos) {
+            0 -> {
+                return "10min"
+            }
+            1 -> {
+                return "1h"
+            }
+            2 -> {
+                return "3h"
+            }
+            3 -> {
+                return "12h"
+            }
+            4 -> {
+                return "24h"
+            }
+            5 -> {
+                return "1w"
+            }
+            6 -> {
+                return "1m"
+            }
+            7 -> {
+                return "3m"
+            }
+            8 -> {
+                return "6m"
+            }
+            9 -> {
+                return "1y"
+            }
+            10 -> {
+                return "2y"
+            }
+            11 -> {
+                return "5y"
+            }
+        }
+        return "10min"
+    }
+
 }

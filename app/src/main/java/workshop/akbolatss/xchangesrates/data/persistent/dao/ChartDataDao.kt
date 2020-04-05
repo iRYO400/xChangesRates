@@ -9,14 +9,14 @@ import workshop.akbolatss.xchangesrates.model.response.ChartData
 @Dao
 interface ChartDataDao {
 
-    @get:Query("SELECT * FROM ChartData")
-    val all: Flowable<List<ChartData>>
+    @Query("SELECT * FROM ChartData WHERE id = :id")
+    suspend fun findBy(id: Long): ChartData
 
-    @get:Query("SELECT * FROM ChartData")
-    val allObservable: Single<List<ChartData>>
+    @Query("SELECT * FROM ChartData")
+    suspend fun findList(): List<ChartData>
 
-    @get:Query("SELECT * FROM ChartData WHERE isNotificationEnabled = 1")
-    val activeOnly: Single<List<ChartData>>
+    @Update
+    suspend fun update(chartData: ChartData): Int
 
     @Query("SELECT * FROM ChartData WHERE id = :id")
     fun getById(id: Long): Single<ChartData>

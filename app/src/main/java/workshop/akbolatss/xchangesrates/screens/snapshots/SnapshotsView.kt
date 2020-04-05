@@ -1,16 +1,14 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import workshop.akbolatss.xchangesrates.base.BaseView
-import workshop.akbolatss.xchangesrates.base.LoadingView
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.model.response.ChartInfo
 
 /**
  * Author: Akbolat Sadvakassov
  * Date: 04.01.2018
  */
 
-interface SnapshotsView : BaseView, LoadingView {
+interface SnapshotsView : BaseView {
 
     /**
      * Loading all snapshots to RecyclerView
@@ -24,7 +22,6 @@ interface SnapshotsView : BaseView, LoadingView {
 
 
     fun onErrorChartItem(pos: Int)
-    fun toast(s: String)
     fun enqueueWorker(it: ChartData)
     fun dequeueWorker(chartData: ChartData)
 }

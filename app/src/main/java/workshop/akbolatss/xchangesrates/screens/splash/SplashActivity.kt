@@ -3,19 +3,11 @@ package workshop.akbolatss.xchangesrates.screens.splash
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.orhanobut.hawk.Hawk
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.observers.DisposableSingleObserver
-import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.app.ApplicationMain
-import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
-import workshop.akbolatss.xchangesrates.data.remote.service.APIService
 import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
 class SplashActivity : AppCompatActivity() {
 
@@ -49,40 +41,39 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun onUpdateXChanges() {
-        val apiService = ApplicationMain.getRetrofit().create(APIService::class.java)
-
-        apiService.getExchanges()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .doAfterSuccess { exchangeResponse ->
-                    Hawk.put(Constants.HAWK_EXCHANGE_RESPONSE, exchangeResponse)
-                    Hawk.put(Constants.HAWK_LAST_UPDATE, UtilityMethods.todayDate)
-                }
-                .subscribe(object : DisposableSingleObserver<ExchangeResponse>() {
-                    override fun onSuccess(exchangeResponse: ExchangeResponse) {
-                        Toast.makeText(this@SplashActivity, R.string.splash_1, Toast.LENGTH_LONG).show()
-                        countDownTimer!!.start()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        if (!Hawk.contains(Constants.HAWK_EXCHANGE_RESPONSE)) {
-                            Toast.makeText(this@SplashActivity, R.string.splash_2, Toast.LENGTH_LONG).show()
-                            countDownTimer = object : CountDownTimer(1500, 1000) {
-                                override fun onTick(l: Long) {
-
-                                }
-
-                                override fun onFinish() {
-                                    finish()
-                                }
-                            }.start()
-                        } else {
-                            val s = Hawk.get(Constants.HAWK_LAST_UPDATE, "")
-                            Toast.makeText(this@SplashActivity, R.string.splash_3.toString() + " " + s, Toast.LENGTH_LONG).show()
-                            countDownTimer!!.start()
-                        }
-                    }
-                })
+        TODO("api service")
+//        apiService.getExchanges()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .doAfterSuccess { exchangeResponse ->
+//                    Hawk.put(Constants.HAWK_EXCHANGE_RESPONSE, exchangeResponse)
+//                    Hawk.put(Constants.HAWK_LAST_UPDATE, UtilityMethods.todayDate)
+//                }
+//                .subscribe(object : DisposableSingleObserver<ExchangeResponse>() {
+//                    override fun onSuccess(exchangeResponse: ExchangeResponse) {
+//                        Toast.makeText(this@SplashActivity, R.string.splash_1, Toast.LENGTH_LONG).show()
+//                        countDownTimer!!.start()
+//                    }
+//
+//                    override fun onError(e: Throwable) {
+//                        e.printStackTrace()
+//                        if (!Hawk.contains(Constants.HAWK_EXCHANGE_RESPONSE)) {
+//                            Toast.makeText(this@SplashActivity, R.string.splash_2, Toast.LENGTH_LONG).show()
+//                            countDownTimer = object : CountDownTimer(1500, 1000) {
+//                                override fun onTick(l: Long) {
+//
+//                                }
+//
+//                                override fun onFinish() {
+//                                    finish()
+//                                }
+//                            }.start()
+//                        } else {
+//                            val s = Hawk.get(Constants.HAWK_LAST_UPDATE, "")
+//                            Toast.makeText(this@SplashActivity, R.string.splash_3.toString() + " " + s, Toast.LENGTH_LONG).show()
+//                            countDownTimer!!.start()
+//                        }
+//                    }
+//                })
     }
 }

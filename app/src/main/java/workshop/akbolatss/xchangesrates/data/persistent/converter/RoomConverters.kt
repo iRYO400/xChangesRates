@@ -1,16 +1,20 @@
 package workshop.akbolatss.xchangesrates.data.persistent.converter
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
-import workshop.akbolatss.xchangesrates.data.remote.RetrofitInstance
 
-object RoomConverters {
+object RoomConverters : KoinComponent {
+
+    private val gson by inject<Gson>()
 
     @TypeConverter
     @JvmStatic
     fun fromCharts(charts: ArrayList<ChartItem>?): String? {
-        return RetrofitInstance.gsonInstance().toJson(charts)
+        return gson.toJson(charts)
     }
 
     @TypeConverter
@@ -18,6 +22,6 @@ object RoomConverters {
     fun toCharts(chartsString: String?): ArrayList<ChartItem>? {
         val listType = object : TypeToken<MutableList<ChartItem>>() {
         }.type
-        return RetrofitInstance.gsonInstance().fromJson(chartsString, listType)
+        return gson.fromJson(chartsString, listType)
     }
 }
