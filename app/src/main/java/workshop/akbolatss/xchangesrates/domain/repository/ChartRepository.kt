@@ -16,6 +16,8 @@ import workshop.akbolatss.xchangesrates.data.remote.model.ChartResponse
 
 interface ChartRepository {
 
+    suspend fun downloadAndSaveExchanges(): Either<Failure, None>
+
     suspend fun findBy(itemId: Long): ChartData
 
     suspend fun findList(): List<ChartData>
@@ -29,7 +31,6 @@ interface ChartRepository {
                     currency: String, term: String): Observable<ChartResponse>
 
     fun onAddChartData(chartData: ChartData): Single<Long>
-
     fun onDeleteChartData(chartData: ChartData): Completable
     fun onUpdateChartData(chartData: ChartData): Observable<ChartData>
     fun onDeleteChartData(id: Long): Completable

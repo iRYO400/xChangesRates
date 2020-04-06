@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import workshop.akbolatss.xchangesrates.data.persistent.converter.RoomConverters
 
-
 @Entity
-@TypeConverters(RoomConverters::class)
 data class ChartData(
     @PrimaryKey(autoGenerate = true)
     var id: Long,

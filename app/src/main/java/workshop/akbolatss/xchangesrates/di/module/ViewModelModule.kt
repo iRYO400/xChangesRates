@@ -10,6 +10,8 @@ import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsViewModel
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsViewModel
+import workshop.akbolatss.xchangesrates.screens.splash.SplashActivity
+import workshop.akbolatss.xchangesrates.screens.splash.SplashViewModel
 
 val viewModelModule: Module = module {
     scope(named<RootActivity>()) {
@@ -23,6 +25,12 @@ val viewModelModule: Module = module {
     scope(named<SnapshotOptionsDialog>()) {
         viewModel { (itemId: Long?) ->
             SnapshotOptionsViewModel(get(), itemId)
+        }
+    }
+
+    scope(named<SplashActivity>()) {
+        viewModel {
+            SplashViewModel(get())
         }
     }
 }

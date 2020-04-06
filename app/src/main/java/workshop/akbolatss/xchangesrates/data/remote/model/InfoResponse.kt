@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.model.response
+package workshop.akbolatss.xchangesrates.data.remote.model
 
 import java.math.BigDecimal
 

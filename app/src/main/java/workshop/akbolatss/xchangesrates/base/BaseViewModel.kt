@@ -41,7 +41,7 @@ abstract class BaseViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 operation(this)
             }.fold(failure, success)
-            loading.invoke(LoadingState.Success)
+            loading.invoke(LoadingState.Ready)
         }
     }
 

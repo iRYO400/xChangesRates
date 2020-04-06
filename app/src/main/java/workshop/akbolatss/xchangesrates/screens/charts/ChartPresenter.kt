@@ -5,7 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import workshop.akbolatss.xchangesrates.base.BasePresenter
-import workshop.akbolatss.xchangesrates.model.ExchangeModel
+import workshop.akbolatss.xchangesrates.data.remote.model.ExchangeResponse
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartOptions
 import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
@@ -17,7 +17,7 @@ class ChartPresenter(private val mRepository: ChartRepositoryImpl) : BasePresent
     /**
      * Main model
      */
-    lateinit var exchangeModel: ExchangeModel
+    lateinit var exchangeModel: ExchangeResponse
     var exchangeModelPos: Int = 0
     /**
      * Chart Model

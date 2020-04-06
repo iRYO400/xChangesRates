@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import workshop.akbolatss.xchangesrates.BuildConfig
 import workshop.akbolatss.xchangesrates.data.remote.adapter.ExchangeTypeAdapter
 import workshop.akbolatss.xchangesrates.data.remote.service.ApiService
-import workshop.akbolatss.xchangesrates.model.ExchangeModel
+import workshop.akbolatss.xchangesrates.data.remote.model.ExchangeResponse
 import workshop.akbolatss.xchangesrates.utils.Constants
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +21,7 @@ val apiModule = module {
 val networkModule = module {
     single {
         GsonBuilder().apply {
-            registerTypeAdapter(ExchangeModel::class.java, ExchangeTypeAdapter())
+            registerTypeAdapter(ExchangeResponse::class.java, ExchangeTypeAdapter())
         }.create()
     }
 

@@ -28,8 +28,7 @@ import me.yokeyword.fragmentation.SupportFragment
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.model.response.ChartItem
-import workshop.akbolatss.xchangesrates.model.response.ExchangeResponse
-import workshop.akbolatss.xchangesrates.data.repository.ChartRepositoryImpl
+import workshop.akbolatss.xchangesrates.data.remote.model.StatsResponse
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods
@@ -40,7 +39,7 @@ class ChartFragment : SupportFragment(), HorizontalBtnsAdapter.OnBtnClickListene
 
     private lateinit var mBtnsAdapter: HorizontalBtnsAdapter
 
-    private var mExchangeResponse: ExchangeResponse? = null
+    private var mExchangeResponse: StatsResponse? = null
 
     /**
      * Коэффициент курса выбранной валюты

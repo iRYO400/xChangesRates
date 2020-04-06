@@ -2,12 +2,15 @@ package workshop.akbolatss.xchangesrates.data.persistent.dao
 
 import androidx.room.*
 import androidx.room.OnConflictStrategy.REPLACE
-import io.reactivex.Flowable
 import io.reactivex.Single
+import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 
 @Dao
 interface ChartDataDao {
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertList(exchanges: List<Exchange>): List<Long>
 
     @Query("SELECT * FROM ChartData WHERE id = :id")
     suspend fun findBy(id: Long): ChartData

@@ -6,14 +6,14 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
 import org.json.JSONObject
-import workshop.akbolatss.xchangesrates.model.ExchangeModel
+import workshop.akbolatss.xchangesrates.data.remote.model.ExchangeResponse
 import java.lang.reflect.Type
 import java.util.*
 
-class ExchangeTypeAdapter : JsonDeserializer<ExchangeModel> {
+class ExchangeTypeAdapter : JsonDeserializer<ExchangeResponse> {
 
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ExchangeModel? {
-        var exchangeModel: ExchangeModel? = null
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ExchangeResponse? {
+        var exchangeModel: ExchangeResponse? = null
         val jsonObject: JSONObject?
         try {
             jsonObject = JSONObject(json.toString())
@@ -34,10 +34,12 @@ class ExchangeTypeAdapter : JsonDeserializer<ExchangeModel> {
                 listMap[buff] = buffCurrency
             }
 
-            exchangeModel = ExchangeModel(
+            exchangeModel =
+                ExchangeResponse(
                     jsonObject.getString("ident"),
                     jsonObject.getString("caption"),
-                    listMap)
+                    listMap
+                )
         } catch (e: JsonParseException) {
             e.printStackTrace()
         }

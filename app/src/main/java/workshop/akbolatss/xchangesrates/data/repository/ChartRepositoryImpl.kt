@@ -9,15 +9,43 @@ import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.base.resource.flatMap
 import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
+import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
+import workshop.akbolatss.xchangesrates.data.remote.model.ChartResponse
 import workshop.akbolatss.xchangesrates.data.remote.service.ApiService
 import workshop.akbolatss.xchangesrates.domain.repository.ChartRepository
+import workshop.akbolatss.xchangesrates.data.remote.model.ExchangeResponse
 import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.data.remote.model.ChartResponse
+import java.util.*
 
 class ChartRepositoryImpl(
-        private val apiService: ApiService,
-        private val chartDataDao: ChartDataDao
+    private val apiService: ApiService,
+    private val chartDataDao: ChartDataDao
 ) : BaseRepository(), ChartRepository {
+
+    override suspend fun downloadAndSaveExchanges(): Either<Failure, None> {
+        return apiCall(call = {
+            apiService.downloadExchanges()
+        }, mapResponse = {
+            it.data
+        }).flatMap { exchanges ->
+            saveExchanges(exchanges)
+        }
+    }
+
+    private suspend fun saveExchanges(response: List<ExchangeResponse>): Either<Failure, None> {
+        return insertList(map = {
+            response.map {
+                Exchange(
+                    id = it.ident,
+                    caption = it.caption,
+                    currencies = it.currencies,
+                    updateTime = Date()
+                )
+            }
+        }, query = { exchanges ->
+            chartDataDao.insertList(exchanges)
+        })
+    }
 
     override fun onAddChartData(chartData: ChartData): Single<Long> {
         return Single.fromCallable {
@@ -48,16 +76,26 @@ class ChartRepositoryImpl(
         }
     }
 
-    override fun getQueryResult(coin: String, exchange: String, currency: String, term: String): Observable<ChartResponse> {
+    override fun getQueryResult(
+        coin: String,
+        exchange: String,
+        currency: String,
+        term: String
+    ): Observable<ChartResponse> {
         return apiService.getCurrency(coin, exchange, currency, term)
     }
 
-    override fun getSnapshot(coin: String, exchange: String, currency: String, term: String): Observable<ChartResponse> {
+    override fun getSnapshot(
+        coin: String,
+        exchange: String,
+        currency: String,
+        term: String
+    ): Observable<ChartResponse> {
         return apiService.getSnapshot(coin, exchange, currency, term)
     }
 
     override suspend fun findBy(itemId: Long): ChartData =
-            chartDataDao.findBy(itemId)
+        chartDataDao.findBy(itemId)
 
     override suspend fun findList(): List<ChartData> = chartDataDao.findList()
 
@@ -65,12 +103,13 @@ class ChartRepositoryImpl(
         return apiCall(call = {
             apiService.getChart(chart.coin, chart.exchange, chart.currency, chart.timingName)
         }, mapResponse = { response ->
-            response.data.copy(id = chart.id,
-                    coin = chart.coin,
-                    timingName = chart.timingName,
-                    timingIndex = chart.timingIndex,
-                    options = chart.options,
-                    isNotificationEnabled = chart.isNotificationEnabled
+            response.data.copy(
+                id = chart.id,
+                coin = chart.coin,
+                timingName = chart.timingName,
+                timingIndex = chart.timingIndex,
+                options = chart.options,
+                isNotificationEnabled = chart.isNotificationEnabled
             )
         }).flatMap { newChart ->
             saveResponse(newChart)

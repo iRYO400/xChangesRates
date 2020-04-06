@@ -2,8 +2,46 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "8a3b88e7fe94362d6c2eb1ca27553310",
+    "identityHash": "195236c423d12798b78585df0448950c",
     "entities": [
+      {
+        "tableName": "exchange",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `caption` TEXT NOT NULL, `currencies` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "caption",
+            "columnName": "caption",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currencies",
+            "columnName": "currencies",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
       {
         "tableName": "ChartData",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `currency` TEXT NOT NULL, `source` TEXT NOT NULL, `coin` TEXT NOT NULL, `timingName` TEXT NOT NULL, `timingIndex` INTEGER NOT NULL, `chart` TEXT NOT NULL, `isNotificationEnabled` INTEGER NOT NULL, `infoinfoId` INTEGER NOT NULL, `infovolume` REAL, `infohigh` TEXT, `infochange24` REAL, `infolast` TEXT, `infolow` TEXT, `infobuy` TEXT, `infosell` TEXT, `infochange` REAL, `infostarted` TEXT, `infomultiply` TEXT, `infoupdated` TEXT, `infotimestamp` INTEGER, `optionsoptionsId` INTEGER NOT NULL, `optionsisSmartEnabled` INTEGER NOT NULL, `optionsisStickedEnabled` INTEGER NOT NULL, `optionsintervalUpdateIndex` INTEGER NOT NULL)",
@@ -320,7 +358,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8a3b88e7fe94362d6c2eb1ca27553310')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '195236c423d12798b78585df0448950c')"
     ]
   }
 }
