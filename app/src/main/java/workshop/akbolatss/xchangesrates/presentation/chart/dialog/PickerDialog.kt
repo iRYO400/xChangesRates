@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.charts
+package workshop.akbolatss.xchangesrates.presentation.chart.dialog
 
 import android.app.Dialog
 import android.os.Bundle
@@ -25,7 +25,8 @@ class PickerDialog : DialogFragment() {
         private const val BUNDLE_POS = "BundlePosition"
 
         fun newInstance(pickType: PICKER_TYPE, ids: ArrayList<String>, position: Int): PickerDialog {
-            val fragment = PickerDialog()
+            val fragment =
+                PickerDialog()
             val arg = Bundle()
             arg.putSerializable(BUNDLE_ENUM, pickType)
             arg.putStringArrayList(BUNDLE_LIST, ids)

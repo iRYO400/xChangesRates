@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.charts
+package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rv_btn.view.*
 import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_1
 import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_12
 import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24
@@ -100,4 +101,21 @@ class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSel
             itemView.btnChartTiming.text = str
         }
     }
+}
+
+fun generateButtons(): ArrayList<String> {
+    val strings = ArrayList<String>()
+    strings.add(Constants.MINUTES_10)
+    strings.add(Constants.HOUR_1)
+    strings.add(Constants.HOUR_3)
+    strings.add(Constants.HOUR_12)
+    strings.add(Constants.HOUR_24)
+    strings.add(Constants.WEEK)
+    strings.add(Constants.MONTH)
+    strings.add(Constants.MONTH_3)
+    strings.add(Constants.MONTH_6)
+    strings.add(Constants.YEAR_1)
+    strings.add(Constants.YEAR_2)
+    strings.add(Constants.YEAR_5)
+    return strings
 }

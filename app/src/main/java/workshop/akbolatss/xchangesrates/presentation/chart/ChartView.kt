@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.charts
+package workshop.akbolatss.xchangesrates.presentation.chart
 
 import workshop.akbolatss.xchangesrates.base.BaseView
 import workshop.akbolatss.xchangesrates.model.response.ChartData
