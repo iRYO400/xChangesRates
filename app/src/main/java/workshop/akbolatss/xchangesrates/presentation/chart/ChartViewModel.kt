@@ -10,18 +10,8 @@ import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadChartUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
-import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_1
-import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_12
-import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_24
-import workshop.akbolatss.xchangesrates.utils.Constants.HOUR_3
-import workshop.akbolatss.xchangesrates.utils.Constants.MINUTES_10
-import workshop.akbolatss.xchangesrates.utils.Constants.MONTH
-import workshop.akbolatss.xchangesrates.utils.Constants.MONTH_3
-import workshop.akbolatss.xchangesrates.utils.Constants.MONTH_6
-import workshop.akbolatss.xchangesrates.utils.Constants.WEEK
-import workshop.akbolatss.xchangesrates.utils.Constants.YEAR_1
-import workshop.akbolatss.xchangesrates.utils.Constants.YEAR_2
-import workshop.akbolatss.xchangesrates.utils.Constants.YEAR_5
+import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriod
+import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriodList
 
 class ChartViewModel(
     private val findExchangesUseCase: LoadExchangesUseCase,
@@ -44,8 +34,6 @@ class ChartViewModel(
 
     val chartPeriodList = MutableLiveData<List<ChartPeriod>>()
     val selectedPeriod = MutableLiveData<ChartPeriod>()
-    var selectedPeriodPreviousPosition = -1
-    var selectedPeriodPosition = -1
 
     init {
         setObservers()
@@ -69,22 +57,8 @@ class ChartViewModel(
     }
 
     private fun initChartPeriod() {
-        val chartPeriods = arrayListOf(
-            ChartPeriod(R.string.tv10min, MINUTES_10, false),
-            ChartPeriod(R.string.tv1h, HOUR_1, false),
-            ChartPeriod(R.string.tv3h, HOUR_3, false),
-            ChartPeriod(R.string.tv12h, HOUR_12, false),
-            ChartPeriod(R.string.tv24h, HOUR_24, false),
-            ChartPeriod(R.string.tv1w, WEEK, false),
-            ChartPeriod(R.string.tv1m, MONTH, false),
-            ChartPeriod(R.string.tv3m, MONTH_3, false),
-            ChartPeriod(R.string.tv6m, MONTH_6, false),
-            ChartPeriod(R.string.tv1y, YEAR_1, false),
-            ChartPeriod(R.string.tv2y, YEAR_2, false),
-            ChartPeriod(R.string.tv5y, YEAR_5, false)
-        )
-        chartPeriodList.value = chartPeriods
-        selectedPeriod.value = chartPeriods.first()
+        chartPeriodList.value = defaultChartPeriodList
+        selectedPeriod.value = defaultChartPeriod()
     }
 
     private fun loadCoinsWithDefault(exchange: Exchange) {
@@ -132,13 +106,11 @@ class ChartViewModel(
             currencyError.value = R.string.chart_selected_currency_error
             return
         }
-        var timing = selectedPeriod.value
-        if (timing == null)
-            timing =
+        val timing = selectedPeriod.value ?: defaultChartPeriod()
 
         Timber.d("tryLoadChart $exchange $coin $currency $timing")
 
-        loadChart(exchange, coin, currency, timing)
+        loadChart(exchange, coin, currency, timing.code)
     }
 
     private fun loadChart(
@@ -162,13 +134,14 @@ class ChartViewModel(
     }
 
     fun toggleSelected(chartPeriod: ChartPeriod, position: Int) {
-        selectedPeriodPreviousPosition = selectedPeriodPosition
-
-        if (selectedPeriodPosition == position) {
-            selectedPeriodPosition = -1
-            selectedPeriod.value = null
-        } else {
-            selectedPeriodPosition = position
+        chartPeriodList.value?.let { list ->
+            val updatedList = list.toMutableList().onEach { period ->
+                if (period.code == chartPeriod.code)
+                    period.copy(isSelected = true)
+                else
+                    period.copy(isSelected = false)
+            }
+            chartPeriodList.value = updatedList
             selectedPeriod.value = chartPeriod
         }
     }

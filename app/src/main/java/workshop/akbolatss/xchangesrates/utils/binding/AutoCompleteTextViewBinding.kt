@@ -1,6 +1,5 @@
-package workshop.akbolatss.xchangesrates.utils.binding_adapter
+package workshop.akbolatss.xchangesrates.utils.binding
 
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -8,6 +7,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.utils.extension.hideKeyboard
 
 @BindingAdapter("selectedEntryAttrChanged")
 fun AutoCompleteTextView.setListener(listener: InverseBindingListener?) {
@@ -23,7 +23,6 @@ fun AutoCompleteTextView.setListener(listener: InverseBindingListener?) {
 @set:BindingAdapter("selectedEntry")
 var AutoCompleteTextView.selectedEntry: Any?
     get() = getTag(R.id.selected_item_position)?.let { position ->
-        dismissDropDown()
         val positionInt = position as Int
         if (adapter.count > positionInt)
             adapter.getItem(positionInt)
@@ -34,7 +33,8 @@ var AutoCompleteTextView.selectedEntry: Any?
         value?.let {
             setText(value.toString(), false)
         }
-        dismissDropDown()
+        clearFocus()
+        hideKeyboard()
     }
 
 @BindingAdapter("entries")
@@ -54,16 +54,4 @@ fun AutoCompleteTextView.showDropDownOnClick(show: Boolean) {
             this.showDropDown()
         }
     }
-}
-
-@BindingAdapter("showHideDropDown")
-fun showHideDropDown(autoCompleteTextView: AutoCompleteTextView, showHide: Boolean?) {
-    val unBoxed: Boolean
-    if (showHide == null) unBoxed = false else unBoxed = showHide
-    if (autoCompleteTextView.windowVisibility != View.VISIBLE && !autoCompleteTextView.isShown)
-        return
-    if (unBoxed)
-        autoCompleteTextView.showDropDown()
-    else
-        autoCompleteTextView.dismissDropDown()
 }

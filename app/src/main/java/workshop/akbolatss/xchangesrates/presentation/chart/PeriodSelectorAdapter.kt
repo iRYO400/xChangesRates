@@ -15,10 +15,6 @@ class PeriodSelectorAdapter(
     private val itemClickListener: (ChartPeriod, Int) -> Unit
 ) : BaseRVA<ChartPeriod>(DIFF_CALLBACK) {
 
-    var selectedPeriodPosition: Int = -1
-
-    enum class PeriodSelectorPayload { ITEM_SELECTED, ITEM_UNSELECTED }
-
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
         return DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
@@ -28,41 +24,20 @@ class PeriodSelectorAdapter(
         )
     }
 
-    override fun onBindViewHolder(
-        holder: DataBoundViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-        if (payloads.isEmpty())
-            super.onBindViewHolder(holder, position, payloads)
-        else
-            bindPayloads(holder, payloads)
-    }
-
     override fun bind(holder: DataBoundViewHolder, item: ChartPeriod) {
         when (holder.binding) {
             is RvBtnBinding -> with(holder.binding) {
                 model = item
 
                 btnHistory.setOnClickListener {
-                    itemClickListener(model, holder.layoutPosition)
+                    itemClickListener(item, holder.layoutPosition)
                 }
 
-                btnHistory.isSelected = selectedPeriodPosition == holder.layoutPosition
+                btnHistory.isSelected = item.isSelected
             }
         }
     }
 
-    private fun bindPayloads(holder: DataBoundViewHolder, payloads: MutableList<Any>) {
-        when (holder.binding) {
-            is RvBtnBinding -> with(holder.binding) {
-                if (payloads.contains(PeriodSelectorPayload.ITEM_SELECTED))
-                    btnHistory.isSelected = true
-                else if (payloads.contains(PeriodSelectorPayload.ITEM_UNSELECTED))
-                    btnHistory.isSelected = false
-            }
-        }
-    }
 }
 
 private val DIFF_CALLBACK: DiffUtil.ItemCallback<ChartPeriod> =

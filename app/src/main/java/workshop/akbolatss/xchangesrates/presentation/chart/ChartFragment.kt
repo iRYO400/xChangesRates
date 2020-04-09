@@ -2,6 +2,7 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -23,22 +24,17 @@ import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
-import workshop.akbolatss.xchangesrates.presentation.chart.PeriodSelectorAdapter.PeriodSelectorPayload.ITEM_SELECTED
-import workshop.akbolatss.xchangesrates.presentation.chart.PeriodSelectorAdapter.PeriodSelectorPayload.ITEM_UNSELECTED
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
 
 class ChartFragment(
     override val layoutId: Int = R.layout.fragment_chart
-) : BaseFragment<FragmentChartBinding>(),
-    HorizontalBtnsAdapter.OnBtnClickListener {
+) : BaseFragment<FragmentChartBinding>() {
 
     private val viewModel by currentScope.viewModel<ChartViewModel>(this)
 
     private lateinit var adapter: PeriodSelectorAdapter
-
-    private lateinit var mBtnsAdapter: HorizontalBtnsAdapter
 
     /**
      * Коэффициент курса выбранной валюты
@@ -73,16 +69,6 @@ class ChartFragment(
 
     private fun highlightSelected(historyButton: ChartPeriod, position: Int) {
         viewModel.toggleSelected(historyButton, position)
-
-        adapter.notifyItemChanged(
-            viewModel.selectedPeriodPosition,
-            ITEM_SELECTED
-        )
-
-        adapter.notifyItemChanged(
-            viewModel.selectedPeriodPreviousPosition,
-            ITEM_UNSELECTED
-        )
     }
 
     private fun onInitChart() {
@@ -117,9 +103,13 @@ class ChartFragment(
     }
 
     private fun observeViewModel() {
-        viewModel.chartPeriodList.observe(viewLifecycleOwner, Observer {chartPeriodList ->
-            adapter.selectedPeriodPosition = viewModel.selectedPeriodPosition
+        viewModel.chartPeriodList.observe(viewLifecycleOwner, Observer { chartPeriodList ->
             adapter.submitList(chartPeriodList)
+        })
+        viewModel.selectedPeriod.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                viewModel.tryLoadChart()
+            }
         })
         viewModel.chart.observe(viewLifecycleOwner, Observer { chart ->
             chart?.let {
@@ -192,15 +182,8 @@ class ChartFragment(
         }
     }
 
-    override fun onBtnClick(id: String, pos: Int) {
-//        mPresenter.mTerm = id
-//        mPresenter.onUpdate()
-        Hawk.put(Constants.HAWK_HISTORY_CODE, id)
-        Hawk.put(Constants.HAWK_HISTORY_POS, pos)
-    }
-
     fun onSaveSnapshot() {
-//        mPresenter.saveChartData()
+        Toast.makeText(context, "Hey", Toast.LENGTH_SHORT).show()
     }
 
     /**
