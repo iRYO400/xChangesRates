@@ -157,5 +157,8 @@
     <string name="notification_smart_switch">Smart(Battery save)</string>
     <string name="notification_sticked_switch" translatable="false">Sticked</string>
     <string name="tv5s">5 seconds</string>
+    <string name="chart_selected_coin_error">Coin not selected</string>
+    <string name="chart_selected_currency_error">Currency not selected</string>
+    <string name="chart_selected_exchange_error">Exchanger not selected</string>
 
 </resources>

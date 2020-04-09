@@ -1,6 +1,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="workshop.akbolatss.xchangesrates.presentation.chart.ChartViewModel" />
+
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +28,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3" />
@@ -45,19 +53,24 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/etText" />
 
-                <TextView
+                <AutoCompleteTextView
                     android:id="@+id/tvExchanger"
+                    entries="@{viewModel.exchangeList}"
+                    selectedEntry="@={viewModel.exchange}"
+                    showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_txt"
+                    android:completionThreshold="0"
                     android:gravity="center_horizontal"
-                    android:maxLines="1"
-                    android:text="Kraken"
+                    android:labelFor="@id/tvExchanger"
+                    android:singleLine="true"
                     android:textColor="@color/colorSpinTxt"
-                    android:textSize="@dimen/txtExchange" />
+                    android:textSize="@dimen/txtExchange"
+                    tools:text="Kraken" />
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3" />
@@ -69,7 +82,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3" />
@@ -101,7 +114,7 @@
                     android:text=""
                     android:textAllCaps="true" />
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.3" />
@@ -113,42 +126,51 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3" />
 
-                <TextView
+                <AutoCompleteTextView
                     android:id="@+id/tvCoin"
+                    entries="@{viewModel.coinList}"
+                    selectedEntry="@={viewModel.coin}"
+                    showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_txt"
+                    android:completionThreshold="0"
                     android:gravity="center_horizontal"
+                    android:labelFor="@id/tvCoin"
                     android:maxLines="1"
-                    android:text="BTC"
                     android:textColor="@color/colorSpinTxt"
-                    android:textSize="@dimen/txtExchange" />
+                    android:textSize="@dimen/txtExchange"
+                    tools:text="BTC" />
 
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25" />
 
-                <TextView
+                <AutoCompleteTextView
                     android:id="@+id/tvCurrency"
+                    entries="@{viewModel.currencyList}"
+                    selectedEntry="@={viewModel.currency}"
+                    showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/bg_txt"
+                    android:completionThreshold="0"
                     android:gravity="center_horizontal"
+                    android:labelFor="@id/tvCurrency"
                     android:maxLines="1"
-                    android:text="USD"
                     android:textColor="@color/colorSpinTxt"
-                    android:textSize="@dimen/txtExchange" />
+                    android:textSize="@dimen/txtExchange"
+                    tools:text="USD" />
 
-
-                <FrameLayout
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3" />

@@ -5,11 +5,11 @@ import workshop.akbolatss.xchangesrates.base.BaseUseCase
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
-import workshop.akbolatss.xchangesrates.domain.repository.ChartRepository
+import workshop.akbolatss.xchangesrates.domain.repository.ExchangeRepository
 
-class UpdateDataUseCase(
-    private val repository: ChartRepository
-) : BaseUseCase<UpdateDataUseCase.Params, None>() {
+class DownloadExchangesUseCase(
+    private val repository: ExchangeRepository
+) : BaseUseCase<DownloadExchangesUseCase.Params, None>() {
 
     override suspend fun run(params: Params, scope: CoroutineScope): Either<Failure, None> {
         return repository.downloadAndSaveExchanges()

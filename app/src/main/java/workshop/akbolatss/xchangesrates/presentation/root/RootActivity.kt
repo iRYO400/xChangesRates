@@ -1,6 +1,9 @@
 package workshop.akbolatss.xchangesrates.presentation.root
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
 import kotlinx.android.synthetic.main.activity_main.*
@@ -76,6 +79,15 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
             1 -> viewModel.showCharts()
         }
     }
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        currentFocus?.let { currFocus ->
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
 
 //    fun onShowCase1() {
 //        val showCaseQueue: FancyShowCaseQueue

@@ -36,22 +36,22 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
     private fun doTheJob() {
         val id = inputData.getLong(Constants.WORKER_INPUT_ID, 0)
         Logger.i("StartWork. Id of chartData is $id")
-        mCompositeDisposable.add(mRepository.onGetById(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .toObservable()
-                .flatMap { cd ->
-                    fetchUpdate(cd)
-                }
-                .flatMap {
-                    pushNotify(it)
-                }
-                .subscribe({
-                    mCompositeDisposable.clear()
-                }, {
-                    it.printStackTrace()
-                })
-        )
+//        mCompositeDisposable.add(mRepository.onGetById(id)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .toObservable()
+//                .flatMap { cd ->
+//                    fetchUpdate(cd)
+//                }
+//                .flatMap {
+//                    pushNotify(it)
+//                }
+//                .subscribe({
+//                    mCompositeDisposable.clear()
+//                }, {
+//                    it.printStackTrace()
+//                })
+//        )
     }
 
     private fun pushNotify(chartData: ChartData): Observable<ChartData> {
@@ -88,29 +88,29 @@ class NotificationWorker(private val appContext: Context, workerParams: WorkerPa
                 .observeOn(AndroidSchedulers.mainThread())
     }
 
-    private fun fetchUpdate(chartData: ChartData): Observable<ChartData> {
-        Logger.i("Worker. Fetching updates...")
-        return mRepository.getSnapshot(
-                chartData.coin,
-                chartData.exchange,
-                chartData.currency,
-                chartData.timingName)
-                .subscribeOn(Schedulers.io())
-                .map { chartResponse ->
-                    chartResponse.data
-                }
-                .map { newChartData ->
-                    newChartData.id = chartData.id
-                    newChartData.coin = chartData.coin
-                    newChartData.timingName = chartData.timingName
-                    newChartData.timingIndex = chartData.timingIndex
-                    newChartData.isNotificationEnabled = chartData.isNotificationEnabled
-                    newChartData.options = chartData.options
-                    Logger.i("Worker. Fetching done")
-                    newChartData
-                }
-                .flatMap { newChartData ->
-                    mRepository.onUpdateChartData(newChartData)
-                }
-    }
+//    private fun fetchUpdate(chartData: ChartData): Observable<ChartData> {
+//        Logger.i("Worker. Fetching updates...")
+//        return mRepository.getSnapshot(
+//                chartData.coin,
+//                chartData.exchange,
+//                chartData.currency,
+//                chartData.timingName)
+//                .subscribeOn(Schedulers.io())
+//                .map { chartResponse ->
+//                    chartResponse.data
+//                }
+//                .map { newChartData ->
+//                    newChartData.id = chartData.id
+//                    newChartData.coin = chartData.coin
+//                    newChartData.timingName = chartData.timingName
+//                    newChartData.timingIndex = chartData.timingIndex
+//                    newChartData.isNotificationEnabled = chartData.isNotificationEnabled
+//                    newChartData.options = chartData.options
+//                    Logger.i("Worker. Fetching done")
+//                    newChartData
+//                }
+//                .flatMap { newChartData ->
+//                    mRepository.onUpdateChartData(newChartData)
+//                }
+//    }
 }

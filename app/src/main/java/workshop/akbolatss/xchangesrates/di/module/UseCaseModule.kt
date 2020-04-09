@@ -1,10 +1,7 @@
 package workshop.akbolatss.xchangesrates.di.module
 
 import org.koin.dsl.module
-import workshop.akbolatss.xchangesrates.domain.usecase.FindAllSnapshotsUseCase
-import workshop.akbolatss.xchangesrates.domain.usecase.UpdateDataUseCase
-import workshop.akbolatss.xchangesrates.domain.usecase.UpdateSingleSnapshotUseCase
-import workshop.akbolatss.xchangesrates.domain.usecase.UpdateSnapshotListUseCase
+import workshop.akbolatss.xchangesrates.domain.usecase.*
 
 val useCaseModule = module {
     factory {
@@ -18,6 +15,13 @@ val useCaseModule = module {
     }
 
     factory {
-        UpdateDataUseCase(get())
+        DownloadExchangesUseCase(get())
+    }
+
+    factory {
+        LoadExchangesUseCase(get())
+    }
+    factory {
+        LoadChartUseCase(get())
     }
 }

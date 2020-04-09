@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2018 Fernando Cejas Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package workshop.akbolatss.xchangesrates.base.resource
 
 import timber.log.Timber
@@ -26,9 +41,6 @@ sealed class Either<out L, out R> {
     fun <L> left(a: L) = Left(a)
     fun <R> right(b: R) = Right(b)
 
-    @Suppress("RedundantSuspendModifier")
-    suspend fun <R> rightAsync(b: R) = Right(b)
-
     inline fun fold(fnL: (L) -> Unit = {}, fnR: (R) -> Any = {}): Any =
         when (this) {
             is Left -> fnL(a)
@@ -36,46 +48,28 @@ sealed class Either<out L, out R> {
         }
 }
 
-// Credits to Alex Hart -> https://proandroiddev.com/kotlins-nothing-type-946de7d464fb
-// Composes 2 functions
-//fun <A, B, C> ((A) -> B).c(f: (B) -> C): (A) -> C = {
-//    f(this(it))
-//}
-//
-//inline fun <T, L, R> Either<L, R>.flatMapSync(fn: (R) -> Either<L, T>): Either<L, T> =
-//    when (this) {
-//        is Left -> Left(a)
-//        is Right -> fn(b)
-//    }
-//
-//fun <T, L, R> Either<L, R>.mapSync(fn: (R) -> (T)): Either<L, T> = this.flatMapSync(fn.c(::right))
-
-
-suspend fun <A, B, C> (suspend (A) -> B).c(f: suspend (B) -> C): suspend (A) -> C = {
-    f(this(it))
-}
-
-fun <L, R> Either<L, R>.log(message: String): Either<L, R> =
+inline fun <T, L, R> Either<L, R>.map(fn: (R) -> (T)): Either<L, T> =
     when (this) {
         is Left -> Left(a)
-        is Right -> {
-            Timber.d("%s %s", message, b.toString())
-            Right(b)
-        }
+        is Right -> right(fn(b))
     }
 
-
-suspend fun <T, L, R> Either<L, R>.flatMap(fn: suspend (R) -> Either<L, T>): Either<L, T> =
+inline fun <T, L, R> Either<L, R>.flatMap(fn: (R) -> Either<L, T>): Either<L, T> =
     when (this) {
         is Left -> Left(a)
         is Right -> fn(b)
     }
 
-suspend fun <T, L, R> Either<L, R>.map(fn: suspend (R) -> (T)): Either<L, T> =
-    this.flatMap(fn.c(::rightAsync))
+inline fun <L, R> Either<L, R>.log(fn: (R) -> String): Either<L, R> =
+    when (this) {
+        is Left -> Left(a)
+        is Right -> {
+            Timber.d(" ${fn(b)}")
+            Right(b)
+        }
+    }
 
-
-suspend fun <L, R, Z> Either<L, R>.zipWith(fn: suspend (R) -> Either<L, Z>): Either<L, Pair<R, Z>> =
+inline fun <L, R, Z> Either<L, R>.zipWith(fn: (R) -> Either<L, Z>): Either<L, Pair<R, Z>> =
     when (this) {
         is Left -> Left(a)
         is Right -> {
@@ -85,7 +79,7 @@ suspend fun <L, R, Z> Either<L, R>.zipWith(fn: suspend (R) -> Either<L, Z>): Eit
         }
     }
 
-suspend fun <L, R, Z, X> Either<L, Pair<R, Z>>.zipWithUp(fn: suspend (Pair<R, Z>) -> Either<L, X>): Either<L, Triple<R, Z, X>> =
+inline fun <L, R, Z, X> Either<L, Pair<R, Z>>.zipWithUp(fn: (Pair<R, Z>) -> Either<L, X>): Either<L, Triple<R, Z, X>> =
     when (this) {
         is Left -> Left(a)
         is Right -> {
@@ -94,12 +88,6 @@ suspend fun <L, R, Z, X> Either<L, Pair<R, Z>>.zipWithUp(fn: suspend (Pair<R, Z>
             }
         }
     }
-
-//suspend fun <L, R, Z> Either<L, R>.zipWith(toZip: Z): Either<L, Pair<R, Z>> =
-//    when (this) {
-//        is Left -> Left(a)
-//        is Right -> Right(Pair(b, toZip))
-//    }
 
 inline fun <L, R> Either<L, R>.doOnFailure(failure: (L) -> Unit): Either<L, R> =
     when (this) {
@@ -111,6 +99,12 @@ inline fun <L, R> Either<L, R>.doOnFailure(failure: (L) -> Unit): Either<L, R> =
     }
 
 inline fun <T, L, R> Either<L, R>.onFailureResumeNext(failure: (L) -> Either<T, R>): Either<T, R> =
+    when (this) {
+        is Left -> failure(a)
+        is Right -> Right(b)
+    }
+
+inline fun <L, R> Either<L, R>.onFailureReturn(failure: (L) -> Either<L, R>): Either<L, R> =
     when (this) {
         is Left -> failure(a)
         is Right -> Right(b)

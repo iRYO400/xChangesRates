@@ -1,8 +1,8 @@
-package workshop.akbolatss.xchangesrates.data.remote.model
+package workshop.akbolatss.xchangesrates.data.persistent.model
 
 import java.math.BigDecimal
 
-data class ChartItemResponse(
+data class ChartUnit(
     val timestamp: Long,
     val price: BigDecimal,
     val market: BigDecimal,

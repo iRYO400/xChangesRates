@@ -31,5 +31,6 @@ sealed class Failure {
     abstract class FeatureFailure : Failure()
     object UseCaseError : FeatureFailure()
 
+    object ChartNotFound : FeatureFailure()
 }
 

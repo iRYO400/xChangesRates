@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "195236c423d12798b78585df0448950c",
+    "identityHash": "17cf828f20c5f3b89277be6dd6611b4f",
     "entities": [
       {
         "tableName": "exchange",
@@ -43,8 +43,120 @@
         "foreignKeys": []
       },
       {
+        "tableName": "chart",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`exchange` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `source` TEXT NOT NULL, `units` TEXT NOT NULL, `info_buy` TEXT NOT NULL, `info_sell` TEXT NOT NULL, `info_high` TEXT NOT NULL, `info_low` TEXT NOT NULL, `info_volume` TEXT NOT NULL, `info_last` TEXT NOT NULL, `info_updated` TEXT NOT NULL, `info_timestamp` INTEGER NOT NULL, `info_change` TEXT NOT NULL, `info_change24` TEXT NOT NULL, `info_started` TEXT NOT NULL, PRIMARY KEY(`exchange`, `coin`, `currency`))",
+        "fields": [
+          {
+            "fieldPath": "exchange",
+            "columnName": "exchange",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coin",
+            "columnName": "coin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "units",
+            "columnName": "units",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.buy",
+            "columnName": "info_buy",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.sell",
+            "columnName": "info_sell",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.high",
+            "columnName": "info_high",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.low",
+            "columnName": "info_low",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.volume",
+            "columnName": "info_volume",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.last",
+            "columnName": "info_last",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.updated",
+            "columnName": "info_updated",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.timestamp",
+            "columnName": "info_timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.change",
+            "columnName": "info_change",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.change24",
+            "columnName": "info_change24",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "info.started",
+            "columnName": "info_started",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "exchange",
+            "coin",
+            "currency"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
         "tableName": "ChartData",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `currency` TEXT NOT NULL, `source` TEXT NOT NULL, `coin` TEXT NOT NULL, `timingName` TEXT NOT NULL, `timingIndex` INTEGER NOT NULL, `chart` TEXT NOT NULL, `isNotificationEnabled` INTEGER NOT NULL, `infoinfoId` INTEGER NOT NULL, `infovolume` REAL, `infohigh` TEXT, `infochange24` REAL, `infolast` TEXT, `infolow` TEXT, `infobuy` TEXT, `infosell` TEXT, `infochange` REAL, `infostarted` TEXT, `infomultiply` TEXT, `infoupdated` TEXT, `infotimestamp` INTEGER, `optionsoptionsId` INTEGER NOT NULL, `optionsisSmartEnabled` INTEGER NOT NULL, `optionsisStickedEnabled` INTEGER NOT NULL, `optionsintervalUpdateIndex` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchange` TEXT NOT NULL, `currency` TEXT NOT NULL, `source` TEXT NOT NULL, `coin` TEXT NOT NULL, `timingName` TEXT NOT NULL, `timingIndex` INTEGER NOT NULL, `chart` TEXT NOT NULL, `isNotificationEnabled` INTEGER NOT NULL, `infovolume` REAL, `infohigh` TEXT, `infochange24` REAL, `infolast` TEXT, `infolow` TEXT, `infobuy` TEXT, `infosell` TEXT, `infochange` REAL, `infostarted` TEXT, `infomultiply` TEXT, `infoupdated` TEXT, `infotimestamp` INTEGER, `optionsoptionsId` INTEGER NOT NULL, `optionsisSmartEnabled` INTEGER NOT NULL, `optionsisStickedEnabled` INTEGER NOT NULL, `optionsintervalUpdateIndex` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -97,12 +209,6 @@
           {
             "fieldPath": "isNotificationEnabled",
             "columnName": "isNotificationEnabled",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "info.infoId",
-            "columnName": "infoinfoId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -211,154 +317,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "ChartInfo",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`infoId` INTEGER NOT NULL, `volume` REAL, `high` TEXT, `change24` REAL, `last` TEXT, `low` TEXT, `buy` TEXT, `sell` TEXT, `change` REAL, `started` TEXT, `multiply` TEXT, `updated` TEXT, `timestamp` INTEGER, PRIMARY KEY(`infoId`))",
-        "fields": [
-          {
-            "fieldPath": "infoId",
-            "columnName": "infoId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "volume",
-            "columnName": "volume",
-            "affinity": "REAL",
-            "notNull": false
-          },
-          {
-            "fieldPath": "high",
-            "columnName": "high",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "change24",
-            "columnName": "change24",
-            "affinity": "REAL",
-            "notNull": false
-          },
-          {
-            "fieldPath": "last",
-            "columnName": "last",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "low",
-            "columnName": "low",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "buy",
-            "columnName": "buy",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "sell",
-            "columnName": "sell",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "change",
-            "columnName": "change",
-            "affinity": "REAL",
-            "notNull": false
-          },
-          {
-            "fieldPath": "started",
-            "columnName": "started",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "multiply",
-            "columnName": "multiply",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "updated",
-            "columnName": "updated",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "infoId"
-          ],
-          "autoGenerate": false
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
-      {
-        "tableName": "ChartItem",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`chartId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `market` REAL, `high` TEXT, `low` TEXT, `price` TEXT, `timestamp` INTEGER)",
-        "fields": [
-          {
-            "fieldPath": "chartId",
-            "columnName": "chartId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "market",
-            "columnName": "market",
-            "affinity": "REAL",
-            "notNull": false
-          },
-          {
-            "fieldPath": "high",
-            "columnName": "high",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "low",
-            "columnName": "low",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "price",
-            "columnName": "price",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "timestamp",
-            "columnName": "timestamp",
-            "affinity": "INTEGER",
-            "notNull": false
-          }
-        ],
-        "primaryKey": {
-          "columnNames": [
-            "chartId"
-          ],
-          "autoGenerate": true
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '195236c423d12798b78585df0448950c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17cf828f20c5f3b89277be6dd6611b4f')"
     ]
   }
 }

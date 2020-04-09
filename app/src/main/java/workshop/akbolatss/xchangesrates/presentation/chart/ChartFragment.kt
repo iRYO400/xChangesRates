@@ -2,68 +2,48 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.orhanobut.hawk.Hawk
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
-import workshop.akbolatss.xchangesrates.data.remote.model.StatsResponse
+import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
-import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.model.response.ChartItem
-import workshop.akbolatss.xchangesrates.presentation.chart.dialog.PICKER_TYPE
-import workshop.akbolatss.xchangesrates.presentation.chart.dialog.PickerDialog
+import workshop.akbolatss.xchangesrates.presentation.chart.PeriodSelectorAdapter.PeriodSelectorPayload.ITEM_SELECTED
+import workshop.akbolatss.xchangesrates.presentation.chart.PeriodSelectorAdapter.PeriodSelectorPayload.ITEM_UNSELECTED
+import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
-import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 
 class ChartFragment(
     override val layoutId: Int = R.layout.fragment_chart
 ) : BaseFragment<FragmentChartBinding>(),
-    HorizontalBtnsAdapter.OnBtnClickListener,
-    PickerDialog.PickerDialogListener,
-    ChartView,
-    TextWatcher {
+    HorizontalBtnsAdapter.OnBtnClickListener {
 
     private val viewModel by currentScope.viewModel<ChartViewModel>(this)
 
-    private lateinit var mPresenter: ChartPresenter
+    private lateinit var adapter: PeriodSelectorAdapter
 
     private lateinit var mBtnsAdapter: HorizontalBtnsAdapter
-
-    private var mExchangeResponse: StatsResponse? = null
 
     /**
      * Коэффициент курса выбранной валюты
      */
     private var mSelectedCurrencyRate: Float = 0.toFloat()
-
-    /**
-     * Фокус на mEtCoin
-     */
-    private var isCoinEtFocused: Boolean = false
-
-    /**
-     * Фокус на mEtCurrency
-     */
-    private var isCurrencyEtFocused: Boolean = false
 
     companion object {
 
@@ -74,30 +54,35 @@ class ChartFragment(
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
+        binding.viewModel = viewModel
 
         onInitRV()
         onInitChart()
-        onInitSpinner()
     }
 
     private fun onInitRV() {
-        val strings =
-            generateButtons()
+        adapter = PeriodSelectorAdapter { historyButton, position ->
+            highlightSelected(historyButton, position)
+        }
 
-        val selectedHistory = Hawk.get<Int>(Constants.HAWK_HISTORY_POS).toInt()
-        mPresenter.mTerm = Hawk.get(Constants.HAWK_HISTORY_CODE, Constants.HOUR_24)
-
-        mBtnsAdapter =
-            HorizontalBtnsAdapter(
-                strings,
-                selectedHistory,
-                this
-            )
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerView.adapter = mBtnsAdapter
-        binding.recyclerView.scrollToPosition(selectedHistory)
+        binding.recyclerView.adapter = adapter
+    }
+
+    private fun highlightSelected(historyButton: ChartPeriod, position: Int) {
+        viewModel.toggleSelected(historyButton, position)
+
+        adapter.notifyItemChanged(
+            viewModel.selectedPeriodPosition,
+            ITEM_SELECTED
+        )
+
+        adapter.notifyItemChanged(
+            viewModel.selectedPeriodPreviousPosition,
+            ITEM_UNSELECTED
+        )
     }
 
     private fun onInitChart() {
@@ -126,202 +111,96 @@ class ChartFragment(
         yAxis1.isEnabled = false
     }
 
-    private fun onInitSpinner() {
-        mExchangeResponse = Hawk.get(Constants.HAWK_EXCHANGE_RESPONSE)
-        mPresenter.exchangeModel = mExchangeResponse!!.data[0]
-        mPresenter.mCoinCode = mPresenter.exchangeModel.currencies.keys.first()
-        mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[mPresenter.mCoinCode]!![0]
-        mPresenter.onUpdate()
-
-        val exchangerCodes = ArrayList<String>()
-        for (exchanger in mExchangeResponse!!.data) {
-            exchangerCodes.add(exchanger.caption)
-        }
-
-        binding.tvExchanger.setOnClickListener {
-            val fm = fragmentManager
-            val dialogFragment =
-                PickerDialog.newInstance(
-                    PICKER_TYPE.EXCHANGER,
-                    exchangerCodes,
-                    mPresenter.exchangeModelPos
-                )
-            dialogFragment.setTargetFragment(this@ChartFragment, 100)
-            dialogFragment.show(fm!!, "fm")
-        }
-
-        binding.tvCoin.setOnClickListener {
-            val arrayList = mPresenter.exchangeModel.currencies.keys.toMutableList()
-            val fm = fragmentManager
-            val dialogFragment =
-                PickerDialog.newInstance(
-                    PICKER_TYPE.COIN,
-                    arrayList as ArrayList<String>,
-                    mPresenter.coinCodePos
-                )
-            dialogFragment.setTargetFragment(this@ChartFragment, 200)
-            dialogFragment.show(fm!!, "fm")
-        }
-
-        binding.tvCurrency.setOnClickListener {
-            val arrayList = mPresenter.exchangeModel.currencies.getValue(mPresenter.mCoinCode)
-            val fm = fragmentManager
-            val dialogFragment =
-                PickerDialog.newInstance(
-                    PICKER_TYPE.CURRENCY,
-                    arrayList as ArrayList<String>,
-                    mPresenter.currencyCodePos
-                )
-            dialogFragment.setTargetFragment(this@ChartFragment, 300)
-            dialogFragment.show(fm!!, "fm")
-        }
-
-        binding.etCoin.addTextChangedListener(this)
-        binding.etCurrency.addTextChangedListener(this)
-
-        binding.etCoin.isFocusable = false
-        binding.etCurrency.isFocusable = false
-
-        binding.etCoin.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            isCoinEtFocused = hasFocus
-            isCurrencyEtFocused = !hasFocus
-        }
-        binding.etCurrency.onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
-            isCoinEtFocused = !hasFocus
-            isCurrencyEtFocused = hasFocus
-        }
-    }
-
     override fun setObserversListeners() {
-
+        observeViewModel()
+        setListeners()
     }
 
-    override fun afterTextChanged(s: Editable?) {
-    }
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
-
-    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-        if (isCoinEtFocused && s.isNotEmpty()) {
-            val result = s.toString().toFloat() * mSelectedCurrencyRate
-            binding.etCurrency.setText(result.toString())
-        }
-        if (isCurrencyEtFocused && s.isNotEmpty()) {
-            val result = s.toString().toFloat() * mSelectedCurrencyRate
-            binding.etCoin.setText(result.toString())
-        }
-    }
-
-
-    /**
-     * NumberPicker Dialog listener
-     */
-    override fun itemSelected(intValue: Int, stringValue: String, pickType: PICKER_TYPE) {
-        when (pickType) {
-            PICKER_TYPE.EXCHANGER -> {
-                mPresenter.exchangeModel = mExchangeResponse!!.data[intValue]
-                binding.tvExchanger.text = mPresenter.exchangeModel.caption
-
-                val coin = mPresenter.exchangeModel.currencies.keys.first()
-                mPresenter.mCoinCode = coin
-                binding.tvCoin.text = coin
-
-                mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[coin]!![0]
-                binding.tvCurrency.text = mPresenter.exchangeModel.currencies[coin]!![0]
-
-                mPresenter.exchangeModelPos = intValue
+    private fun observeViewModel() {
+        viewModel.chartPeriodList.observe(viewLifecycleOwner, Observer {chartPeriodList ->
+            adapter.selectedPeriodPosition = viewModel.selectedPeriodPosition
+            adapter.submitList(chartPeriodList)
+        })
+        viewModel.chart.observe(viewLifecycleOwner, Observer { chart ->
+            chart?.let {
+                onLoadLineChart(chart)
             }
-            PICKER_TYPE.COIN -> {
-                mPresenter.mCoinCode = stringValue
-                binding.tvCoin.text = stringValue
-
-                mPresenter.mCurrencyCode = mPresenter.exchangeModel.currencies[stringValue]!![0]
-                binding.tvCurrency.text = mPresenter.exchangeModel.currencies[stringValue]!![0]
-
-                mPresenter.coinCodePos = intValue
+        })
+        viewModel.currencyError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.d("currencyError")
             }
-            PICKER_TYPE.CURRENCY -> {
-                mPresenter.mCurrencyCode = stringValue
-                binding.tvCurrency.text = stringValue
-
-                mPresenter.currencyCodePos = intValue
+        })
+        viewModel.coinError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Timber.d("coinError")
             }
-        }
-
-        mPresenter.onUpdate()
+        })
     }
 
-    override fun onLoadLineChart(chartData: ChartData) {
-        mSelectedCurrencyRate = chartData.info.last!!.toFloat()
+    private fun setListeners() {
+//        binding.etCoin.doOnTextChanged { text, start, count, after ->
+//            if (text.isNullOrBlank().not()) {
+//                val result = text.toString().toFloat() * mSelectedCurrencyRate
+//                binding.etCurrency.setText(result.toString())
+//            }
+//        }
+//        binding.etCurrency.doOnTextChanged { text, start, count, after ->
+//            if (text.isNullOrBlank().not()) {
+//                val result = text.toString().toFloat() * mSelectedCurrencyRate
+//                binding.etCoin.setText(result.toString())
+//            }
+//        }
+    }
+
+    private fun onLoadLineChart(chartData: Chart) {
+        mSelectedCurrencyRate = chartData.info.last.toFloat()
 
         binding.etCoin.setText(1.toString())
-        binding.etCurrency.setText(chartData.info.last)
+        binding.etCurrency.setText(chartData.info.last.toEngineeringString())
 
-        fillLineData(chartData.chart)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe { lineData ->
+        lifecycleScope.launch(Dispatchers.IO) {
+            val barEntries = chartData.units.map { unit ->
+                BarEntry(
+                    unit.timestamp.toFloat(),
+                    unit.price.toFloat()
+                )
+            }
+
+            val dataSet = LineDataSet(barEntries, "LÆßEL").apply {
+                setDrawFilled(true)
+                setDrawCircles(true)
+                mode = LineDataSet.Mode.CUBIC_BEZIER
+                cubicIntensity = 0.2f
+                lineWidth = 1.8f
+                color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
+                circleRadius = 1.4f
+                setCircleColor(Color.WHITE)
+                valueTextColor = Color.WHITE
+                fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
+                fillAlpha = 100
+            }
+            val lineData = LineData(dataSet).apply {
+                setValueTextSize(9f)
+                isHighlightEnabled = false
+            }
+
+            withContext(Dispatchers.Main) {
                 binding.lineChart.data = lineData
                 binding.lineChart.invalidate()
             }
-    }
-
-    private fun fillLineData(chartsList: List<ChartItem>): Single<LineData> {
-        return Observable.fromIterable(chartsList)
-            .map { chartItem ->
-                BarEntry(
-                    chartItem.timestamp!!.toFloat(),
-                    chartItem.price!!.toFloat()
-                )
-            }
-            .toList()
-            .map {
-                val dataSet = LineDataSet(it as List<Entry>, "")
-                dataSet.setDrawFilled(true)
-                dataSet.setDrawCircles(true)
-                dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
-                dataSet.cubicIntensity = 0.2f
-                dataSet.lineWidth = 1.8f
-                dataSet.color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
-                dataSet.circleRadius = 1.4f
-                dataSet.setCircleColor(Color.WHITE)
-                dataSet.valueTextColor = Color.WHITE
-                dataSet.fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
-                dataSet.fillAlpha = 100
-                dataSet
-            }
-            .map { dataSet ->
-                val lineData = LineData(dataSet)
-                lineData.setValueTextSize(9f)
-                lineData.isHighlightEnabled = false
-                lineData
-            }
+        }
     }
 
     override fun onBtnClick(id: String, pos: Int) {
-        mPresenter.mTerm = id
-        mPresenter.onUpdate()
+//        mPresenter.mTerm = id
+//        mPresenter.onUpdate()
         Hawk.put(Constants.HAWK_HISTORY_CODE, id)
         Hawk.put(Constants.HAWK_HISTORY_POS, pos)
     }
 
     fun onSaveSnapshot() {
-        mPresenter.saveChartData()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        hideSoftInput() //Pos.RootActivity.override birnase
-    }
-
-    override fun onSaveSnapshot(isSuccess: Boolean, chartData: ChartData) {
-        if (isSuccess)
-            UtilityMethods.createNotificationChannel(chartData, _mActivity)
-    }
-
-    override fun toast(message: String) {
-        Toast.makeText(_mActivity, message, Toast.LENGTH_SHORT).show()
+//        mPresenter.saveChartData()
     }
 
     /**

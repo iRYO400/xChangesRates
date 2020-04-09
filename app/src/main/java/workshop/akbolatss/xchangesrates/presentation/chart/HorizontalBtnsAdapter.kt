@@ -97,8 +97,6 @@ class HorizontalBtnsAdapter(private val mBtnIds: List<String>?, private var mSel
                 YEAR_2 -> str = context.resources.getString(R.string.tv2y)
                 YEAR_5 -> str = context.resources.getString(R.string.tv5y)
             }
-            itemView.btnChartTiming.isSelected = isSelected
-            itemView.btnChartTiming.text = str
         }
     }
 }

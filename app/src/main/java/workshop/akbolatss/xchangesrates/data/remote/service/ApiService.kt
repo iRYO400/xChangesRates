@@ -19,10 +19,10 @@ interface ApiService {
 
     @GET("chart")
     suspend fun getChart(
-        @Query("coin") coin: String,
         @Query("exchange") exchange: String,
+        @Query("coin") coin: String,
         @Query("currency") currency: String,
-        @Query("term") term: String
+        @Query("term") timing: String
     ): Response<ChartResponse>
 
     @GET("chart")

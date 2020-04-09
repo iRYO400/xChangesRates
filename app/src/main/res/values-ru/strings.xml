@@ -77,4 +77,7 @@
     <string name="bottom_bar_charts">Чарты</string>
     <string name="notification_switch">Включить уведомления</string>
     <string name="notification_smart_switch">Умные уведомления</string>
+    <string name="chart_selected_coin_error">Coin not selected</string>
+    <string name="chart_selected_currency_error">Currency not selected</string>
+    <string name="chart_selected_exchange_error">Exchanger not selected</string>
 </resources>

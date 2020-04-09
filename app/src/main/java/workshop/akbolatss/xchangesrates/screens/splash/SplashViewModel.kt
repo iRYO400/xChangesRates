@@ -2,10 +2,10 @@ package workshop.akbolatss.xchangesrates.screens.splash
 
 import androidx.lifecycle.MutableLiveData
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
-import workshop.akbolatss.xchangesrates.domain.usecase.UpdateDataUseCase
+import workshop.akbolatss.xchangesrates.domain.usecase.DownloadExchangesUseCase
 
 class SplashViewModel(
-    private val updateDataUseCase: UpdateDataUseCase
+    private val downloadExchangesUseCase: DownloadExchangesUseCase
 ) : BaseViewModel() {
 
     val success = MutableLiveData<Boolean>()
@@ -17,7 +17,7 @@ class SplashViewModel(
 
     private fun loadData() {
         launchOperation(operation = { scope ->
-            updateDataUseCase(scope, UpdateDataUseCase.Params())
+            downloadExchangesUseCase(scope, DownloadExchangesUseCase.Params())
         }, success = {
             success.value = true
         })

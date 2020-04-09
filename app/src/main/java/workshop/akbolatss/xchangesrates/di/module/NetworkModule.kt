@@ -42,6 +42,6 @@ val networkModule = module {
             addConverterFactory(GsonConverterFactory.create(get()))
             addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             client(get())
-        }
+        }.build()
     }
 }

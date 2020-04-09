@@ -1,13 +1,17 @@
 package workshop.akbolatss.xchangesrates.presentation.chart.dialog
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Window
 import android.widget.NumberPicker
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.DialogFragment
+import org.koin.androidx.scope.currentScope
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.base.dialog.BaseDialogFragment
+import workshop.akbolatss.xchangesrates.databinding.DialogItemPickerBinding
 
 
 enum class PICKER_TYPE {
@@ -16,7 +20,9 @@ enum class PICKER_TYPE {
     CURRENCY
 }
 
-class PickerDialog : DialogFragment() {
+class PickerDialog : BaseDialogFragment<DialogItemPickerBinding>(
+    layoutId = R.layout.dialog_item_picker
+) {
 
     companion object {
 
@@ -24,7 +30,11 @@ class PickerDialog : DialogFragment() {
         private const val BUNDLE_LIST = "BundleList"
         private const val BUNDLE_POS = "BundlePosition"
 
-        fun newInstance(pickType: PICKER_TYPE, ids: ArrayList<String>, position: Int): PickerDialog {
+        fun newInstance(
+            pickType: PICKER_TYPE,
+            ids: ArrayList<String>,
+            position: Int
+        ): PickerDialog {
             val fragment =
                 PickerDialog()
             val arg = Bundle()
@@ -36,11 +46,14 @@ class PickerDialog : DialogFragment() {
         }
     }
 
+    private val viewModel by currentScope.viewModel<ItemPickerViewModel>(this)
+
+    private lateinit var callback: OnItemPickerCallback
     private lateinit var mList: ArrayList<String>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = LayoutInflater.from(activity)
-        val view = inflater.inflate(R.layout.dialog_picker, null)
+        val view = inflater.inflate(R.layout.dialog_item_picker, null)
 
         val alertDialogBuilder = AlertDialog.Builder(activity!!, R.style.CustomDialog)
         alertDialogBuilder.setView(view)
@@ -60,7 +73,7 @@ class PickerDialog : DialogFragment() {
         numberPicker.value = pos
 
         alertDialogBuilder.setPositiveButton(R.string.alert_save) { dialog, which ->
-            val mListener = targetFragment as PickerDialogListener
+            val mListener = targetFragment as OnItemPickerCallback
             val type = arguments!!.get(BUNDLE_ENUM) as PICKER_TYPE
             mListener.itemSelected(numberPicker.value, mList[numberPicker.value], type)
         }
@@ -70,9 +83,26 @@ class PickerDialog : DialogFragment() {
         return dialog
     }
 
-    interface PickerDialogListener {
+    interface OnItemPickerCallback {
 
         fun itemSelected(intValue: Int, stringValue: String, pickType: PICKER_TYPE)
+
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (parentFragment is OnItemPickerCallback)
+            callback = parentFragment as OnItemPickerCallback
+        else
+            throw RuntimeException("Must implement OnItemPickerCallback")
+    }
+
+    override fun init(savedInstanceState: Bundle?) {
+        super.init(savedInstanceState)
+
+    }
+
+    override fun setObserversListeners() {
 
     }
 }

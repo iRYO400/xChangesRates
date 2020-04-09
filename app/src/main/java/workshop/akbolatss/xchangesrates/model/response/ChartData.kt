@@ -3,8 +3,6 @@ package workshop.akbolatss.xchangesrates.model.response
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
-import workshop.akbolatss.xchangesrates.data.persistent.converter.RoomConverters
 
 @Entity
 data class ChartData(
@@ -24,19 +22,14 @@ data class ChartData(
     var options: ChartOptions = ChartOptions()
 )
 
-@Entity
 data class ChartOptions(
-    @PrimaryKey
     var optionsId: Long = 0,
     var isSmartEnabled: Boolean = true,
     var isStickedEnabled: Boolean = false, // Sticked notification in status bar
     var intervalUpdateIndex: Int = 13 // Custom, Interval update index, @see strings.xml array_interval_updates. 1 is 1 minute
 )
 
-@Entity
 data class ChartInfo(
-    @PrimaryKey
-    var infoId: Long,
     val volume: Float?,
     val high: String?,
     val change24: Float?,
@@ -51,10 +44,7 @@ data class ChartInfo(
     val timestamp: Long?
 )
 
-@Entity
 class ChartItem(
-    @PrimaryKey(autoGenerate = true)
-    var chartId: Long,
     val market: Float?,
     val high: String?,
     val low: String?,

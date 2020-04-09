@@ -8,6 +8,10 @@ class RootViewModel : BaseViewModel() {
 
     val screenState = MutableLiveData<Event<ScreenState>>()
 
+    init {
+        showCharts()
+    }
+
     fun showList() {
         if (screenState.value?.peekContent() != ScreenState.SNAPSHOTS)
             screenState.value = Event(ScreenState.SNAPSHOTS)
