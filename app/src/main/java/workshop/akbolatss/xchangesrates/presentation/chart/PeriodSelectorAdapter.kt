@@ -54,6 +54,6 @@ private val DIFF_CALLBACK: DiffUtil.ItemCallback<ChartPeriod> =
             oldItem: ChartPeriod,
             newItem: ChartPeriod
         ): Boolean =
-            oldItem.code == newItem.code
+            oldItem.code == newItem.code && oldItem.isSelected == newItem.isSelected
 
     }

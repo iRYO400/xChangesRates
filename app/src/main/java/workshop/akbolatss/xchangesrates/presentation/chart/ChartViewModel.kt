@@ -135,7 +135,7 @@ class ChartViewModel(
 
     fun toggleSelected(chartPeriod: ChartPeriod, position: Int) {
         chartPeriodList.value?.let { list ->
-            val updatedList = list.toMutableList().onEach { period ->
+            val updatedList = list.map { period ->
                 if (period.code == chartPeriod.code)
                     period.copy(isSelected = true)
                 else
