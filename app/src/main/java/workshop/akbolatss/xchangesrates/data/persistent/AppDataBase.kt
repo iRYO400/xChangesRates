@@ -6,13 +6,16 @@ import androidx.room.TypeConverters
 import workshop.akbolatss.xchangesrates.data.persistent.converter.RoomConverters
 import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
 import workshop.akbolatss.xchangesrates.data.persistent.dao.ExchangeDao
+import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
 import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
+import workshop.akbolatss.xchangesrates.data.persistent.model.DBSnapshot
 import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 
 @Database(
     entities = [
         Exchange::class,
+        DBSnapshot::class,
         Chart::class,
         ChartData::class
     ],
@@ -26,4 +29,5 @@ abstract class AppDataBase : RoomDatabase() {
 
     abstract fun chartDataDao(): ChartDataDao
 
+    abstract fun snapshotDao(): SnapshotDao
 }

@@ -38,7 +38,7 @@ class SplashActivity : AppCompatActivity() {
                     is LoadingState.Loading -> {
                         // TODO loading
                     }
-                    is LoadingState.Ready -> {
+                    is LoadingState.Idle -> {
                         // TODO Idle?
                     }
                 }

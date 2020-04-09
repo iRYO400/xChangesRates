@@ -41,7 +41,18 @@ abstract class BaseViewModel : ViewModel() {
             withContext(Dispatchers.IO) {
                 operation(this)
             }.fold(failure, success)
-            loading.invoke(LoadingState.Ready)
+            loading.invoke(LoadingState.Idle)
+        }
+    }
+
+    protected fun executeUseCase(
+        loading: (LoadingState) -> Unit = handleLoadingState,
+        action: suspend (CoroutineScope) -> Unit
+    ): Job {
+        return viewModelScope.launch {
+            loading.invoke(LoadingState.Loading)
+            action(this)
+            loading.invoke(LoadingState.Idle)
         }
     }
 

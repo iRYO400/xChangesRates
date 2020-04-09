@@ -24,15 +24,6 @@ interface ChartDataDao {
     @Update
     suspend fun update(chartData: ChartData): Int
 
-    @Insert(onConflict = REPLACE)
-    fun addChartData(chartData: ChartData): Long
-
-    @Delete
-    fun deleteChartData(chartData: ChartData)
-
-    @Query("DELETE FROM ChartData WHERE id = :id")
-    fun deleteChartData(id: Long)
-
     @Update
     fun updateChartData(chartData: ChartData)
 }

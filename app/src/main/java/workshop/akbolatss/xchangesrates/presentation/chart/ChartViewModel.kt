@@ -5,8 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
+import workshop.akbolatss.xchangesrates.base.resource.Failure
+import workshop.akbolatss.xchangesrates.base.resource.onFailure
+import workshop.akbolatss.xchangesrates.base.resource.onSuccess
 import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
 import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
+import workshop.akbolatss.xchangesrates.domain.usecase.CreateSnapshotUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadChartUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
@@ -15,7 +19,8 @@ import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriodLis
 
 class ChartViewModel(
     private val findExchangesUseCase: LoadExchangesUseCase,
-    private val loadChartUseCase: LoadChartUseCase
+    private val loadChartUseCase: LoadChartUseCase,
+    private val createSnapshotUseCase: CreateSnapshotUseCase
 ) : BaseViewModel() {
 
     val exchangeList = MutableLiveData<List<Exchange>>()
@@ -145,4 +150,39 @@ class ChartViewModel(
             selectedPeriod.value = chartPeriod
         }
     }
+
+    fun tryCreateSnapshot() {
+        val exchange = exchange.value
+        if (exchange == null) {
+            exchangeError.value = R.string.chart_selected_exchange_error
+            return
+        }
+        val coin = coin.value
+        if (coin.isNullOrBlank()) {
+            coinError.value = R.string.chart_selected_coin_error
+            return
+        }
+        val currency = currency.value
+        if (currency.isNullOrBlank()) {
+            currencyError.value = R.string.chart_selected_currency_error
+            return
+        }
+
+        createSnapshot(exchange.caption, coin, currency)
+    }
+
+    private fun createSnapshot(exchange: String, coin: String, currency: String) =
+        executeUseCase { scope ->
+            createSnapshotUseCase(
+                scope, CreateSnapshotUseCase.Params(
+                    exchange, coin, currency
+                )
+            ).onSuccess {
+                TODO("Successfully created")
+            }.onFailure {
+                if (it is Failure.SnapshotAlreadyExists) {
+                    TODO("Already exists")
+                }
+            }
+        }
 }

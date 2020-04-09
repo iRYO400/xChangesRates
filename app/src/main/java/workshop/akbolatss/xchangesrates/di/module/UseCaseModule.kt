@@ -24,4 +24,11 @@ val useCaseModule = module {
     factory {
         LoadChartUseCase(get())
     }
+
+    factory {
+        CreateSnapshotUseCase(get(), get())
+    }
+    factory {
+        CreateOrUpdateSnapshotUseCase(get(), get())
+    }
 }

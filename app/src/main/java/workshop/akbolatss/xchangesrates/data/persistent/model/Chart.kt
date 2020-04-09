@@ -15,7 +15,6 @@ data class Chart(
     val source: String,
     @Embedded(prefix = "info_")
     val info: ChartInfo,
-//    @Embedded(prefix = "unit_")
     val units: ArrayList<ChartUnit> //TODO mby divide
 ) {
     companion object {

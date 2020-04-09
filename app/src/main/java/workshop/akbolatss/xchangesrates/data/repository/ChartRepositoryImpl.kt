@@ -56,50 +56,6 @@ class ChartRepositoryImpl(
     override suspend fun findBy(exchange: String, coin: String, currency: String): Chart =
         chartDao.findBy(exchange, coin, currency) ?: Chart.empty()
 
-    override fun onAddChartData(chartData: ChartData): Single<Long> {
-        return Single.fromCallable {
-            chartDao.addChartData(chartData)
-        }
-    }
-
-    override fun onDeleteChartData(chartData: ChartData): Completable {
-        return Completable.fromAction {
-            chartDao.deleteChartData(chartData)
-        }
-    }
-
-    override fun onDeleteChartData(id: Long): Completable {
-        return Completable.fromAction {
-            chartDao.deleteChartData(id)
-        }
-    }
-
-    override fun onUpdateChartData(chartData: ChartData): Observable<ChartData> {
-        return Observable.fromCallable {
-            chartDao.updateChartData(chartData)
-            chartData
-        }
-    }
-
-
-    override fun getQueryResult(
-        coin: String,
-        exchange: String,
-        currency: String,
-        term: String
-    ): Observable<ChartResponse> {
-        return apiService.getCurrency(coin, exchange, currency, term)
-    }
-
-    override fun getSnapshot(
-        coin: String,
-        exchange: String,
-        currency: String,
-        term: String
-    ): Observable<ChartResponse> {
-        return apiService.getSnapshot(coin, exchange, currency, term)
-    }
-
     override suspend fun findBy(itemId: Long): ChartData =
         chartDao.findBy(itemId)
 
@@ -119,15 +75,7 @@ class ChartRepositoryImpl(
             )
         }).flatMap { newChart ->
             Either.Right(None())
-//            saveResponse(newChart)
         }
-    }
-
-    private suspend fun saveResponse(chart: ChartData): Either<Failure, None> {
-        return update(map = {
-        }, query = {
-            chartDao.update(chart)
-        })
     }
 
 }

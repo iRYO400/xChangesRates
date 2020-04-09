@@ -183,6 +183,7 @@ class ChartFragment(
     }
 
     fun onSaveSnapshot() {
+        viewModel.tryCreateSnapshot()
         Toast.makeText(context, "Hey", Toast.LENGTH_SHORT).show()
     }
 

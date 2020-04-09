@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.data.remote.service
 
-import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -25,15 +24,4 @@ interface ApiService {
         @Query("term") timing: String
     ): Response<ChartResponse>
 
-    @GET("chart")
-    fun getCurrency(
-        @Query("coin") coin: String, @Query("exchange") exchange: String,
-        @Query("currency") currency: String, @Query("term") term: String
-    ): Observable<ChartResponse>
-
-    @GET("chart")
-    fun getSnapshot(
-        @Query("coin") coin: String, @Query("exchange") exchange: String,
-        @Query("currency") currency: String, @Query("term") term: String
-    ): Observable<ChartResponse>
 }
