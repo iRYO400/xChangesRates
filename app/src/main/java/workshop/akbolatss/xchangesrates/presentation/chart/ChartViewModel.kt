@@ -2,6 +2,7 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import kz.jgroup.pos.util.Event
 import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
@@ -10,17 +11,18 @@ import workshop.akbolatss.xchangesrates.base.resource.onFailure
 import workshop.akbolatss.xchangesrates.base.resource.onSuccess
 import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
 import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
-import workshop.akbolatss.xchangesrates.domain.usecase.CreateSnapshotUseCase
+import workshop.akbolatss.xchangesrates.domain.usecase.CreateOrUpdateSnapshotUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadChartUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriod
 import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriodList
+import java.math.BigDecimal
 
 class ChartViewModel(
     private val findExchangesUseCase: LoadExchangesUseCase,
     private val loadChartUseCase: LoadChartUseCase,
-    private val createSnapshotUseCase: CreateSnapshotUseCase
+    private val createOrUpdateSnapshotUseCase: CreateOrUpdateSnapshotUseCase
 ) : BaseViewModel() {
 
     val exchangeList = MutableLiveData<List<Exchange>>()
@@ -40,6 +42,11 @@ class ChartViewModel(
     val chartPeriodList = MutableLiveData<List<ChartPeriod>>()
     val selectedPeriod = MutableLiveData<ChartPeriod>()
 
+    val rate = MediatorLiveData<BigDecimal>()
+
+    val snapshotCreated = MutableLiveData<Event<Int>>()
+    val snapshotCreatedError = MutableLiveData<Event<Int>>()
+
     init {
         setObservers()
         initChartPeriod()
@@ -58,6 +65,9 @@ class ChartViewModel(
         currencyList.addSource(coin) { coin ->
             loadCurrenciesWithDefault(coin)
             tryLoadChart()
+        }
+        rate.addSource(chart) {
+            rate.value = it.info.last
         }
     }
 
@@ -173,17 +183,18 @@ class ChartViewModel(
 
     private fun createSnapshot(exchange: String, coin: String, currency: String) =
         executeUseCase { scope ->
-            createSnapshotUseCase(
-                scope, CreateSnapshotUseCase.Params(
+            createOrUpdateSnapshotUseCase(
+                scope, CreateOrUpdateSnapshotUseCase.Params(
                     exchange, coin, currency
                 )
             ).onSuccess {
-                Timber.d("Success created")
-//                TODO("Successfully created")
+                snapshotCreated.value = Event(R.string.chart_create_snapshot_success)
             }.onFailure {
-                if (it is Failure.SnapshotAlreadyExists) {
-                    TODO("Already exists")
-                }
+                if (it is Failure.SnapshotAlreadyExists)
+                    snapshotCreatedError.value =
+                        Event(R.string.chart_create_snapshot_error_already_exists)
+                else
+                    snapshotCreatedError.value = Event(R.string.chart_create_snapshot_error_unknown)
             }
         }
 }

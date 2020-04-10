@@ -160,5 +160,8 @@
     <string name="chart_selected_coin_error">Coin not selected</string>
     <string name="chart_selected_currency_error">Currency not selected</string>
     <string name="chart_selected_exchange_error">Exchanger not selected</string>
+    <string name="chart_create_snapshot_error_already_exists">Snapshot already exists</string>
+    <string name="chart_create_snapshot_error_unknown">Couldn\'t save snapshot</string>
+    <string name="chart_create_snapshot_success">Snapshot successfully created</string>
 
 </resources>

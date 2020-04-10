@@ -61,7 +61,7 @@ class SnapshotsAdapter(
                 tvCurrRate.text = item.rate.toPlainString()
                 tvHighRate.text = item.high.toPlainString()
                 tvLowRate.text = item.low.toPlainString()
-                tvTime.text = convertTime(item.updateTime.time * 1000)
+                tvTime.text = convertTime(item.updateTime.time)
 
 //                lifecycleOwner?.lifecycleScope?.launchWhenResumed {
 //                    withContext(Dispatchers.IO) {

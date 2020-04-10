@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -9,49 +10,53 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        tools:context="workshop.akbolatss.xchangesrates.presentation.root.RootActivity">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3" />
+                android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/textView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/bg_txt"
                     android:gravity="center_horizontal"
                     android:maxLines="1"
                     android:text="@string/tvExchanger"
                     android:textColor="@color/colorSpinTxt"
-                    android:textSize="@dimen/txtExchange" />
+                    android:textSize="@dimen/txtExchange"
+                    app:layout_constraintEnd_toStartOf="@+id/textView3"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
-                    android:gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:text="@string/tvDoubleDots"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/etText" />
+                    android:textSize="@dimen/etText"
+                    app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                    app:layout_constraintEnd_toStartOf="@+id/tvExchanger"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView2"
+                    app:layout_constraintTop_toTopOf="@+id/textView2" />
 
                 <AutoCompleteTextView
                     android:id="@+id/tvExchanger"
@@ -60,7 +65,8 @@
                     showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="48dp"
                     android:background="@drawable/bg_txt"
                     android:completionThreshold="0"
                     android:gravity="center_horizontal"
@@ -68,68 +74,57 @@
                     android:singleLine="true"
                     android:textColor="@color/colorSpinTxt"
                     android:textSize="@dimen/txtExchange"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView3"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Kraken" />
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3" />
 
                 <EditText
                     android:id="@+id/etCoin"
                     style="@style/StyleEditText"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="1"
-                    android:textAllCaps="true" />
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toStartOf="@+id/textView4"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvExchanger"
+                    tools:text="1" />
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.25"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
                     android:gravity="center"
+                    android:includeFontPadding="false"
                     android:text="@string/tvEquality"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/etText" />
+                    android:textSize="@dimen/etText"
+                    app:layout_constraintBottom_toBottomOf="@+id/etCoin"
+                    app:layout_constraintEnd_toStartOf="@+id/etCurrency"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/etCoin"
+                    app:layout_constraintTop_toTopOf="@+id/etCoin" />
 
                 <EditText
                     android:id="@+id/etCurrency"
                     style="@style/StyleEditText"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text=""
-                    android:textAllCaps="true" />
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="48dp"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/textView4"
+                    app:layout_constraintTop_toBottomOf="@+id/tvExchanger"
+                    tools:text="6500" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.3" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3" />
 
                 <AutoCompleteTextView
                     android:id="@+id/tvCoin"
@@ -138,21 +133,24 @@
                     showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/bg_txt"
                     android:completionThreshold="0"
                     android:gravity="center_horizontal"
                     android:labelFor="@id/tvCoin"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textAllCaps="true"
                     android:textColor="@color/colorSpinTxt"
                     android:textSize="@dimen/txtExchange"
+                    app:layout_constraintEnd_toStartOf="@+id/tvCurrency"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etCoin"
                     tools:text="BTC" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25" />
 
                 <AutoCompleteTextView
                     android:id="@+id/tvCurrency"
@@ -161,44 +159,41 @@
                     showDropDownOnClick="@{true}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="48dp"
                     android:background="@drawable/bg_txt"
                     android:completionThreshold="0"
                     android:gravity="center_horizontal"
                     android:labelFor="@id/tvCurrency"
-                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textAllCaps="true"
                     android:textColor="@color/colorSpinTxt"
                     android:textSize="@dimen/txtExchange"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/tvCoin"
+                    app:layout_constraintTop_toBottomOf="@+id/etCurrency"
                     tools:text="USD" />
 
-                <Space
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.3" />
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="12sp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="12dp"
-            android:background="@color/colorInactive" />
-
-        <LinearLayout
-            android:id="@+id/layoutChart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/colorInactive" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/rv_btn" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
@@ -206,5 +201,5 @@
                 android:layout_height="match_parent"
                 android:layout_marginBottom="24dp" />
         </LinearLayout>
-    </LinearLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -2,8 +2,8 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.graphics.Color
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,11 +15,11 @@ import com.orhanobut.hawk.Hawk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kz.jgroup.pos.util.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
@@ -27,6 +27,8 @@ import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
+import workshop.akbolatss.xchangesrates.utils.extension.showSnackBar
+import workshop.akbolatss.xchangesrates.utils.extension.toFormattedString
 
 class ChartFragment(
     override val layoutId: Int = R.layout.fragment_chart
@@ -35,11 +37,6 @@ class ChartFragment(
     private val viewModel by currentScope.viewModel<ChartViewModel>(this)
 
     private lateinit var adapter: PeriodSelectorAdapter
-
-    /**
-     * Коэффициент курса выбранной валюты
-     */
-    private var mSelectedCurrencyRate: Float = 0.toFloat()
 
     companion object {
 
@@ -113,44 +110,48 @@ class ChartFragment(
         })
         viewModel.chart.observe(viewLifecycleOwner, Observer { chart ->
             chart?.let {
-                onLoadLineChart(chart)
+                loadLineChart(chart)
             }
         })
         viewModel.currencyError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.d("currencyError")
+                binding.coordinator.showSnackBar(it)
             }
         })
         viewModel.coinError.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.d("coinError")
+                binding.coordinator.showSnackBar(it)
             }
+        })
+        viewModel.snapshotCreated.observe(viewLifecycleOwner, EventObserver {
+            binding.coordinator.showSnackBar(it)
+        })
+        viewModel.snapshotCreatedError.observe(viewLifecycleOwner, EventObserver {
+            binding.coordinator.showSnackBar(it)
         })
     }
 
     private fun setListeners() {
-//        binding.etCoin.doOnTextChanged { text, start, count, after ->
-//            if (text.isNullOrBlank().not()) {
-//                val result = text.toString().toFloat() * mSelectedCurrencyRate
-//                binding.etCurrency.setText(result.toString())
-//            }
-//        }
-//        binding.etCurrency.doOnTextChanged { text, start, count, after ->
-//            if (text.isNullOrBlank().not()) {
-//                val result = text.toString().toFloat() * mSelectedCurrencyRate
-//                binding.etCoin.setText(result.toString())
-//            }
-//        }
+        binding.etCoin.doAfterTextChanged {
+            it?.toString()?.toBigDecimalOrNull()?.let { coinValue ->
+                val rate = viewModel.rate.value ?: return@let
+                binding.etCurrency.setText(coinValue.multiply(rate).toFormattedString())
+            }
+        }
+        binding.etCurrency.doAfterTextChanged {
+            it?.toString()?.toBigDecimalOrNull()?.let { currencyValue ->
+                val rate = viewModel.rate.value ?: return@let
+                binding.etCoin.setText(currencyValue.multiply(rate).toFormattedString())
+            }
+        }
     }
 
-    private fun onLoadLineChart(chartData: Chart) {
-        mSelectedCurrencyRate = chartData.info.last.toFloat()
-
+    private fun loadLineChart(chart: Chart) {
         binding.etCoin.setText(1.toString())
-        binding.etCurrency.setText(chartData.info.last.toEngineeringString())
+        binding.etCurrency.setText(chart.info.last.toEngineeringString())
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val barEntries = chartData.units.map { unit ->
+            val barEntries = chart.units.map { unit ->
                 BarEntry(
                     unit.timestamp.toFloat(),
                     unit.price.toFloat()
@@ -184,7 +185,6 @@ class ChartFragment(
 
     fun onSaveSnapshot() {
         viewModel.tryCreateSnapshot()
-        Toast.makeText(context, "Hey", Toast.LENGTH_SHORT).show()
     }
 
     /**
