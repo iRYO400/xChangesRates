@@ -9,7 +9,7 @@ class RootViewModel : BaseViewModel() {
     val screenState = MutableLiveData<Event<ScreenState>>()
 
     init {
-        showCharts()
+        showList()
     }
 
     fun showList() {

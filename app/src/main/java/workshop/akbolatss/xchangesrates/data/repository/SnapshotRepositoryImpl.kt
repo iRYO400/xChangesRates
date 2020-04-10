@@ -1,5 +1,7 @@
 package workshop.akbolatss.xchangesrates.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -27,4 +29,10 @@ class SnapshotRepositoryImpl(
     override suspend fun findBy(exchange: String, coin: String, currency: String): Snapshot =
         snapshotDao.findBy(exchange, coin, currency)?.map() ?: Snapshot.empty()
 
+    override fun findAll(): Flow<List<Snapshot>> {
+        return snapshotDao.findAll()
+            .map { list ->
+                list.map()
+            }
+    }
 }

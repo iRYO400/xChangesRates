@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import workshop.akbolatss.xchangesrates.data.persistent.model.DBSnapshot
 
 @Dao
@@ -14,4 +15,7 @@ interface SnapshotDao {
 
     @Query("SELECT * FROM snapshot WHERE exchangerName = :exchange AND coin = :coin AND currency = :currency")
     suspend fun findBy(exchange: String, coin: String, currency: String): DBSnapshot?
+
+    @Query("SELECT * FROM snapshot")
+    fun findAll(): Flow<List<DBSnapshot>>
 }

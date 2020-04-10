@@ -31,10 +31,10 @@ abstract class BaseViewModel : ViewModel() {
     }
 
     fun <T> launchOperation(
-            operation: suspend (CoroutineScope) -> Either<Failure, T>,
-            loading: (LoadingState) -> Unit = handleLoadingState,
-            success: (T) -> Unit,
-            failure: (Failure) -> Unit = handleFailure
+        operation: suspend (CoroutineScope) -> Either<Failure, T>,
+        loading: (LoadingState) -> Unit = handleLoadingState,
+        success: (T) -> Unit,
+        failure: (Failure) -> Unit = handleFailure
     ): Job {
         return viewModelScope.launch {
             loading.invoke(LoadingState.Loading)

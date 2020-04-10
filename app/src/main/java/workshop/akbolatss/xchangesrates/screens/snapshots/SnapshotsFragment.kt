@@ -2,49 +2,52 @@ package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import android.os.Bundle
 import android.os.Handler
+import androidx.lifecycle.Observer
 import com.orhanobut.hawk.Hawk
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentSnapshotsBinding
+import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
 
 
 class SnapshotsFragment(
-        override val layoutId: Int = R.layout.fragment_snapshots
+    override val layoutId: Int = R.layout.fragment_snapshots
 ) : BaseFragment<FragmentSnapshotsBinding>(),
-        SnapshotOptionsDialog.OnSnapshotOptionsCallback {
+    SnapshotOptionsDialog.OnSnapshotOptionsCallback {
 
     private val viewModel by currentScope.viewModel<SnapshotsViewModel>(this)
 
-    private lateinit var mAdapter: SnapshotsAdapter
+    private lateinit var adapter: SnapshotsAdapter
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
-
-        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-        binding.swipeRefresh.setOnRefreshListener {
-            viewModel.loadSnapshots()
-        }
-
         initRecyclerView()
+
+//        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
+//        binding.swipeRefresh.setOnRefreshListener {
+////            viewModel.loadSnapshots()
+//        }
+
     }
 
     private fun initRecyclerView() {
-        mAdapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
+        adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
             viewModel.updateSingle(itemId, position)
-        }, notificationToggleClickListener = { chartData: ChartData, position: Int ->
-            toggleNotification(chartData, position)
+        }, notificationToggleClickListener = { snapshot: Snapshot, position: Int ->
+//            toggleNotification(chartData, position)
         }, openOptionsClickListener = { itemId: Long, positions: Int ->
             openSnapshotOptionsDialog(itemId, positions)
         })
         binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.adapter = mAdapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun setObserversListeners() {
@@ -57,7 +60,10 @@ class SnapshotsFragment(
     }
 
     private fun observeViewModel() {
-
+        viewModel.snapshots.observe(viewLifecycleOwner, Observer {
+            Timber.d("observe snapshots $it")
+            adapter.submitList(it)
+        })
     }
 
     private fun setListeners() {
@@ -94,7 +100,11 @@ class SnapshotsFragment(
     /**
      * Save edited changes
      */
-    override fun saveSnapshotChanges(chartData: ChartData, lastNotificationState: Boolean, pos: Int) {
+    override fun saveSnapshotChanges(
+        chartData: ChartData,
+        lastNotificationState: Boolean,
+        pos: Int
+    ) {
 //        if (lastNotificationState && chartData.isNotificationEnabled) { // Was enabled, then still enabled. Maybe changed timing
 //            dequeueWorker(chartData)
 //            UtilityMethods.clearOngoinNotification(chartData, _mActivity)
@@ -182,7 +192,7 @@ class SnapshotsFragment(
 //    }
 
     fun updateAllSnapshots() {
-        if (mAdapter.itemCount <= 0) {
+        if (adapter.itemCount <= 0) {
             return
         }
 
@@ -197,12 +207,12 @@ class SnapshotsFragment(
         if (!Hawk.get(Constants.HAWK_SHOWCASE_0_DONE, false)) {
             val showCaseQueue: FancyShowCaseQueue
             val showCase1 = FancyShowCaseView.Builder(activity!!)
-                    .title(resources.getString(R.string.showcase_snap_1))
-                    .backgroundColor(R.color.colorShowCaseBG)
-                    .build()
+                .title(resources.getString(R.string.showcase_snap_1))
+                .backgroundColor(R.color.colorShowCaseBG)
+                .build()
 
             showCaseQueue = FancyShowCaseQueue()
-                    .add(showCase1)
+                .add(showCase1)
 
             showCaseQueue.show()
             Hawk.put(Constants.HAWK_SHOWCASE_0_DONE, true)

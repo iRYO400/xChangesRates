@@ -178,7 +178,8 @@ class ChartViewModel(
                     exchange, coin, currency
                 )
             ).onSuccess {
-                TODO("Successfully created")
+                Timber.d("Success created")
+//                TODO("Successfully created")
             }.onFailure {
                 if (it is Failure.SnapshotAlreadyExists) {
                     TODO("Already exists")

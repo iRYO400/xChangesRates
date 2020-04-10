@@ -39,7 +39,7 @@ val viewModelModule: Module = module {
 
     scope(named<ChartFragment>()) {
         viewModel {
-            ChartViewModel(get(), get())
+            ChartViewModel(get(), get(), get())
         }
     }
 }

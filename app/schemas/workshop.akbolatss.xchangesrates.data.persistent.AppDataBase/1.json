@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "17cf828f20c5f3b89277be6dd6611b4f",
+    "identityHash": "b773f75c15878a8e0ed7c2763756214a",
     "entities": [
       {
         "tableName": "exchange",
@@ -40,6 +40,85 @@
           "autoGenerate": false
         },
         "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "snapshot",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchangerName` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `source` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `rate` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exchangerName",
+            "columnName": "exchangerName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coin",
+            "columnName": "coin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateTime",
+            "columnName": "updateTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rate",
+            "columnName": "rate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "high",
+            "columnName": "high",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "low",
+            "columnName": "low",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_snapshot_exchangerName_coin_currency",
+            "unique": false,
+            "columnNames": [
+              "exchangerName",
+              "coin",
+              "currency"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_snapshot_exchangerName_coin_currency` ON `${TABLE_NAME}` (`exchangerName`, `coin`, `currency`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -322,7 +401,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17cf828f20c5f3b89277be6dd6611b4f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b773f75c15878a8e0ed7c2763756214a')"
     ]
   }
 }
