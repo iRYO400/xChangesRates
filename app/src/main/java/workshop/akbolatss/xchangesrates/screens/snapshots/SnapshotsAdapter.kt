@@ -3,9 +3,15 @@ package workshop.akbolatss.xchangesrates.screens.snapshots
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.coroutines.launch
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -63,35 +69,33 @@ class SnapshotsAdapter(
                 tvLowRate.text = item.low.toPlainString()
                 tvTime.text = convertTime(item.updateTime.time)
 
-//                lifecycleOwner?.lifecycleScope?.launchWhenResumed {
-//                    withContext(Dispatchers.IO) {
-//                        val barEntries = item.chart.map { chartItem ->
-//                            BarEntry(
-//                                chartItem.timestamp!!.toFloat(),
-//                                chartItem.price!!.toFloat()
-//                            )
-//                        }
-//
-//                        val dataSet = LineDataSet(barEntries, "Entries").apply {
-//                            setDrawCircles(false)
-//                            mode = LineDataSet.Mode.CUBIC_BEZIER
-//                            cubicIntensity = 0.4f
-//                            lineWidth = 1f
-//                            color = ContextCompat.getColor(root.context, R.color.colorAccent)
-//                            setDrawFilled(true)
-//                            fillDrawable =
-//                                ContextCompat.getDrawable(root.context, R.drawable.bg_chart_round)
-//                        }
-//
-//                        val lineData = LineData(dataSet).apply {
-//                            setDrawValues(false)
-//                            isHighlightEnabled = false
-//                        }
-//                        lineChart.clear()
-//                        lineChart.data = lineData
-//                    }
-//                    lineChart.notifyDataSetChanged()
-//                }
+                lifecycleOwner?.lifecycleScope?.launch {
+                    val barEntries = item.charts.map { chartItem ->
+                        BarEntry(
+                            chartItem.timestamp.toFloat(),
+                            chartItem.price.toFloat()
+                        )
+                    }
+
+                    val dataSet = LineDataSet(barEntries, "Entries").apply {
+                        setDrawCircles(false)
+                        mode = LineDataSet.Mode.CUBIC_BEZIER
+                        cubicIntensity = 0.4f
+                        lineWidth = 1f
+                        color = ContextCompat.getColor(root.context, R.color.colorAccent)
+                        setDrawFilled(true)
+                        fillDrawable =
+                            ContextCompat.getDrawable(root.context, R.drawable.bg_chart_round)
+                    }
+
+                    val lineData = LineData(dataSet).apply {
+                        setDrawValues(false)
+                        isHighlightEnabled = false
+                    }
+                    lineChart.clear()
+                    lineChart.data = lineData
+                    lineChart.notifyDataSetChanged()
+                }
                 setListeners(this, item, holder.layoutPosition)
             }
         }
