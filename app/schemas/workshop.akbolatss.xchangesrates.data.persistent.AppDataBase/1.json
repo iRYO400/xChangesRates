@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "bc614b28ac4f2af6b4aed4b7fde3fcae",
+    "identityHash": "b8c8f0bb918a87f9c062ba477adec82d",
     "entities": [
       {
         "tableName": "exchange",
@@ -120,12 +120,56 @@
           }
         ],
         "foreignKeys": []
+      },
+      {
+        "tableName": "snapshot_options",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snapshotId` INTEGER NOT NULL, `isSmartEnabled` INTEGER NOT NULL, `isStick` INTEGER NOT NULL, `updateInterval` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snapshotId",
+            "columnName": "snapshotId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSmartEnabled",
+            "columnName": "isSmartEnabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isStick",
+            "columnName": "isStick",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updateInterval",
+            "columnName": "updateInterval",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'bc614b28ac4f2af6b4aed4b7fde3fcae')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b8c8f0bb918a87f9c062ba477adec82d')"
     ]
   }
 }

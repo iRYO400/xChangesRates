@@ -5,8 +5,10 @@ import workshop.akbolatss.xchangesrates.base.BaseUseCase
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
+import workshop.akbolatss.xchangesrates.data.persistent.model.UpdateInterval
 import workshop.akbolatss.xchangesrates.domain.model.Chart
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
+import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
 import workshop.akbolatss.xchangesrates.utils.extension.localId
 import java.util.*
@@ -16,6 +18,13 @@ class CreateSnapshotUseCase(
 ) : BaseUseCase<CreateSnapshotUseCase.Params, None>() {
 
     override suspend fun run(params: Params, scope: CoroutineScope): Either<Failure, None> {
+        val options = SnapshotOptions(
+            id = localId(),
+            isSmartEnabled = false,
+            isStick = false,
+            updateInterval = UpdateInterval.HOUR_1
+        )
+
         val snapshot = Snapshot(
             id = localId(),
             exchangerName = params.exchange,
@@ -25,6 +34,7 @@ class CreateSnapshotUseCase(
             high = params.chart.high,
             low = params.chart.low,
             updateTime = Date(),
+            options = options,
             charts = params.chart.units
         )
 

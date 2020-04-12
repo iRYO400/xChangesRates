@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.UpdateInterval
 import java.math.BigDecimal
 import java.util.*
 
@@ -25,6 +26,18 @@ object RoomConverters : KoinComponent {
         val listType = object : TypeToken<List<PriceByTimeEntity>>() {
         }.type
         return gson.fromJson(chartsString, listType)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toUpdateInterval(name: String): UpdateInterval {
+        return UpdateInterval.valueOf(name)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromUpdateInterval(updateInterval: UpdateInterval): String {
+        return updateInterval.name
     }
 
     @TypeConverter

@@ -8,11 +8,13 @@ import workshop.akbolatss.xchangesrates.data.persistent.dao.ExchangeDao
 import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
 import workshop.akbolatss.xchangesrates.data.persistent.model.ExchangeEntity
 import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotOptionsEntity
 
 @Database(
     entities = [
         ExchangeEntity::class,
-        SnapshotEntity::class
+        SnapshotEntity::class,
+        SnapshotOptionsEntity::class
     ],
     version = 1,
     exportSchema = true

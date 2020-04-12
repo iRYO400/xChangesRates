@@ -15,6 +15,7 @@ data class Snapshot(
     val rate: BigDecimal,
     val high: BigDecimal,
     val low: BigDecimal,
+    val options: SnapshotOptions,
     val charts: List<PriceByTime>
 ) {
     companion object {
@@ -28,6 +29,7 @@ data class Snapshot(
             rate = BigDecimal.ZERO,
             high = BigDecimal.ZERO,
             low = BigDecimal.ZERO,
+            options = SnapshotOptions.empty(),
             charts = emptyList()
         )
     }

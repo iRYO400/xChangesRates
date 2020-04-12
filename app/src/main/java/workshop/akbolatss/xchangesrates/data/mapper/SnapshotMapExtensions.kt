@@ -4,6 +4,7 @@ import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
 import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
 import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
+import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 
 object SnapshotMap {
 
@@ -20,11 +21,13 @@ object SnapshotMap {
             PriceByTimeEntity(it.timestamp, it.price)
         }
     )
+
 }
+
 
 object SnapshotEntityMap {
 
-    fun SnapshotEntity.map() = Snapshot(
+    fun SnapshotEntity.map(snapshotOptions: SnapshotOptions) = Snapshot(
         id = id,
         exchangerName = exchangerName,
         coin = coin,
@@ -33,11 +36,9 @@ object SnapshotEntityMap {
         rate = rate,
         high = high,
         low = low,
+        options = snapshotOptions,
         charts = charts.map {
             PriceByTime(it.timestamp, it.price)
         }
     )
-
-    fun List<SnapshotEntity>.map() =
-        this.map { it.map() }
 }
