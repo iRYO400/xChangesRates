@@ -12,7 +12,7 @@ class DownloadExchangesUseCase(
 ) : BaseUseCase<DownloadExchangesUseCase.Params, None>() {
 
     override suspend fun run(params: Params, scope: CoroutineScope): Either<Failure, None> {
-        return repository.downloadAndSaveExchanges()
+        return repository.downloadAndSave()
     }
 
     data class Params(val none: None = None())

@@ -5,8 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import workshop.akbolatss.xchangesrates.data.persistent.model.ChartUnit
-import workshop.akbolatss.xchangesrates.model.response.ChartItem
+import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
 import java.math.BigDecimal
 import java.util.*
 
@@ -16,28 +15,14 @@ object RoomConverters : KoinComponent {
 
     @TypeConverter
     @JvmStatic
-    fun fromChartItems(charts: ArrayList<ChartItem>?): String? {
+    fun fromChartItems(charts: List<PriceByTimeEntity>?): String? {
         return gson.toJson(charts)
     }
 
     @TypeConverter
     @JvmStatic
-    fun toChartItems(chartsString: String?): ArrayList<ChartItem>? {
-        val listType = object : TypeToken<MutableList<ChartItem>>() {
-        }.type
-        return gson.fromJson(chartsString, listType)
-    }
-
-    @TypeConverter
-    @JvmStatic
-    fun fromCharts(charts: ArrayList<ChartUnit>?): String? {
-        return gson.toJson(charts)
-    }
-
-    @TypeConverter
-    @JvmStatic
-    fun toCharts(chartsString: String?): ArrayList<ChartUnit>? {
-        val listType = object : TypeToken<MutableList<ChartUnit>>() {
+    fun toChartItems(chartsString: String?): List<PriceByTimeEntity>? {
+        val listType = object : TypeToken<List<PriceByTimeEntity>>() {
         }.type
         return gson.fromJson(chartsString, listType)
     }

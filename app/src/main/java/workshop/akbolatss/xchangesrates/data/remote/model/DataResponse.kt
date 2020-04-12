@@ -4,6 +4,6 @@ data class DataResponse(
     val exchange: String,
     val currency: String,
     val source: String,
-    val info: ChartInfoResponse,
-    val chart: List<ChartUnitResponse>
+    val info: InfoResponse,
+    val chart: List<UnitResponse> //TODO rename
 )

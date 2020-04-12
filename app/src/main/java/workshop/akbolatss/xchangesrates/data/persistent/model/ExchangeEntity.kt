@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "exchange")
-data class Exchange(
+@Entity(tableName = "exchange")//TODO it also used in view, do smthing!
+data class ExchangeEntity(
     @PrimaryKey
     val id: String,
     val caption: String,

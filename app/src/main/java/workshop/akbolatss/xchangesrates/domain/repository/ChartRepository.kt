@@ -1,10 +1,8 @@
 package workshop.akbolatss.xchangesrates.domain.repository
 
-import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
-import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
-import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.domain.model.Chart
 
 /**
  * Author: Akbolat Sadvakassov
@@ -13,23 +11,10 @@ import workshop.akbolatss.xchangesrates.model.response.ChartData
 
 interface ChartRepository {
 
-    suspend fun findBy(itemId: Long): ChartData
-
-    suspend fun findList(): List<ChartData>
-
-    suspend fun updateChartData(chart: ChartData): Either<Failure, None>
-
-    suspend fun loadChart(
+    suspend fun download(
         exchange: String,
         coin: String,
         currency: String,
         timing: String
-    ): Either<Failure, None>
-
-    suspend fun findBy(
-        exchange: String,
-        coin: String,
-        currency: String
-    ): Chart
-
+    ): Either<Failure, Chart>
 }

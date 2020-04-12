@@ -1,37 +1,43 @@
 package workshop.akbolatss.xchangesrates.data.mapper
 
-import workshop.akbolatss.xchangesrates.data.persistent.model.DBSnapshot
+import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
+import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 
 object SnapshotMap {
 
-    fun Snapshot.map() = DBSnapshot(
+    fun Snapshot.map() = SnapshotEntity(
         id = id,
         exchangerName = exchangerName,
         coin = coin,
         currency = currency,
-        source = source,
         updateTime = updateTime,
         rate = rate,
         high = high,
-        low = low
+        low = low,
+        charts = charts.map {
+            PriceByTimeEntity(it.timestamp, it.price)
+        }
     )
 }
 
-object DBSnapshotMap {
+object SnapshotEntityMap {
 
-    fun DBSnapshot.map() = Snapshot(
+    fun SnapshotEntity.map() = Snapshot(
         id = id,
         exchangerName = exchangerName,
         coin = coin,
         currency = currency,
-        source = source,
         updateTime = updateTime,
         rate = rate,
         high = high,
-        low = low
+        low = low,
+        charts = charts.map {
+            PriceByTime(it.timestamp, it.price)
+        }
     )
 
-    fun List<DBSnapshot>.map() =
+    fun List<SnapshotEntity>.map() =
         this.map { it.map() }
 }

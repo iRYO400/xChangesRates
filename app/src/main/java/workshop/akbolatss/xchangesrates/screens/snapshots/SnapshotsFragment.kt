@@ -23,6 +23,13 @@ class SnapshotsFragment(
 ) : BaseFragment<FragmentSnapshotsBinding>(),
     SnapshotOptionsDialog.OnSnapshotOptionsCallback {
 
+    companion object {
+
+        fun newInstance(): SnapshotsFragment {
+            return SnapshotsFragment()
+        }
+    }
+
     private val viewModel by currentScope.viewModel<SnapshotsViewModel>(this)
 
     private lateinit var adapter: SnapshotsAdapter
@@ -30,12 +37,6 @@ class SnapshotsFragment(
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         initRecyclerView()
-
-//        binding.swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-//        binding.swipeRefresh.setOnRefreshListener {
-////            viewModel.loadSnapshots()
-//        }
-
     }
 
     private fun initRecyclerView() {
@@ -77,25 +78,9 @@ class SnapshotsFragment(
     }
 
     private fun openSnapshotOptionsDialog(chartId: Long, pos: Int) {
-        val fm = childFragmentManager
-        val dialogFragment = SnapshotOptionsDialog.newInstance(chartId, pos)
-        dialogFragment.setTargetFragment(this@SnapshotsFragment, 300)
-        dialogFragment.show(fm, "fm")
+        val dialog = SnapshotOptionsDialog.newInstance(chartId, pos)
+        dialog.show(childFragmentManager, dialog.tag)
     }
-
-
-//    /**
-//     * Error occurred, when updating single snapshot
-//     */
-//    override fun onErrorChartItem(pos: Int) {
-//        val view = binding.recyclerView.findViewHolderForAdapterPosition(pos)!!.itemView
-//        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
-//        view.findViewById<ImageView>(R.id.imgError).visibility = View.VISIBLE
-//        view.findViewById<TextView>(R.id.tvTime).visibility = View.INVISIBLE
-//        view.findViewById<ConstraintLayout>(R.id.snapshotView).isEnabled = true
-//        view.findViewById<ConstraintLayout>(R.id.snapshotView).isClickable = true
-//    }
-
 
     /**
      * Save edited changes
@@ -163,34 +148,6 @@ class SnapshotsFragment(
 //    }
 
 
-//    /**
-//     * No content state
-//     */
-//    override fun onNoContent(isEmpty: Boolean) {
-//        if (isEmpty) {
-//            binding.tvNoContent.visibility = View.VISIBLE
-//        } else {
-//            binding.tvNoContent.visibility = View.GONE
-//        }
-//    }
-//
-//    /**
-//     * Show loading state
-//     */
-//    override fun onShowLoading() {
-//        binding.progressBar.visibility = View.VISIBLE
-//        binding.recyclerView.visibility = View.GONE
-//    }
-//
-//    /**
-//     * Hide loading state
-//     */
-//    override fun onHideLoading() {
-//        binding.progressBar.visibility = View.GONE
-//        binding.recyclerView.visibility = View.VISIBLE
-//        binding.swipeRefresh.isRefreshing = false
-//    }
-
     fun updateAllSnapshots() {
         if (adapter.itemCount <= 0) {
             return
@@ -203,7 +160,6 @@ class SnapshotsFragment(
      * Show ShowCase at startup
      */
     private fun showStartupShowCase() {
-
         if (!Hawk.get(Constants.HAWK_SHOWCASE_0_DONE, false)) {
             val showCaseQueue: FancyShowCaseQueue
             val showCase1 = FancyShowCaseView.Builder(activity!!)
@@ -219,10 +175,4 @@ class SnapshotsFragment(
         }
     }
 
-    companion object {
-
-        fun newInstance(): SnapshotsFragment {
-            return SnapshotsFragment()
-        }
-    }
 }

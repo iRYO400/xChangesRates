@@ -1,10 +1,8 @@
 package workshop.akbolatss.xchangesrates.model.response
 
 import androidx.room.Embedded
-import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
 data class ChartData(
     @PrimaryKey(autoGenerate = true)
     var id: Long,

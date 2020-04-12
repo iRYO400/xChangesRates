@@ -83,4 +83,5 @@
     <string name="chart_create_snapshot_error_already_exists">Snapshot already exists</string>
     <string name="chart_create_snapshot_error_unknown">Couldn\'t save snapshot</string>
     <string name="chart_create_snapshot_success">Snapshot successfully created</string>
+    <string name="chart_create_snapshot_error_not_loaded">Looks like chart have not laoded yet</string>
 </resources>

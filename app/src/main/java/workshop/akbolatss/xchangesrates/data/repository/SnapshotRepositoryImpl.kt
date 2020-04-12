@@ -6,7 +6,7 @@ import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
-import workshop.akbolatss.xchangesrates.data.mapper.DBSnapshotMap.map
+import workshop.akbolatss.xchangesrates.data.mapper.SnapshotEntityMap.map
 import workshop.akbolatss.xchangesrates.data.mapper.SnapshotMap.map
 import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot

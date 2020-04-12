@@ -8,7 +8,6 @@ import workshop.akbolatss.xchangesrates.data.persistent.AppDataBase
 import workshop.akbolatss.xchangesrates.utils.Constants
 
 val daoModule = module {
-    factory { get<AppDataBase>().chartDataDao() }
     factory { get<AppDataBase>().exchangeDao() }
     factory { get<AppDataBase>().snapshotDao() }
 }

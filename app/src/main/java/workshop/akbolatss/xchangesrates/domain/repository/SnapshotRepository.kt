@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
-import workshop.akbolatss.xchangesrates.data.persistent.model.DBSnapshot
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 
 interface SnapshotRepository {

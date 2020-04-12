@@ -6,7 +6,7 @@ import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.base.resource.flatMap
 import workshop.akbolatss.xchangesrates.data.persistent.dao.ExchangeDao
-import workshop.akbolatss.xchangesrates.data.persistent.model.Exchange
+import workshop.akbolatss.xchangesrates.data.persistent.model.ExchangeEntity
 import workshop.akbolatss.xchangesrates.data.remote.model.ExchangeResponse
 import workshop.akbolatss.xchangesrates.data.remote.service.ApiService
 import workshop.akbolatss.xchangesrates.domain.repository.ExchangeRepository
@@ -17,7 +17,7 @@ class ExchangeRepositoryImpl(
     private val exchangeDao: ExchangeDao
 ) : BaseRepository(), ExchangeRepository {
 
-    override suspend fun downloadAndSaveExchanges(): Either<Failure, None> {
+    override suspend fun downloadAndSave(): Either<Failure, None> {
         return apiCall(call = {
             apiService.downloadExchanges()
         }, mapResponse = {
@@ -30,7 +30,7 @@ class ExchangeRepositoryImpl(
     private suspend fun saveExchanges(response: List<ExchangeResponse>): Either<Failure, None> {
         return insertList(map = {
             response.map {
-                Exchange(
+                ExchangeEntity(
                     id = it.ident,
                     caption = it.caption,
                     currencies = it.currencies,
@@ -42,7 +42,7 @@ class ExchangeRepositoryImpl(
         })
     }
 
-    override suspend fun findAll(): List<Exchange> =
+    override suspend fun findAll(): List<ExchangeEntity> =
         exchangeDao.findAll()
 
 }

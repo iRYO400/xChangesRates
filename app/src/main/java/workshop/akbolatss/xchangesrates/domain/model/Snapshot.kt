@@ -11,11 +11,11 @@ data class Snapshot(
     val exchangerName: String,
     val coin: String,
     val currency: String,
-    val source: String,
     val updateTime: Date,
     val rate: BigDecimal,
     val high: BigDecimal,
-    val low: BigDecimal
+    val low: BigDecimal,
+    val charts: List<PriceByTime>
 ) {
     companion object {
 
@@ -24,11 +24,11 @@ data class Snapshot(
             exchangerName = String.empty(),
             coin = String.empty(),
             currency = String.empty(),
-            source = String.empty(),
             updateTime = emptyDate(),
             rate = BigDecimal.ZERO,
             high = BigDecimal.ZERO,
-            low = BigDecimal.ZERO
+            low = BigDecimal.ZERO,
+            charts = emptyList()
         )
     }
 

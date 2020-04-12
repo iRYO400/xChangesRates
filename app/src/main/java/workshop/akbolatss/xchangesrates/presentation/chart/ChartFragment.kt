@@ -22,8 +22,8 @@ import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
-import workshop.akbolatss.xchangesrates.data.persistent.model.Chart
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
+import workshop.akbolatss.xchangesrates.domain.model.Chart
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
@@ -34,16 +34,16 @@ class ChartFragment(
     override val layoutId: Int = R.layout.fragment_chart
 ) : BaseFragment<FragmentChartBinding>() {
 
-    private val viewModel by currentScope.viewModel<ChartViewModel>(this)
-
-    private lateinit var adapter: PeriodSelectorAdapter
-
     companion object {
 
         fun newInstance(): ChartFragment {
             return ChartFragment()
         }
     }
+
+    private val viewModel by currentScope.viewModel<ChartViewModel>(this)
+
+    private lateinit var adapter: PeriodSelectorAdapter
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
@@ -148,7 +148,7 @@ class ChartFragment(
 
     private fun loadLineChart(chart: Chart) {
         binding.etCoin.setText(1.toString())
-        binding.etCurrency.setText(chart.info.last.toEngineeringString())
+        binding.etCurrency.setText(chart.rate.toEngineeringString())
 
         lifecycleScope.launch(Dispatchers.IO) {
             val barEntries = chart.units.map { unit ->

@@ -3,7 +3,6 @@ package workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options
 import android.content.Context
 import android.os.Bundle
 import android.widget.SeekBar
-import androidx.lifecycle.Observer
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -59,26 +58,26 @@ class SnapshotOptionsDialog : BaseDialogFragment<FragmentOptionsBinding>(
     }
 
     private fun observeViewModel() {
-        viewModel.snapshot.observe(viewLifecycleOwner, Observer {
-            it?.let { chartData ->
-                if (chartData.options.isSmartEnabled) {
-                    binding.seekIntervalTiming.max = 9
-                    binding.tvIntervalUpdates.text = intervalSmartUpdatesArray[chartData.options.intervalUpdateIndex - 8]
-                    binding.seekIntervalTiming.progress = chartData.options.intervalUpdateIndex - 8
-                } else {
-                    binding.seekIntervalTiming.max = 17
-                    binding.tvIntervalUpdates.text = intervalUpdatesArray[chartData.options.intervalUpdateIndex]
-                    binding.seekIntervalTiming.progress = chartData.options.intervalUpdateIndex
-                }
-
-                binding.seekHistoryTiming.progress = chartData.timingIndex
-                val historyTimingArray = resources.getStringArray(R.array.array_history_timing)
-
-                binding.tvHistoryTiming.text = historyTimingArray[chartData.timingIndex]
-                binding.switchNotify.isChecked = chartData.isNotificationEnabled
-                binding.switchSmart.isChecked = chartData.options.isSmartEnabled
-            }
-        })
+//        viewModel.snapshot.observe(viewLifecycleOwner, Observer {
+//            it?.let { chartData ->
+//                if (chartData.options.isSmartEnabled) {
+//                    binding.seekIntervalTiming.max = 9
+//                    binding.tvIntervalUpdates.text = intervalSmartUpdatesArray[chartData.options.intervalUpdateIndex - 8]
+//                    binding.seekIntervalTiming.progress = chartData.options.intervalUpdateIndex - 8
+//                } else {
+//                    binding.seekIntervalTiming.max = 17
+//                    binding.tvIntervalUpdates.text = intervalUpdatesArray[chartData.options.intervalUpdateIndex]
+//                    binding.seekIntervalTiming.progress = chartData.options.intervalUpdateIndex
+//                }
+//
+//                binding.seekHistoryTiming.progress = chartData.timingIndex
+//                val historyTimingArray = resources.getStringArray(R.array.array_history_timing)
+//
+//                binding.tvHistoryTiming.text = historyTimingArray[chartData.timingIndex]
+//                binding.switchNotify.isChecked = chartData.isNotificationEnabled
+//                binding.switchSmart.isChecked = chartData.options.isSmartEnabled
+//            }
+//        })
     }
 
     private fun setListeners() {

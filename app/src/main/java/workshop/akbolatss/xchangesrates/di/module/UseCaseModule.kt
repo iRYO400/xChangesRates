@@ -8,13 +8,6 @@ val useCaseModule = module {
         FindAllSnapshotsUseCase(get())
     }
     factory {
-        UpdateSingleSnapshotUseCase(get())
-    }
-    factory {
-        UpdateSnapshotListUseCase(get(), get())
-    }
-
-    factory {
         DownloadExchangesUseCase(get())
     }
 
@@ -22,11 +15,11 @@ val useCaseModule = module {
         LoadExchangesUseCase(get())
     }
     factory {
-        LoadChartUseCase(get())
+        DownloadChartUseCase(get())
     }
 
     factory {
-        CreateSnapshotUseCase(get(), get())
+        CreateSnapshotUseCase(get())
     }
     factory {
         CreateOrUpdateSnapshotUseCase(get(), get())

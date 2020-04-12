@@ -2,15 +2,13 @@ package workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options
 
 import androidx.lifecycle.MutableLiveData
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
-import workshop.akbolatss.xchangesrates.domain.usecase.FindSnapshotByIdUseCase
-import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 
 class SnapshotOptionsViewModel(
-        private val findSnapshotByIdUseCase: FindSnapshotByIdUseCase,
-        private val itemId: Long?
+    private val itemId: Long?
 ) : BaseViewModel() {
 
-    val snapshot = MutableLiveData<ChartData>()
+    val snapshot = MutableLiveData<Snapshot>()
 
     init {
         if (itemId == null)
@@ -19,13 +17,6 @@ class SnapshotOptionsViewModel(
     }
 
     private fun loadSnapshot() {
-        itemId?.let {
-            launchOperation(operation = { scope ->
-                findSnapshotByIdUseCase(scope, FindSnapshotByIdUseCase.Params(itemId))
-            }, success = {
-                snapshot.value = it
-            })
-        }
     }
 
 }

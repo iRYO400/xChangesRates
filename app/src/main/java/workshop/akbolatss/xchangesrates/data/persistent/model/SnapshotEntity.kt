@@ -10,15 +10,15 @@ import java.util.*
     tableName = "snapshot",
     indices = [Index("exchangerName", "coin", "currency")]
 )
-data class DBSnapshot(
+data class SnapshotEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long,
     val exchangerName: String,
     val coin: String,
     val currency: String,
-    val source: String,
     val updateTime: Date,
     val rate: BigDecimal,
     val high: BigDecimal,
-    val low: BigDecimal
+    val low: BigDecimal,
+    val charts: List<PriceByTimeEntity>
 )

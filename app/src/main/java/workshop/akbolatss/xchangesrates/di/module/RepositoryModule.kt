@@ -11,7 +11,7 @@ import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
 val repositoryModule = module {
 
     single {
-        ChartRepositoryImpl(get(), get()) as ChartRepository
+        ChartRepositoryImpl(get()) as ChartRepository
     }
 
     single {
