@@ -2,7 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
     android:paddingStart="24dp"
     android:paddingTop="24dp"
     android:paddingEnd="24dp"
@@ -11,7 +10,5 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/alert_notifies"
-        android:textColor="@color/colorSpinTxt"
-        android:textSize="20sp" />
+        android:text="@string/alert_notifies" />
 </FrameLayout>

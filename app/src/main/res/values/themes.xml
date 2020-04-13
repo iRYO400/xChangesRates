@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MyApp" parent="Base.Theme.MyApp" />
+
+    <style name="Base.Theme.MyApp" parent="Base.Theme.Root">
+        <item name="colorPrimary">@color/licorice</item>
+        <item name="colorPrimaryVariant">@color/big_stone</item>
+        <item name="colorSecondary">@color/san_juan</item>
+
+
+        <item name="android:colorBackground">@color/rhino</item>
+
+        <item name="colorOnPrimary">@color/aquamarine</item>
+        <item name="colorOnPrimaryVariant">@color/white</item>
+        <item name="colorOnSecondary">@color/lynch</item>
+
+        <item name="colorError">@color/md_red_600</item>
+    </style>
+
+    <style name="Base.Theme.Root" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+</resources>

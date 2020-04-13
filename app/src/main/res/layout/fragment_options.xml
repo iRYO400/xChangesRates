@@ -16,16 +16,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:text="Set chart history"
-            android:textColor="@color/colorSpinTxt"
-            android:textSize="14sp" />
+            android:text="Set chart history" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/bg_round">
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:id="@+id/tvHistoryTiming"
@@ -34,8 +31,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="@color/colorSnapExchange"
-                android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -61,8 +56,6 @@
                 android:layout_marginBottom="8dp"
                 android:maxLines="1"
                 android:text="@string/tv10min"
-                android:textColor="@color/colorSnapTxtDate"
-                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/seekHistoryTiming" />
@@ -74,8 +67,6 @@
                 android:layout_marginBottom="8dp"
                 android:maxLines="1"
                 android:text="@string/tv5y"
-                android:textColor="@color/colorSnapTxtDate"
-                android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/seekHistoryTiming" />
@@ -92,8 +83,6 @@
                 android:layout_marginEnd="8dp"
                 android:maxLines="1"
                 android:text="@string/notification_switch"
-                android:textColor="@color/colorSpinTxt"
-                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/switchNotify"
                 app:layout_constraintStart_toStartOf="parent"
@@ -126,16 +115,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|center_vertical"
-                    android:text="Set interval"
-                    android:textColor="@color/colorSpinTxt"
-                    android:textSize="14sp" />
+                    android:text="Set interval" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/bg_round">
+                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:id="@+id/tvIntervalUpdates"
@@ -144,8 +130,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:textColor="@color/colorSnapExchange"
-                        android:textSize="11sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -170,8 +154,6 @@
                         android:layout_marginBottom="8dp"
                         android:maxLines="1"
                         android:text="@string/tv15min"
-                        android:textColor="@color/colorSnapTxtDate"
-                        android:textSize="10sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/seekIntervalTiming" />
@@ -183,8 +165,6 @@
                         android:layout_marginBottom="8dp"
                         android:maxLines="1"
                         android:text="@string/tv2weeks"
-                        android:textColor="@color/colorSnapTxtDate"
-                        android:textSize="10sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/seekIntervalTiming" />
@@ -201,8 +181,6 @@
                         android:layout_marginEnd="8dp"
                         android:maxLines="1"
                         android:text="@string/notification_smart_switch"
-                        android:textColor="@color/colorSpinTxt"
-                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switchSmart"
                         app:layout_constraintStart_toStartOf="parent"
@@ -233,8 +211,6 @@
                         android:layout_marginEnd="8dp"
                         android:maxLines="1"
                         android:text="@string/notification_sticked_switch"
-                        android:textColor="@color/colorSpinTxt"
-                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/switchSticked"
                         app:layout_constraintStart_toStartOf="parent"
@@ -254,6 +230,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveChanges"
+            style="?materialButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:text="Save" />

@@ -3,7 +3,6 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 import android.graphics.Color
 import android.os.Bundle
 import androidx.core.content.ContextCompat
-import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,7 +27,6 @@ import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
 import workshop.akbolatss.xchangesrates.utils.extension.showSnackBar
-import workshop.akbolatss.xchangesrates.utils.extension.toFormattedString
 
 class ChartFragment(
     override val layoutId: Int = R.layout.fragment_chart
@@ -132,24 +130,10 @@ class ChartFragment(
     }
 
     private fun setListeners() {
-        binding.etCoin.doAfterTextChanged {
-            it?.toString()?.toBigDecimalOrNull()?.let { coinValue ->
-                val rate = viewModel.rate.value ?: return@let
-                binding.etCurrency.setText(coinValue.multiply(rate).toFormattedString())
-            }
-        }
-        binding.etCurrency.doAfterTextChanged {
-            it?.toString()?.toBigDecimalOrNull()?.let { currencyValue ->
-                val rate = viewModel.rate.value ?: return@let
-                binding.etCoin.setText(currencyValue.multiply(rate).toFormattedString())
-            }
-        }
+
     }
 
     private fun loadLineChart(chart: Chart) {
-        binding.etCoin.setText(1.toString())
-        binding.etCurrency.setText(chart.rate.toEngineeringString())
-
         lifecycleScope.launch(Dispatchers.IO) {
             val barEntries = chart.units.map { unit ->
                 BarEntry(
