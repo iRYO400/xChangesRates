@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
-import workshop.akbolatss.xchangesrates.databinding.RvBtnBinding
+import workshop.akbolatss.xchangesrates.databinding.ItemChartPeriodBinding
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 
 class PeriodSelectorAdapter(
@@ -18,7 +18,7 @@ class PeriodSelectorAdapter(
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
         return DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.rv_btn,
+            R.layout.item_chart_period,
             parent,
             false
         )
@@ -26,7 +26,7 @@ class PeriodSelectorAdapter(
 
     override fun bind(holder: DataBoundViewHolder, item: ChartPeriod) {
         when (holder.binding) {
-            is RvBtnBinding -> with(holder.binding) {
+            is ItemChartPeriodBinding -> with(holder.binding) {
                 model = item
 
                 btnHistory.setOnClickListener {

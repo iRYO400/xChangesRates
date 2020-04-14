@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        app:centre_button_color="@color/colorAccentDark"
+        app:centre_button_color="?attr/colorAccent"
         app:centre_button_icon="@drawable/ic_round_refresh"
-        app:space_background_color="@color/colorPrimaryDark" />
+        app:space_background_color="?attr/colorPrimary" />
 </FrameLayout>

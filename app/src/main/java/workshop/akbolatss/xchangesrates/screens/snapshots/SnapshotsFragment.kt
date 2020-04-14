@@ -8,11 +8,9 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentSnapshotsBinding
-import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
@@ -40,13 +38,9 @@ class SnapshotsFragment(
     }
 
     private fun initRecyclerView() {
-        adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
+        adapter = SnapshotsAdapter { itemId: Long, position: Int ->
             viewModel.updateSingle(itemId, position)
-        }, notificationToggleClickListener = { snapshot: Snapshot, position: Int ->
-//            toggleNotification(chartData, position)
-        }, openOptionsClickListener = { itemId: Long, positions: Int ->
-            openSnapshotOptionsDialog(itemId, positions)
-        })
+        }
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
     }
@@ -62,7 +56,6 @@ class SnapshotsFragment(
 
     private fun observeViewModel() {
         viewModel.snapshots.observe(viewLifecycleOwner, Observer {
-            Timber.d("observe snapshots $it")
             adapter.submitList(it)
         })
     }
@@ -164,7 +157,7 @@ class SnapshotsFragment(
             val showCaseQueue: FancyShowCaseQueue
             val showCase1 = FancyShowCaseView.Builder(activity!!)
                 .title(resources.getString(R.string.showcase_snap_1))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             showCaseQueue = FancyShowCaseQueue()

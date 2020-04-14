@@ -2,7 +2,6 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +25,7 @@ import workshop.akbolatss.xchangesrates.domain.model.Chart
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.DateXValueFormatter
+import workshop.akbolatss.xchangesrates.utils.extension.getThemeColor
 import workshop.akbolatss.xchangesrates.utils.extension.showSnackBar
 
 class ChartFragment(
@@ -70,10 +70,7 @@ class ChartFragment(
         binding.lineChart.description.isEnabled = false
         binding.lineChart.legend.isEnabled = false
         binding.lineChart.setNoDataTextColor(
-            ContextCompat.getColor(
-                _mActivity,
-                R.color.colorSpinTxt
-            )
+            _mActivity.getThemeColor(R.attr.colorError)
         )
         binding.lineChart.setMaxVisibleValueCount(16)
 
@@ -82,11 +79,12 @@ class ChartFragment(
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.labelCount = 3
         xAxis.valueFormatter = xAxisFormatter
-        xAxis.textColor = ContextCompat.getColor(_mActivity, R.color.colorInactive)
+
+        xAxis.textColor = _mActivity.getThemeColor(R.attr.colorOnPrimary)
         xAxis.setDrawGridLines(false)
 
         val yAxis = binding.lineChart.axisLeft
-        yAxis.textColor = ContextCompat.getColor(_mActivity, R.color.colorInactive)
+        yAxis.textColor = _mActivity.getThemeColor(R.attr.colorOnPrimary)
 
         val yAxis1 = binding.lineChart.axisRight
         yAxis1.isEnabled = false
@@ -148,11 +146,11 @@ class ChartFragment(
                 mode = LineDataSet.Mode.CUBIC_BEZIER
                 cubicIntensity = 0.2f
                 lineWidth = 1.8f
-                color = ContextCompat.getColor(_mActivity, R.color.colorAccent)
+                color = _mActivity.getThemeColor(R.attr.colorAccent)
                 circleRadius = 1.4f
                 setCircleColor(Color.WHITE)
                 valueTextColor = Color.WHITE
-                fillColor = ContextCompat.getColor(_mActivity, R.color.colorPrimaryDark)
+                fillColor = _mActivity.getThemeColor(R.attr.colorPrimary)
                 fillAlpha = 100
             }
             val lineData = LineData(dataSet).apply {
@@ -180,31 +178,31 @@ class ChartFragment(
 
             val showCase1 = FancyShowCaseView.Builder(_mActivity)
                 .title(resources.getString(R.string.showcase_chart_1))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             val showCase2 = FancyShowCaseView.Builder(_mActivity)
-                .focusOn(binding.tvExchanger)
+//                .focusOn(binding.tvExchanger)
                 .title(resources.getString(R.string.showcase_chart_2))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             val showCase3 = FancyShowCaseView.Builder(_mActivity)
-                .focusOn(binding.tvCoin)
+//                .focusOn(binding.tvCoin)
                 .title(resources.getString(R.string.showcase_chart_3))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             val showCase4 = FancyShowCaseView.Builder(_mActivity)
-                .focusOn(binding.tvCurrency)
+//                .focusOn(binding.tvCurrency)
                 .title(resources.getString(R.string.showcase_chart_4))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             val showCase5 = FancyShowCaseView.Builder(_mActivity)
                 .focusOn(binding.recyclerView)
                 .title(resources.getString(R.string.showcase_chart_5))
-                .backgroundColor(R.color.colorShowCaseBG)
+//                .backgroundColor(R.color.colorShowCaseBG)
                 .build()
 
             showCaseQueue = FancyShowCaseQueue()

@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
+<resources>
     <style name="Theme.MyApp" parent="Base.Theme.MyApp">
 
-        <item name="colorPrimary">@color/md_blue_grey_900</item>
 
-        <item name="android:colorBackground">@color/md_black_1000</item>
-        <item name="colorSurface">@color/md_blue_grey_800</item>
-        <item name="colorError">@color/md_red_200</item>
-
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
     </style>
 </resources>

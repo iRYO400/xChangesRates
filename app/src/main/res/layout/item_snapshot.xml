@@ -3,37 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/snapshotView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="6dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/snapshotView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_snap_material"
-            android:clickable="true"
-            android:elevation="4dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/tvSnapName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:textAllCaps="true"
-                android:textColor="@color/colorSnapRate"
-                android:textSize="18sp"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvExchanger"
                 tools:text="BTC/USD" />
+
+            <ImageView
+                android:id="@+id/imgNotificationState"
+                android:layout_width="16dp"
+                android:layout_height="20dp"
+                app:layout_constraintEnd_toStartOf="@+id/tvTime"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/barrier"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_round_notifications_none_24"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvTime"
@@ -42,12 +51,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
-                android:maxLines="1"
-                android:textColor="@color/colorSnapTxtDate"
-                android:textSize="10sp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/barrier"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="5 minutes ago" />
 
@@ -72,21 +78,19 @@
                 android:src="@drawable/ic_round_error_outline"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tvCurrRate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:maxLines="1"
-                android:textAllCaps="true"
-                android:textColor="@color/colorSnapRate"
-                android:textSize="24sp"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvSnapName"
                 tools:text="5600.00" />
-
 
             <TextView
                 android:id="@+id/tvHighRate"
@@ -94,10 +98,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:drawableStart="@drawable/ic_round_arrow_drop_up_24"
-                android:maxLines="1"
-                android:textAllCaps="true"
-                android:textColor="@color/colorSnapExchange"
-                android:textSize="12sp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvCurrRate" />
 
@@ -108,10 +110,8 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="2dp"
                 android:drawableStart="@drawable/ic_round_arrow_drop_down_24"
-                android:maxLines="1"
-                android:textAllCaps="true"
-                android:textColor="@color/colorSnapExchange"
-                android:textSize="12sp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvHighRate" />
@@ -121,24 +121,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:drawableStart="@drawable/ic_round_arrow_drop_down_24"
-                android:maxLines="1"
-                android:textAllCaps="true"
-                android:textColor="@color/colorSnapExchange"
-                android:textSize="12sp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintBottom_toBottomOf="@+id/lineChart"
                 app:layout_constraintEnd_toEndOf="@+id/lineChart"
                 app:layout_constraintStart_toStartOf="@+id/lineChart"
-                app:layout_constraintTop_toTopOf="@+id/lineChart"
-                app:layout_constraintVertical_bias="1.0"
                 tools:text="6.852%" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -149,11 +145,10 @@
                 android:id="@+id/tvExchanger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/colorSnapExchange"
-                android:textSize="11sp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Kraken" />
@@ -168,51 +163,5 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <FrameLayout
-            android:id="@+id/flNotify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="1dp"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_nested_button"
-            android:clickable="true"
-            android:elevation="2dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/snapshotView">
-
-            <ImageView
-                android:id="@+id/imgNotifyState"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_round_notifications_none_24" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/flOptions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:background="@drawable/bg_nested_button"
-            android:clickable="true"
-            android:elevation="2dp"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/flNotify"
-            app:layout_constraintTop_toBottomOf="@id/snapshotView">
-
-            <ImageView
-                android:id="@+id/imgOptions"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                app:srcCompat="@drawable/ic_outline_settings_24" />
-        </FrameLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

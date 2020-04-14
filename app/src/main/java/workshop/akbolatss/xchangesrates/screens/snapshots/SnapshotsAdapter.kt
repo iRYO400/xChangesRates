@@ -15,27 +15,26 @@ import kotlinx.coroutines.launch
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
-import workshop.akbolatss.xchangesrates.databinding.RvSnapshotBinding
+import workshop.akbolatss.xchangesrates.databinding.ItemSnapshotBinding
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.utils.UtilityMethods.convertTime
+import workshop.akbolatss.xchangesrates.utils.extension.getThemeColor
 
 class SnapshotsAdapter(
-    private val itemClickListener: (Long, Int) -> Unit,
-    private val notificationToggleClickListener: (Snapshot, Int) -> Unit,
-    private val openOptionsClickListener: (Long, Int) -> Unit
+    private val itemClickListener: (Long, Int) -> Unit
 ) : BaseRVA<Snapshot>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
-        val viewBinding = DataBindingUtil.inflate<RvSnapshotBinding>(
+        val viewBinding = DataBindingUtil.inflate<ItemSnapshotBinding>(
             LayoutInflater.from(parent.context),
-            R.layout.rv_snapshot,
+            R.layout.item_snapshot,
             parent, false
         )
         initChartView(viewBinding)
         return viewBinding
     }
 
-    private fun initChartView(viewBinding: RvSnapshotBinding) = with(viewBinding) {
+    private fun initChartView(viewBinding: ItemSnapshotBinding) = with(viewBinding) {
         lineChart.description.isEnabled = false
         lineChart.legend.isEnabled = false
         lineChart.setTouchEnabled(false)
@@ -54,19 +53,13 @@ class SnapshotsAdapter(
     @SuppressLint("SetTextI18n")
     override fun bind(holder: DataBoundViewHolder, item: Snapshot) {
         when (holder.binding) {
-            is RvSnapshotBinding -> with(holder.binding) {
+            is ItemSnapshotBinding -> with(holder.binding) {
                 tvSnapName.text = item.coin + "/" + item.currency
                 tvExchanger.text = item.exchangerName
-
-//                if (item.isNotificationEnabled) {
-//                    imgNotifyState.setImageResource(R.drawable.ic_round_notifications_active_24)
-//                } else {
-//                    imgNotifyState.setImageResource(R.drawable.ic_round_notifications_none_24)
-//                }
-
                 tvCurrRate.text = item.rate.toPlainString()
                 tvHighRate.text = item.high.toPlainString()
                 tvLowRate.text = item.low.toPlainString()
+                tvChange.text = "TODO"
                 tvTime.text = convertTime(item.updateTime.time)
 
                 lifecycleOwner?.lifecycleScope?.launch {
@@ -82,7 +75,7 @@ class SnapshotsAdapter(
                         mode = LineDataSet.Mode.CUBIC_BEZIER
                         cubicIntensity = 0.4f
                         lineWidth = 1f
-                        color = ContextCompat.getColor(root.context, R.color.colorAccent)
+                        color = holder.binding.root.context.getThemeColor(R.attr.colorAccent)
                         setDrawFilled(true)
                         fillDrawable =
                             ContextCompat.getDrawable(root.context, R.drawable.bg_chart_round)
@@ -101,18 +94,14 @@ class SnapshotsAdapter(
         }
     }
 
-    private fun setListeners(viewBinding: RvSnapshotBinding, item: Snapshot, layoutPosition: Int) =
+    private fun setListeners(
+        viewBinding: ItemSnapshotBinding,
+        item: Snapshot,
+        layoutPosition: Int
+    ) =
         with(viewBinding) {
             snapshotView.setOnClickListener {
                 itemClickListener(item.id, layoutPosition)
-            }
-
-            flNotify.setOnClickListener {
-                notificationToggleClickListener(item, layoutPosition)
-            }
-
-            flOptions.setOnClickListener {
-                openOptionsClickListener(item.id, layoutPosition)
             }
         }
 }

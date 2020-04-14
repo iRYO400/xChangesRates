@@ -8,6 +8,7 @@ import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.utils.extension.hideKeyboard
+import java.util.*
 
 @BindingAdapter("selectedEntryAttrChanged")
 fun AutoCompleteTextView.setListener(listener: InverseBindingListener?) {
@@ -31,7 +32,7 @@ var AutoCompleteTextView.selectedEntry: Any?
     }
     set(value) {
         value?.let {
-            setText(value.toString(), false)
+            setText(value.toString().toUpperCase(Locale.getDefault()), false)
         }
         clearFocus()
         hideKeyboard()
