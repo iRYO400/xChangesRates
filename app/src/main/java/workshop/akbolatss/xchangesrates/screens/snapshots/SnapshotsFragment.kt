@@ -8,7 +8,6 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -48,6 +47,8 @@ class SnapshotsFragment(
 
     private fun initRecyclerView() {
         adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
+        }, toggleNotificationListener = { itemId: Long, position: Int ->
+            toggleNotification(itemId, position)
         }, longClickListener = { itemId: Long, position: Int ->
             viewModel.updateSingle(itemId, position)
         })
@@ -66,7 +67,6 @@ class SnapshotsFragment(
 
     private fun observeViewModel() {
         viewModel.snapshots.observe(viewLifecycleOwner, Observer {
-            Timber.d("snapshots observe")
             adapter.submitList(it)
         })
         viewModel.updatingItemViewState.observe(viewLifecycleOwner,
@@ -111,6 +111,10 @@ class SnapshotsFragment(
 
     private fun setListeners() {
 
+    }
+
+    private fun toggleNotification(itemId: Long, pos: Int) {
+        viewModel.toggleNotification(itemId, pos)
     }
 
     private fun toggleNotification(chartData: ChartData, pos: Int) {

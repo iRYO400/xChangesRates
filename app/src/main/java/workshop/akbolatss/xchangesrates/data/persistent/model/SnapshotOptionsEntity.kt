@@ -19,6 +19,7 @@ data class SnapshotOptionsEntity(
         onDelete = ForeignKey.CASCADE
     )
     val snapshotId: Long,
+    val isNotificationEnabled: Boolean,
     val isSmartEnabled: Boolean = true,
     val isStick: Boolean = false,
     val updateInterval: UpdateInterval = UpdateInterval.HOUR_1,

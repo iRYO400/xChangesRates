@@ -27,4 +27,7 @@ val useCaseModule = module {
     factory {
         UpdateSnapshotUseCase(get(), get())
     }
+    factory {
+        ToggleNotificationUseCase(get())
+    }
 }

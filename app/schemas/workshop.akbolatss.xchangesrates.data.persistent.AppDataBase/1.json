@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "f02fcb2c93cc3de19e3df8b479914062",
+    "identityHash": "6959eb60ff7581b467d0b9ad89258a96",
     "entities": [
       {
         "tableName": "exchange",
@@ -135,7 +135,7 @@
       },
       {
         "tableName": "snapshot_options",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snapshotId` INTEGER NOT NULL, `isSmartEnabled` INTEGER NOT NULL, `isStick` INTEGER NOT NULL, `updateInterval` TEXT NOT NULL, `changesForPeriod` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snapshotId` INTEGER NOT NULL, `isNotificationEnabled` INTEGER NOT NULL, `isSmartEnabled` INTEGER NOT NULL, `isStick` INTEGER NOT NULL, `updateInterval` TEXT NOT NULL, `changesForPeriod` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -146,6 +146,12 @@
           {
             "fieldPath": "snapshotId",
             "columnName": "snapshotId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNotificationEnabled",
+            "columnName": "isNotificationEnabled",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -187,7 +193,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f02fcb2c93cc3de19e3df8b479914062')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6959eb60ff7581b467d0b9ad89258a96')"
     ]
   }
 }

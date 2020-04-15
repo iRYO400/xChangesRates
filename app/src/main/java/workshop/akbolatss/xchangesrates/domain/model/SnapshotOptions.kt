@@ -4,6 +4,8 @@ import workshop.akbolatss.xchangesrates.utils.extension.defaultVal
 
 data class SnapshotOptions(
     val id: Long,
+    val snapshotId: Long,
+    val isNotificationEnabled: Boolean,
     val isSmartEnabled: Boolean,
     val isStick: Boolean,
     val updateInterval: UpdateInterval,
@@ -12,6 +14,8 @@ data class SnapshotOptions(
     companion object {
         fun empty() = SnapshotOptions(
             id = defaultVal(),
+            snapshotId = defaultVal(),
+            isNotificationEnabled = false,
             isSmartEnabled = false,
             isStick = false,
             updateInterval = UpdateInterval.HOUR_1,

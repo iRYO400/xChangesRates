@@ -169,9 +169,9 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-
         <ImageView
             android:id="@+id/imgNotificationState"
+            isSelected="@{model.options.notificationEnabled}"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="16dp"
@@ -184,7 +184,7 @@
             android:padding="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/snapshotView"
-            app:srcCompat="@drawable/ic_round_notifications_none_24"
+            app:srcCompat="@drawable/ic_selector_notification_state"
             tools:ignore="ContentDescription" />
 
         <ImageView

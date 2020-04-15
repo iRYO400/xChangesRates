@@ -1,12 +1,12 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
-import android.annotation.SuppressLint
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -16,6 +16,7 @@ import workshop.akbolatss.xchangesrates.utils.binding.setupChartInList
 
 class SnapshotsAdapter(
     private val itemClickListener: (Long, Int) -> Unit,
+    private val toggleNotificationListener: (Long, Int) -> Unit,
     private val longClickListener: (Long, Int) -> Unit
 ) : BaseRVA<Snapshot>(DIFF_CALLBACK) {
 
@@ -33,6 +34,7 @@ class SnapshotsAdapter(
         when (holder.binding) {
             is ItemSnapshotBinding -> with(holder.binding) {
                 model = item
+                Timber.d("isNotificationEnabled ${item.options.isNotificationEnabled}")
                 snapshotView.setOnLongClickListener {
                     it.performHapticFeedback(
                         HapticFeedbackConstants.LONG_PRESS,
@@ -43,6 +45,9 @@ class SnapshotsAdapter(
                 }
                 snapshotView.setOnClickListener {
                     itemClickListener(item.id, holder.layoutPosition)
+                }
+                imgNotificationState.setOnClickListener {
+                    toggleNotificationListener(item.id, holder.layoutPosition)
                 }
             }
         }
@@ -71,7 +76,8 @@ private val DIFF_CALLBACK: DiffUtil.ItemCallback<Snapshot> =
                     oldItem.high == newItem.high &&
                     oldItem.low == newItem.low &&
                     oldItem.change == newItem.change &&
-                    oldItem.updateTime == newItem.updateTime
+                    oldItem.updateTime == newItem.updateTime &&
+                    oldItem.options.isNotificationEnabled == newItem.options.isNotificationEnabled
         }
 
     }

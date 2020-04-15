@@ -4,6 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onEach
 import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -34,9 +35,11 @@ class SnapshotRepositoryImpl(
 
     override suspend fun update(updatedSnapshot: Snapshot): Either<Failure, None> {
         return update(map = {
-            updatedSnapshot.map()
-        }, query = { snapshot ->
-            snapshotDao.update(snapshot)
+            val snapshotEntity = updatedSnapshot.map()
+            val optionsEntity = updatedSnapshot.options.map()
+            Pair(snapshotEntity, optionsEntity)
+        }, query = { (snapshot, options) ->
+            snapshotDao.update(snapshot, options)
         })
     }
 
@@ -58,6 +61,7 @@ class SnapshotRepositoryImpl(
     }
 
     override fun findAll(): Flow<List<Snapshot>> = snapshotDao.findAll()
+        .onEach { }
         .combine(
             snapshotDao.findOptionsList()
         ) { snapshotEntities, snapshotOptionsEntities ->
