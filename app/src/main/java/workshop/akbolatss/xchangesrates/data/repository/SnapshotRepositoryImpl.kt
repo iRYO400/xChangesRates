@@ -1,7 +1,9 @@
 package workshop.akbolatss.xchangesrates.data.repository
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -56,7 +58,9 @@ class SnapshotRepositoryImpl(
     }
 
     override fun findAll(): Flow<List<Snapshot>> = snapshotDao.findAll()
-        .zip(snapshotDao.findOptionsList()) { snapshotEntities, snapshotOptionsEntities ->
+        .combine(
+            snapshotDao.findOptionsList()
+        ) { snapshotEntities, snapshotOptionsEntities ->
             snapshotEntities.map { snapshotEntity ->
                 val snapshotOptions = snapshotOptionsEntities.find { snapshotOptionsEntity ->
                     snapshotOptionsEntity.snapshotId == snapshotEntity.id
@@ -64,4 +68,5 @@ class SnapshotRepositoryImpl(
                 snapshotEntity.map(snapshotOptions!!.map())
             }
         }
+        .flowOn(Dispatchers.IO)
 }

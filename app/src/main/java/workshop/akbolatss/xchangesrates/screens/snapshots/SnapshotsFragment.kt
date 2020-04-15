@@ -8,6 +8,7 @@ import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -65,6 +66,7 @@ class SnapshotsFragment(
 
     private fun observeViewModel() {
         viewModel.snapshots.observe(viewLifecycleOwner, Observer {
+            Timber.d("snapshots observe")
             adapter.submitList(it)
         })
         viewModel.updatingItemViewState.observe(viewLifecycleOwner,
