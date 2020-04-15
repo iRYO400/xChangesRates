@@ -6,11 +6,11 @@ import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
 
-class FindAllSnapshotsUseCase(
+class FindAllSnapshotsFlowUseCase(
     private val repository: SnapshotRepository
-) : BaseFlowUseCase<FindAllSnapshotsUseCase.Params, List<Snapshot>>() {
+) : BaseFlowUseCase<FindAllSnapshotsFlowUseCase.Params, List<Snapshot>>() {
 
-    override fun run(params: Params): Flow<List<Snapshot>> = repository.findAll()
+    override fun run(params: Params): Flow<List<Snapshot>> = repository.findListFlow()
 
     data class Params(val none: None = None())
 }

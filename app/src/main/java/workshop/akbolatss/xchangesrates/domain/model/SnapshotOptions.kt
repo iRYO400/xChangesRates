@@ -39,15 +39,15 @@ enum class ChangesForPeriod(val queryParam: String) {
     YEAR_5("5y"),
 }
 
-enum class UpdateInterval {
-    MIN_15,
-    MIN_30,
-    HOUR_1,
-    HOUR_2,
-    HOUR_5,
-    HOUR_12,
-    HOUR_24,
-    HOUR_48,
-    WEEK_1,
-    WEEK_2,
+enum class UpdateInterval(val seconds: Long) {
+    MIN_15(15 * 60),
+    MIN_30(30 * 60),
+    HOUR_1(60 * 60),
+    HOUR_2(2 * 60 * 60),
+    HOUR_5(5 * 60 * 60),
+    HOUR_12(12 * 60 * 60),
+    HOUR_24(24 * 60 * 60),
+    HOUR_48(48 * 60 * 60),
+    WEEK_1(168 * 60 * 60),
+    WEEK_2(336 * 60 * 60),
 }

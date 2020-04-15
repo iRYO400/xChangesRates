@@ -1,9 +1,9 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.Observer
 import com.orhanobut.hawk.Hawk
+import kz.jgroup.pos.util.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
@@ -13,21 +13,17 @@ import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
 import workshop.akbolatss.xchangesrates.databinding.FragmentSnapshotsBinding
 import workshop.akbolatss.xchangesrates.databinding.ItemSnapshotBinding
-import workshop.akbolatss.xchangesrates.model.response.ChartData
 import workshop.akbolatss.xchangesrates.presentation.base.Error
 import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
+import workshop.akbolatss.xchangesrates.presentation.base.ViewState
 import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.extension.gone
-import workshop.akbolatss.xchangesrates.utils.extension.invisible
-import workshop.akbolatss.xchangesrates.utils.extension.visible
+import workshop.akbolatss.xchangesrates.utils.extension.*
 
 
 class SnapshotsFragment(
     override val layoutId: Int = R.layout.fragment_snapshots
-) : BaseFragment<FragmentSnapshotsBinding>(),
-    SnapshotOptionsDialog.OnSnapshotOptionsCallback {
+) : BaseFragment<FragmentSnapshotsBinding>() {
 
     companion object {
 
@@ -47,8 +43,8 @@ class SnapshotsFragment(
 
     private fun initRecyclerView() {
         adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
-        }, toggleNotificationListener = { itemId: Long, position: Int ->
-            toggleNotification(itemId, position)
+        }, toggleNotificationListener = { itemId: Long ->
+            toggleNotification(itemId)
         }, longClickListener = { itemId: Long, position: Int ->
             viewModel.updateSingle(itemId, position)
         })
@@ -57,10 +53,6 @@ class SnapshotsFragment(
     }
 
     override fun setObserversListeners() {
-        Handler().postDelayed({
-            showStartupShowCase()
-        }, 500)
-
         observeViewModel()
         setListeners()
     }
@@ -71,79 +63,70 @@ class SnapshotsFragment(
         })
         viewModel.updatingItemViewState.observe(viewLifecycleOwner,
             Observer { (loadingState, position) ->
-                when (loadingState) {
-                    is Loading -> {
-                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
-                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
-                                binding.progressBar.visible()
-                                binding.imgError.gone()
-                                binding.tvTime.invisible()
-                                binding.snapshotView.isEnabled = false
-                                binding.snapshotView.isClickable = false
-                            }
-                        }
-                    }
-                    is Success<*> -> {
-                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
-                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
-                                binding.progressBar.gone()
-                                binding.imgError.gone()
-                                binding.tvTime.visible()
-                                binding.snapshotView.isEnabled = true
-                                binding.snapshotView.isClickable = true
-                            }
-                        }
-                    }
-                    is Error -> {
-                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
-                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
-                                binding.progressBar.gone()
-                                binding.imgError.visible()
-                                binding.tvTime.gone()
-                                binding.snapshotView.isEnabled = true
-                                binding.snapshotView.isClickable = true
-                            }
-                        }
-                    }
+                handleSnapshotLoadingState(loadingState, position)
+            })
+        viewModel.snapshot2ToggleNotification.observe(
+            viewLifecycleOwner, EventObserver { snapshot ->
+                if (snapshot.options.isNotificationEnabled) {
+                    context.createNotificationChannel(snapshot)
+                    context.launchWorker(snapshot)
+                } else {
+                    context.cancelWorker(snapshot)
+                    context.deleteNotificationChannel(snapshot)
                 }
             })
+    }
+
+    private fun handleSnapshotLoadingState(
+        loadingState: ViewState,
+        position: Int
+    ) {
+        when (loadingState) {
+            is Loading -> {
+                binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                    if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                        binding.progressBar.visible()
+                        binding.imgError.gone()
+                        binding.tvTime.invisible()
+                        binding.snapshotView.isEnabled = false
+                        binding.snapshotView.isClickable = false
+                    }
+                }
+            }
+            is Success<*> -> {
+                binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                    if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                        binding.progressBar.gone()
+                        binding.imgError.gone()
+                        binding.tvTime.visible()
+                        binding.snapshotView.isEnabled = true
+                        binding.snapshotView.isClickable = true
+                    }
+                }
+            }
+            is Error -> {
+                binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                    if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                        binding.progressBar.gone()
+                        binding.imgError.visible()
+                        binding.tvTime.gone()
+                        binding.snapshotView.isEnabled = true
+                        binding.snapshotView.isClickable = true
+                    }
+                }
+            }
+        }
     }
 
     private fun setListeners() {
 
     }
 
-    private fun toggleNotification(itemId: Long, pos: Int) {
-        viewModel.toggleNotification(itemId, pos)
-    }
-
-    private fun toggleNotification(chartData: ChartData, pos: Int) {
-        val lastState = chartData.isNotificationEnabled
-        chartData.isNotificationEnabled = !chartData.isNotificationEnabled
-        saveSnapshotChanges(chartData, lastState, pos)
-    }
-
-    private fun openSnapshotOptionsDialog(chartId: Long, pos: Int) {
-        val dialog = SnapshotOptionsDialog.newInstance(chartId, pos)
-        dialog.show(childFragmentManager, dialog.tag)
-    }
-
-    /**
-     * Save edited changes
-     */
-    override fun saveSnapshotChanges(
-        chartData: ChartData,
-        lastNotificationState: Boolean,
-        pos: Int
-    ) {
-
+    private fun toggleNotification(itemId: Long) {
+        viewModel.toggleNotification(itemId)
     }
 
     fun updateAllSnapshots() {
-        if (adapter.itemCount <= 0) {
-            return
-        }
-
         viewModel.updateAll()
     }
 

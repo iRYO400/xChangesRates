@@ -5,7 +5,7 @@ import workshop.akbolatss.xchangesrates.domain.usecase.*
 
 val useCaseModule = module {
     factory {
-        FindAllSnapshotsUseCase(get())
+        FindAllSnapshotsFlowUseCase(get())
     }
     factory {
         DownloadExchangesUseCase(get())
@@ -17,7 +17,9 @@ val useCaseModule = module {
     factory {
         DownloadChartUseCase(get())
     }
-
+    factory {
+        FindSnapshotByIdUseCase(get())
+    }
     factory {
         CreateSnapshotUseCase(get())
     }
@@ -25,9 +27,9 @@ val useCaseModule = module {
         CreateOrUpdateSnapshotUseCase(get(), get())
     }
     factory {
-        UpdateSnapshotUseCase(get(), get())
+        UpdateSnapshotUseCase(get(), get(), get())
     }
     factory {
-        ToggleNotificationUseCase(get())
+        ToggleNotificationUseCase(get(), get())
     }
 }

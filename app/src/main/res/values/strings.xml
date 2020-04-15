@@ -164,5 +164,9 @@
     <string name="chart_create_snapshot_error_unknown">Couldn\'t save snapshot</string>
     <string name="chart_create_snapshot_success">Snapshot successfully created</string>
     <string name="chart_create_snapshot_error_not_loaded">Looks like chart have not laoded yet</string>
+    <string name="notification_snapshot_high">High:</string>
+    <string name="notification_snapshot_low">Low:</string>
+    <string name="notification_snapshot_change">Change:</string>
+    <string name="notification_snapshot_change24">Change24:</string>
 
 </resources>

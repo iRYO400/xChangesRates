@@ -29,18 +29,30 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
 
     private fun initFragments() {
         if (findFragment(ScreenState.CHART.fragment) == null
-                || findFragment(ScreenState.SNAPSHOTS.fragment) == null) {
-            loadMultipleRootFragment(R.id.flContainer, 0,
-                    SnapshotsFragment.newInstance(),
-                    ChartFragment.newInstance()
+            || findFragment(ScreenState.SNAPSHOTS.fragment) == null
+        ) {
+            loadMultipleRootFragment(
+                R.id.flContainer, 0,
+                SnapshotsFragment.newInstance(),
+                ChartFragment.newInstance()
             )
         }
     }
 
     private fun initSpaceView(savedInstanceState: Bundle?) {
         spaceView.initWithSaveInstanceState(savedInstanceState)
-        spaceView.addSpaceItem(SpaceItem(getString(R.string.bottom_bar_snapshots), R.drawable.ic_round_insert_chart_outlined_24))
-        spaceView.addSpaceItem(SpaceItem(getString(R.string.bottom_bar_charts), R.drawable.ic_round_score_24))
+        spaceView.addSpaceItem(
+            SpaceItem(
+                getString(R.string.bottom_bar_snapshots),
+                R.drawable.ic_round_insert_chart_outlined_24
+            )
+        )
+        spaceView.addSpaceItem(
+            SpaceItem(
+                getString(R.string.bottom_bar_charts),
+                R.drawable.ic_round_score_24
+            )
+        )
         spaceView.setSpaceOnClickListener(this)
     }
 
@@ -64,10 +76,11 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
     }
 
     override fun onCentreButtonClick() {
-        if (topFragment is ChartFragment) {
-            findFragment(ChartFragment::class.java).onSaveSnapshot()
-        } else if (topFragment is SnapshotsFragment) {
-            findFragment(SnapshotsFragment::class.java).updateAllSnapshots()
+        viewModel.screenState.value?.let { event ->
+            if (event.peekContent() == ScreenState.CHART)
+                findFragment(ChartFragment::class.java).onSaveSnapshot()
+            else if (event.peekContent() == ScreenState.SNAPSHOTS)
+                findFragment(SnapshotsFragment::class.java).updateAllSnapshots()
         }
     }
 
@@ -83,7 +96,10 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         currentFocus?.let { currFocus ->
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            imm.hideSoftInputFromWindow(
+                currFocus.windowToken,
+                InputMethodManager.HIDE_NOT_ALWAYS
+            )
         }
         return super.dispatchTouchEvent(ev)
     }

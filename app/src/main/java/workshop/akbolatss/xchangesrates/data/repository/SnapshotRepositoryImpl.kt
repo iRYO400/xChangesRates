@@ -60,8 +60,7 @@ class SnapshotRepositoryImpl(
         return snapshotEntity.map(snapshotOptions)
     }
 
-    override fun findAll(): Flow<List<Snapshot>> = snapshotDao.findAll()
-        .onEach { }
+    override fun findListFlow(): Flow<List<Snapshot>> = snapshotDao.findAll()
         .combine(
             snapshotDao.findOptionsList()
         ) { snapshotEntities, snapshotOptionsEntities ->

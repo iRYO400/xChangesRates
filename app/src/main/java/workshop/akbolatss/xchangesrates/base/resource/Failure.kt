@@ -32,8 +32,9 @@ sealed class Failure {
     object UseCaseError : FeatureFailure()
 
 
+    object SnapshotListIsEmpty : FeatureFailure()
     object SnapshotAlreadyExists : FeatureFailure()
     object SnapshotNotFound : FeatureFailure()
-    object ChartNotLoaded: FeatureFailure()
+    object ChartNotLoaded : FeatureFailure()
 }
 

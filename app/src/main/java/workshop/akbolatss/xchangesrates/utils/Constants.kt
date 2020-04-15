@@ -1,10 +1,5 @@
 package workshop.akbolatss.xchangesrates.utils
 
-/**
- * Author: Akbolat Sadvakassov
- * Date: 20.11.2017
- */
-
 object Constants {
 
     const val BASE_URL = "http://bitcoinstat.org/api_v3/"
@@ -36,9 +31,7 @@ object Constants {
     const val BUNDLE_POSITION = "chartPosition"
     const val BUNDLE_ISACTIVE = "isActive"
 
-    const val WORKER_INPUT_ID = "idForInputData"
     const val NOTIFICATION_MAIN_ID = 1731
-    const val NOTIFICATION_GROUP_ID = "workshop.akbolatss.xchangesrates.group"
     const val NOTIFICATION_GROUP_SUMMARY = 1371
     const val NOTIFICATION_CHANNEL_ID = "workshop.akbolatss.xchangesrates.main"
     const val NOTIFICATION_CHANNEL_NAME = "Background service"
@@ -48,6 +41,4 @@ object Constants {
     const val HAWK_SHOWCASE_1_DONE = "showCase1Done"
     const val HAWK_SHOWCASE_2_DONE = "showCase2Done"
 
-
-    const val HAWK_SHOULD_OFF = "shouldToOffService"
 }
