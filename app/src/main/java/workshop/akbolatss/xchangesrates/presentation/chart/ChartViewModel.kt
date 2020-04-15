@@ -6,6 +6,8 @@ import kz.jgroup.pos.util.Event
 import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
+import workshop.akbolatss.xchangesrates.base.None
+import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.base.resource.onFailure
 import workshop.akbolatss.xchangesrates.base.resource.onSuccess
@@ -149,7 +151,7 @@ class ChartViewModel(
         )
     }
 
-    fun toggleSelected(chartPeriod: ChartPeriod, position: Int) {
+    fun toggleSelected(chartPeriod: ChartPeriod) {
         chartPeriodList.value?.let { list ->
             val updatedList = list.map { period ->
                 if (period.code == chartPeriod.code)
@@ -187,7 +189,7 @@ class ChartViewModel(
             val chart = chart.value
             if (chart == null) {
                 this.chartError.value = R.string.chart_create_snapshot_error_not_loaded
-                return@executeUseCase
+                return@executeUseCase Either.failure(Failure.ChartNotLoaded)
             }
             createOrUpdateSnapshotUseCase(
                 scope, CreateOrUpdateSnapshotUseCase.Params(

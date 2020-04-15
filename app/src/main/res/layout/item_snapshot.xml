@@ -7,12 +7,10 @@
         android:id="@+id/snapshotView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="6dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:hapticFeedbackEnabled="true"
         app:cardBackgroundColor="?attr/colorSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,20 +114,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvHighRate" />
 
-            <TextView
-                android:id="@+id/tvChange"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:drawableStart="@drawable/ic_round_arrow_drop_down_24"
-                android:textAppearance="?attr/textAppearanceCaption"
-                android:textColor="?attr/colorOnPrimary"
-                app:layout_constraintBottom_toBottomOf="@+id/lineChart"
-                app:layout_constraintEnd_toEndOf="@+id/lineChart"
-                app:layout_constraintStart_toStartOf="@+id/lineChart"
-                tools:text="6.852%" />
-
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
                 android:layout_width="0dp"
@@ -140,6 +124,19 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/barrier"
                 app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+
+            <TextView
+                android:id="@+id/tvChange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textAppearance="?attr/textAppearanceCaption"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/lineChart"
+                app:layout_constraintEnd_toEndOf="@+id/lineChart"
+                app:layout_constraintStart_toStartOf="@+id/lineChart"
+                tools:text="6.852%" />
 
             <TextView
                 android:id="@+id/tvExchanger"

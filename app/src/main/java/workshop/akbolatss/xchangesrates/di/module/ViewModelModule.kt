@@ -28,7 +28,7 @@ val viewModelModule: Module = module {
     }
 
     scope(named<SnapshotsFragment>()) {
-        viewModel { SnapshotsViewModel(get()) }
+        viewModel { SnapshotsViewModel(get(), get()) }
     }
 
     scope(named<SnapshotOptionsDialog>()) {

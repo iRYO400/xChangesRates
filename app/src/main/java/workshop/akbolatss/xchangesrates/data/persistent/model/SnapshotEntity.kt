@@ -20,5 +20,7 @@ data class SnapshotEntity(
     val rate: BigDecimal,
     val high: BigDecimal,
     val low: BigDecimal,
+    val change: BigDecimal,
+    val change24: BigDecimal,
     val charts: List<PriceByTimeEntity>
 )

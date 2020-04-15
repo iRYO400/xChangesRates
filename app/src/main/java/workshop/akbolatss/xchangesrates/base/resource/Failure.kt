@@ -27,11 +27,13 @@ sealed class Failure {
     data class DatabaseError(override var errorMessage: String?) : Failure()
 
     /** * Extend this class for feature specific failures.*/
-    abstract class FeatureFailure : Failure()
+    abstract class FeatureFailure(override var errorMessage: String? = null) : Failure()
+
     object UseCaseError : FeatureFailure()
 
 
     object SnapshotAlreadyExists : FeatureFailure()
-    object ChartNotFound : FeatureFailure()
+    object SnapshotNotFound : FeatureFailure()
+    object ChartNotLoaded: FeatureFailure()
 }
 

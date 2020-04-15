@@ -1,6 +1,7 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
 import android.annotation.SuppressLint
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -12,6 +13,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -21,7 +23,8 @@ import workshop.akbolatss.xchangesrates.utils.UtilityMethods.convertTime
 import workshop.akbolatss.xchangesrates.utils.extension.getThemeColor
 
 class SnapshotsAdapter(
-    private val itemClickListener: (Long, Int) -> Unit
+    private val itemClickListener: (Long, Int) -> Unit,
+    private val longClickListener: (Long, Int) -> Unit
 ) : BaseRVA<Snapshot>(DIFF_CALLBACK) {
 
     override fun createBinding(parent: ViewGroup, viewType: Int): ViewDataBinding {
@@ -59,7 +62,7 @@ class SnapshotsAdapter(
                 tvCurrRate.text = item.rate.toPlainString()
                 tvHighRate.text = item.high.toPlainString()
                 tvLowRate.text = item.low.toPlainString()
-                tvChange.text = "TODO"
+                tvChange.text = item.change.toPlainString()
                 tvTime.text = convertTime(item.updateTime.time)
 
                 lifecycleOwner?.lifecycleScope?.launch {
@@ -100,6 +103,14 @@ class SnapshotsAdapter(
         layoutPosition: Int
     ) =
         with(viewBinding) {
+            snapshotView.setOnLongClickListener {
+                it.performHapticFeedback(
+                    HapticFeedbackConstants.LONG_PRESS,
+                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+                )
+                longClickListener(item.id, layoutPosition)
+                true
+            }
             snapshotView.setOnClickListener {
                 itemClickListener(item.id, layoutPosition)
             }
@@ -125,7 +136,9 @@ private val DIFF_CALLBACK: DiffUtil.ItemCallback<Snapshot> =
                     oldItem.currency == newItem.currency &&
                     oldItem.rate == newItem.rate &&
                     oldItem.high == newItem.high &&
-                    oldItem.low == newItem.low
+                    oldItem.low == newItem.low &&
+                    oldItem.change == newItem.change &&
+                    oldItem.updateTime == newItem.updateTime
         }
 
     }

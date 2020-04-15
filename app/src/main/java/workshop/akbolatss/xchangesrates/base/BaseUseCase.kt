@@ -1,8 +1,9 @@
 package workshop.akbolatss.xchangesrates.base
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 
@@ -14,7 +15,7 @@ abstract class BaseUseCase<in Params, out Type> where Type : Any {
         scope: CoroutineScope,
         params: Params
     ): Either<Failure, Type> {
-        return withContext(scope.coroutineContext) {
+        return withContext(scope.coroutineContext + Dispatchers.IO) {
             try {
                 run(params, this)
             } catch (e: Exception) {

@@ -5,10 +5,7 @@ import workshop.akbolatss.xchangesrates.base.BaseUseCase
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
-import workshop.akbolatss.xchangesrates.data.persistent.model.UpdateInterval
-import workshop.akbolatss.xchangesrates.domain.model.Chart
-import workshop.akbolatss.xchangesrates.domain.model.Snapshot
-import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
+import workshop.akbolatss.xchangesrates.domain.model.*
 import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
 import workshop.akbolatss.xchangesrates.utils.extension.localId
 import java.util.*
@@ -22,7 +19,8 @@ class CreateSnapshotUseCase(
             id = localId(),
             isSmartEnabled = false,
             isStick = false,
-            updateInterval = UpdateInterval.HOUR_1
+            updateInterval = UpdateInterval.HOUR_1,
+            changesForPeriod = ChangesForPeriod.HOUR_24
         )
 
         val snapshot = Snapshot(
@@ -33,6 +31,8 @@ class CreateSnapshotUseCase(
             rate = params.chart.rate,
             high = params.chart.high,
             low = params.chart.low,
+            change = params.chart.change,
+            change24 = params.chart.change24,
             updateTime = Date(),
             options = options,
             charts = params.chart.units

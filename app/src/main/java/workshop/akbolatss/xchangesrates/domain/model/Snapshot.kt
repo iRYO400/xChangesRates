@@ -15,6 +15,8 @@ data class Snapshot(
     val rate: BigDecimal,
     val high: BigDecimal,
     val low: BigDecimal,
+    val change: BigDecimal,
+    val change24: BigDecimal,
     val options: SnapshotOptions,
     val charts: List<PriceByTime>
 ) {
@@ -29,6 +31,8 @@ data class Snapshot(
             rate = BigDecimal.ZERO,
             high = BigDecimal.ZERO,
             low = BigDecimal.ZERO,
+            change = BigDecimal.ZERO,
+            change24 = BigDecimal.ZERO,
             options = SnapshotOptions.empty(),
             charts = emptyList()
         )

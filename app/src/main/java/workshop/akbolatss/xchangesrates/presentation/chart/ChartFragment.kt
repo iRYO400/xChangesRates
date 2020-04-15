@@ -53,7 +53,7 @@ class ChartFragment(
 
     private fun onInitRV() {
         adapter = PeriodSelectorAdapter { historyButton, position ->
-            highlightSelected(historyButton, position)
+            highlightSelected(historyButton)
         }
 
         binding.recyclerView.setHasFixedSize(true)
@@ -62,8 +62,8 @@ class ChartFragment(
         binding.recyclerView.adapter = adapter
     }
 
-    private fun highlightSelected(historyButton: ChartPeriod, position: Int) {
-        viewModel.toggleSelected(historyButton, position)
+    private fun highlightSelected(historyButton: ChartPeriod) {
+        viewModel.toggleSelected(historyButton)
     }
 
     private fun onInitChart() {

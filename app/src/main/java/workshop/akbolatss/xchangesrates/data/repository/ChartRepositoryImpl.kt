@@ -25,6 +25,8 @@ class ChartRepositoryImpl(
                 rate = response.data.info.last,
                 high = response.data.info.high,
                 low = response.data.info.low,
+                change = response.data.info.change,
+                change24 = response.data.info.change24,
                 units = response.data.chart.map {
                     PriceByTime(it.timestamp, it.price)
                 }

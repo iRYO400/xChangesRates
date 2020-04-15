@@ -3,6 +3,8 @@ package workshop.akbolatss.xchangesrates.data.persistent.model
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import workshop.akbolatss.xchangesrates.domain.model.ChangesForPeriod
+import workshop.akbolatss.xchangesrates.domain.model.UpdateInterval
 
 @Entity(
     tableName = "snapshot_options"
@@ -19,18 +21,6 @@ data class SnapshotOptionsEntity(
     val snapshotId: Long,
     val isSmartEnabled: Boolean = true,
     val isStick: Boolean = false,
-    val updateInterval: UpdateInterval = UpdateInterval.HOUR_1
+    val updateInterval: UpdateInterval = UpdateInterval.HOUR_1,
+    val changesForPeriod: ChangesForPeriod = ChangesForPeriod.HOUR_24
 )
-
-enum class UpdateInterval {
-    MIN_15,
-    MIN_30,
-    HOUR_1,
-    HOUR_2,
-    HOUR_5,
-    HOUR_12,
-    HOUR_24,
-    HOUR_48,
-    WEEK_1,
-    WEEK_2,
-}

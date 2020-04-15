@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "b8c8f0bb918a87f9c062ba477adec82d",
+    "identityHash": "f02fcb2c93cc3de19e3df8b479914062",
     "entities": [
       {
         "tableName": "exchange",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "snapshot",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchangerName` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `rate` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL, `charts` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchangerName` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `rate` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL, `change` TEXT NOT NULL, `change24` TEXT NOT NULL, `charts` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -95,6 +95,18 @@
             "notNull": true
           },
           {
+            "fieldPath": "change",
+            "columnName": "change",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "change24",
+            "columnName": "change24",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
             "fieldPath": "charts",
             "columnName": "charts",
             "affinity": "TEXT",
@@ -123,7 +135,7 @@
       },
       {
         "tableName": "snapshot_options",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snapshotId` INTEGER NOT NULL, `isSmartEnabled` INTEGER NOT NULL, `isStick` INTEGER NOT NULL, `updateInterval` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `snapshotId` INTEGER NOT NULL, `isSmartEnabled` INTEGER NOT NULL, `isStick` INTEGER NOT NULL, `updateInterval` TEXT NOT NULL, `changesForPeriod` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -154,6 +166,12 @@
             "columnName": "updateInterval",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "changesForPeriod",
+            "columnName": "changesForPeriod",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -169,7 +187,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b8c8f0bb918a87f9c062ba477adec82d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f02fcb2c93cc3de19e3df8b479914062')"
     ]
   }
 }

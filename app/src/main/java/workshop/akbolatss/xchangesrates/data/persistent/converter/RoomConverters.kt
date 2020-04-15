@@ -6,7 +6,8 @@ import com.google.gson.reflect.TypeToken
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
-import workshop.akbolatss.xchangesrates.data.persistent.model.UpdateInterval
+import workshop.akbolatss.xchangesrates.domain.model.ChangesForPeriod
+import workshop.akbolatss.xchangesrates.domain.model.UpdateInterval
 import java.math.BigDecimal
 import java.util.*
 
@@ -38,6 +39,18 @@ object RoomConverters : KoinComponent {
     @JvmStatic
     fun fromUpdateInterval(updateInterval: UpdateInterval): String {
         return updateInterval.name
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toChangesForPeriod(name: String): ChangesForPeriod {
+        return ChangesForPeriod.valueOf(name)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun fromChangesForPeriod(changesForPeriod: ChangesForPeriod): String {
+        return changesForPeriod.name
     }
 
     @TypeConverter

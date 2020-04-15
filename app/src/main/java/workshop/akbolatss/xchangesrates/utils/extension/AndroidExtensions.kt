@@ -41,3 +41,15 @@ fun Context.getThemeColor(@AttrRes attribute: Int): Int {
     typedArray.recycle()
     return color
 }
+
+fun View.visible() = apply {
+    this.visibility = View.VISIBLE
+}
+
+fun View.gone() = apply {
+    this.visibility = View.GONE
+}
+
+fun View.invisible() = apply {
+    this.visibility = View.INVISIBLE
+}

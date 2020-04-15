@@ -23,10 +23,16 @@ abstract class SnapshotDao {
     protected abstract suspend fun create(snapshot: SnapshotEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun create(snapshotOptions: SnapshotOptionsEntity)
+    protected abstract fun create(snapshotOptions: SnapshotOptionsEntity)
+
+    @Update
+    abstract suspend fun update(snapshot: SnapshotEntity): Int
 
     @Query("SELECT * FROM snapshot WHERE exchangerName = :exchange AND coin = :coin AND currency = :currency")
     abstract suspend fun findBy(exchange: String, coin: String, currency: String): SnapshotEntity?
+
+    @Query("SELECT * FROM snapshot WHERE id = :id")
+    abstract suspend fun findBy(id: Long): SnapshotEntity?
 
     @Query("SELECT * FROM snapshot ORDER BY updateTime ASC")
     abstract fun findAll(): Flow<List<SnapshotEntity>>

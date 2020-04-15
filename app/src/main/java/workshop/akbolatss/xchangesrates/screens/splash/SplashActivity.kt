@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
-import workshop.akbolatss.xchangesrates.base.resource.LoadingState
+import workshop.akbolatss.xchangesrates.presentation.base.Error
+import workshop.akbolatss.xchangesrates.presentation.base.Loading
+import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -22,24 +25,18 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.success.observe(this, Observer {
-            if (it) {
-                startActivity(Intent(this@SplashActivity, RootActivity::class.java))
-                finish()
-            }
-        })
-        viewModel.error.observe(this, Observer {
-            if (it)
-                finish()
-        })
-        viewModel.loadingState.observe(this, Observer {
+        viewModel.viewState.observe(this, Observer {
             it?.let {
                 when (it) {
-                    is LoadingState.Loading -> {
-                        // TODO loading
+                    is Loading -> {
+                        Timber.d("Loading")
                     }
-                    is LoadingState.Idle -> {
-                        // TODO Idle?
+                    is Success<*> -> {
+                        startActivity(Intent(this@SplashActivity, RootActivity::class.java))
+                        finish()
+                    }
+                    is Error -> {
+                        finish()
                     }
                 }
             }

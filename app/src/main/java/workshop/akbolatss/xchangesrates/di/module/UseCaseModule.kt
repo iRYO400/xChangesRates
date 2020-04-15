@@ -24,4 +24,7 @@ val useCaseModule = module {
     factory {
         CreateOrUpdateSnapshotUseCase(get(), get())
     }
+    factory {
+        UpdateSnapshotUseCase(get(), get())
+    }
 }

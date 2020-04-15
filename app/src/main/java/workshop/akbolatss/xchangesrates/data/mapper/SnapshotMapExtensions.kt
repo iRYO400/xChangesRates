@@ -17,11 +17,12 @@ object SnapshotMap {
         rate = rate,
         high = high,
         low = low,
+        change = change,
+        change24 = change24,
         charts = charts.map {
             PriceByTimeEntity(it.timestamp, it.price)
         }
     )
-
 }
 
 
@@ -36,6 +37,8 @@ object SnapshotEntityMap {
         rate = rate,
         high = high,
         low = low,
+        change = change,
+        change24 = change24,
         options = snapshotOptions,
         charts = charts.map {
             PriceByTime(it.timestamp, it.price)

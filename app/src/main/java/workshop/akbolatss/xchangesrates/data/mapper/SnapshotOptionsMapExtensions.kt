@@ -11,7 +11,8 @@ object SnapshotOptionsMap {
         snapshotId = defaultVal(),
         isSmartEnabled = isSmartEnabled,
         isStick = isStick,
-        updateInterval = updateInterval
+        updateInterval = updateInterval,
+        changesForPeriod = changesForPeriod
     )
 }
 
@@ -21,6 +22,7 @@ object SnapshotOptionsEntityMap {
         id = id,
         isSmartEnabled = isSmartEnabled,
         isStick = isStick,
-        updateInterval = updateInterval
+        updateInterval = updateInterval,
+        changesForPeriod = changesForPeriod
     )
 }

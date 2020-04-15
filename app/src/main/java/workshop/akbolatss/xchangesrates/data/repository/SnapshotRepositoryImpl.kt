@@ -30,6 +30,22 @@ class SnapshotRepositoryImpl(
         )
     }
 
+    override suspend fun update(updatedSnapshot: Snapshot): Either<Failure, None> {
+        return update(map = {
+            updatedSnapshot.map()
+        }, query = { snapshot ->
+            snapshotDao.update(snapshot)
+        })
+    }
+
+    override suspend fun findBy(id: Long): Snapshot {
+        val snapshotEntity = snapshotDao.findBy(id) ?: return Snapshot.empty()
+        val snapshotOptionsEntity = snapshotDao.findOptions(id)
+        val snapshotOptions = snapshotOptionsEntity.map()
+
+        return snapshotEntity.map(snapshotOptions)
+    }
+
     override suspend fun findBy(exchange: String, coin: String, currency: String): Snapshot {
         val snapshotEntity = snapshotDao.findBy(exchange, coin, currency) ?: return Snapshot.empty()
         val snapshotOptionsEntity =

@@ -10,6 +10,10 @@ interface SnapshotRepository {
 
     suspend fun create(snapshot: Snapshot): Either<Failure, None>
 
+    suspend fun update(updatedSnapshot: Snapshot): Either<Failure, None>
+
+    suspend fun findBy(id: Long): Snapshot
+
     suspend fun findBy(exchange: String, coin: String, currency: String): Snapshot
 
     fun findAll(): Flow<List<Snapshot>>

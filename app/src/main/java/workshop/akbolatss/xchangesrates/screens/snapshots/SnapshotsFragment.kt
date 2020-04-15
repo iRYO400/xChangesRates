@@ -10,10 +10,18 @@ import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
+import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
 import workshop.akbolatss.xchangesrates.databinding.FragmentSnapshotsBinding
+import workshop.akbolatss.xchangesrates.databinding.ItemSnapshotBinding
 import workshop.akbolatss.xchangesrates.model.response.ChartData
+import workshop.akbolatss.xchangesrates.presentation.base.Error
+import workshop.akbolatss.xchangesrates.presentation.base.Loading
+import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
+import workshop.akbolatss.xchangesrates.utils.extension.gone
+import workshop.akbolatss.xchangesrates.utils.extension.invisible
+import workshop.akbolatss.xchangesrates.utils.extension.visible
 
 
 class SnapshotsFragment(
@@ -38,9 +46,10 @@ class SnapshotsFragment(
     }
 
     private fun initRecyclerView() {
-        adapter = SnapshotsAdapter { itemId: Long, position: Int ->
+        adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
+        }, longClickListener = { itemId: Long, position: Int ->
             viewModel.updateSingle(itemId, position)
-        }
+        })
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
     }
@@ -58,6 +67,44 @@ class SnapshotsFragment(
         viewModel.snapshots.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
+        viewModel.updatingItemViewState.observe(viewLifecycleOwner,
+            Observer { (loadingState, position) ->
+                when (loadingState) {
+                    is Loading -> {
+                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                                binding.progressBar.visible()
+                                binding.imgError.gone()
+                                binding.tvTime.invisible()
+                                binding.snapshotView.isEnabled = false
+                                binding.snapshotView.isClickable = false
+                            }
+                        }
+                    }
+                    is Success<*> -> {
+                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                                binding.progressBar.gone()
+                                binding.imgError.gone()
+                                binding.tvTime.visible()
+                                binding.snapshotView.isEnabled = true
+                                binding.snapshotView.isClickable = true
+                            }
+                        }
+                    }
+                    is Error -> {
+                        binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
+                            if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {
+                                binding.progressBar.gone()
+                                binding.imgError.visible()
+                                binding.tvTime.gone()
+                                binding.snapshotView.isEnabled = true
+                                binding.snapshotView.isClickable = true
+                            }
+                        }
+                    }
+                }
+            })
     }
 
     private fun setListeners() {
@@ -83,63 +130,8 @@ class SnapshotsFragment(
         lastNotificationState: Boolean,
         pos: Int
     ) {
-//        if (lastNotificationState && chartData.isNotificationEnabled) { // Was enabled, then still enabled. Maybe changed timing
-//            dequeueWorker(chartData)
-//            UtilityMethods.clearOngoinNotification(chartData, _mActivity)
-//            enqueueWorker(chartData)
-//        }
-//        if (lastNotificationState && !chartData.isNotificationEnabled) { // Was enabled, then disabled, So dequeue it
-//            dequeueWorker(chartData)
-//            UtilityMethods.clearOngoinNotification(chartData, _mActivity)
-//        }
-//        if (!lastNotificationState && chartData.isNotificationEnabled) { // Was disabled, then enabled. So only enqueue it
-//            enqueueWorker(chartData)
-//        }
-//        if (!lastNotificationState && !chartData.isNotificationEnabled) { // Was disabled, then still disabled. Nothing to do
-//        }
 
-//        mPresenter.onUpdateOptions(chartData, pos)
     }
-
-    /**
-     * Remove snapshot from database
-     */
-//    override fun removeSnapshot(chartData: ChartData, pos: Int) {
-//        dequeueWorker(chartData)
-//        UtilityMethods.clearOngoinNotification(chartData, _mActivity)
-//        UtilityMethods.deleteNotificationChannel(chartData, _mActivity)
-//        mAdapter.notifyItemRemoved(pos)
-//        mPresenter.onRemoveSnapshot(chartData.id)
-//    }
-
-//    override fun enqueueWorker(chartData: ChartData) {
-//        val myConstraints = Constraints.Builder()
-//                .setRequiredNetworkType(NetworkType.CONNECTED)
-//                .setRequiresCharging(false)
-//                .build()
-//
-//        val inputData = Data.Builder()
-//                .putLong(WORKER_INPUT_ID, chartData.id)
-//                .build()
-//
-//        val seconds = UtilityMethods.calculateInterval(chartData.options.intervalUpdateIndex)
-//        Logger.i("Seconds is $seconds")
-//        val notificationWork = PeriodicWorkRequestBuilder<NotificationWorker>(seconds, TimeUnit.SECONDS)
-//                .setConstraints(myConstraints)
-//                .setInputData(inputData)
-//                .build()
-//
-//        context?.let {
-//            WorkManager.getInstance(it).enqueueUniquePeriodicWork(UtilityMethods.generateChannelId(chartData), ExistingPeriodicWorkPolicy.KEEP, notificationWork)
-//        }
-//    }
-//
-//    override fun dequeueWorker(chartData: ChartData) {
-//        context?.let {
-//            WorkManager.getInstance(it).cancelUniqueWork(UtilityMethods.generateChannelId(chartData))
-//        }
-//    }
-
 
     fun updateAllSnapshots() {
         if (adapter.itemCount <= 0) {

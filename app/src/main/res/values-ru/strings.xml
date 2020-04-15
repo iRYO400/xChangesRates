@@ -13,18 +13,18 @@
 
     //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
 
-    <string name="tv10min">10 минут</string>
-    <string name="tv1h">Час</string>
-    <string name="tv3h">3 часа</string>
-    <string name="tv12h">12 часов</string>
-    <string name="tv24h">24 часа</string>
-    <string name="tv1w">Неделя</string>
-    <string name="tv1m">Месяц</string>
-    <string name="tv3m">3 месяца</string>
-    <string name="tv6m">Полгода</string>
-    <string name="tv1y">Год</string>
-    <string name="tv2y">2 года</string>
-    <string name="tv5y">5 лет</string>
+    <string name="tv10min">10М</string>
+    <string name="tv1h">1Ч</string>
+    <string name="tv3h">3Ч</string>
+    <string name="tv12h">12Ч</string>
+    <string name="tv24h">24Ч</string>
+    <string name="tv1w">Н</string>
+    <string name="tv1m">1М</string>
+    <string name="tv3m">3М</string>
+    <string name="tv6m">6М</string>
+    <string name="tv1y">1Г</string>
+    <string name="tv2y">2Г</string>
+    <string name="tv5y">5Л</string>
 
     <string-array name="array_time">
         <item>10 минут</item>

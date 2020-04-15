@@ -46,6 +46,11 @@ sealed class Either<out L, out R> {
             is Left -> fnL(a)
             is Right -> fnR(b)
         }
+
+    companion object {
+        fun <T> empty(t: T) = Right(t)
+        fun <T> failure(t: T) = Left(t)
+    }
 }
 
 inline fun <L, R> Either<L, R>.onSuccess(action: (R) -> Unit): Either<L, R> {
@@ -53,11 +58,12 @@ inline fun <L, R> Either<L, R>.onSuccess(action: (R) -> Unit): Either<L, R> {
     return this
 }
 
-inline fun <L, R> Either<L, R>.onFailure(action: (L) -> Unit) {
+inline fun <L, R> Either<L, R>.onFailure(action: (L) -> Unit): Either<L, R> {
     if (this is Left) {
         Timber.e("Some shit happened $a")
         action(a)
     }
+    return this
 }
 
 inline fun <T, L, R> Either<L, R>.map(fn: (R) -> (T)): Either<L, T> =

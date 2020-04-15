@@ -1,21 +1,31 @@
 package workshop.akbolatss.xchangesrates.screens.snapshots
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
 import workshop.akbolatss.xchangesrates.domain.usecase.FindAllSnapshotsUseCase
+import workshop.akbolatss.xchangesrates.domain.usecase.UpdateSnapshotUseCase
+import workshop.akbolatss.xchangesrates.presentation.base.ViewState
 
 class SnapshotsViewModel(
-    findAllSnapshotsUseCase: FindAllSnapshotsUseCase
+    findAllSnapshotsUseCase: FindAllSnapshotsUseCase,
+    private val updateSnapshotUseCase: UpdateSnapshotUseCase
 ) : BaseViewModel() {
 
     val snapshots = findAllSnapshotsUseCase(FindAllSnapshotsUseCase.Params())
         .asLiveData(viewModelScope.coroutineContext)
 
-    fun updateSingle(itemId: Long, position: Int) {
+    val updatingItemViewState = MutableLiveData<Pair<ViewState, Int>>()
 
+    fun updateSingle(itemId: Long, position: Int) {
+        executeUseCase(
+            viewState = { viewState ->
+                updatingItemViewState.value = Pair(viewState, position)
+            })
+        { scope ->
+            updateSnapshotUseCase(scope, UpdateSnapshotUseCase.Params(itemId))
+        }
     }
 
     fun updateAll() {
