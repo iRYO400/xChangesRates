@@ -33,7 +33,6 @@ dependencies {
     // Appcompat
     implementation "androidx.appcompat:appcompat:$appcompat"
 
-
     // AndroidX View
     implementation "androidx.recyclerview:recyclerview:$recycler_view"
     implementation "androidx.cardview:cardview:$card_view"
@@ -50,12 +49,7 @@ dependencies {
     //Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
-
-    //RxJava 2, RxAndroid 2
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     // Koin
     implementation "org.koin:koin-androidx-scope:$koin_version"
@@ -66,7 +60,6 @@ dependencies {
 
     // Room
     implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Show Case

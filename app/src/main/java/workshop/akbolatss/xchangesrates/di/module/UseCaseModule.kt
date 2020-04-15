@@ -10,7 +10,6 @@ val useCaseModule = module {
     factory {
         DownloadExchangesUseCase(get())
     }
-
     factory {
         LoadExchangesUseCase(get())
     }
