@@ -26,6 +26,8 @@
         <item name="popupBackgroundColor">@color/translucent</item>
 
         <item name="dialogTheme">@style/ThemeOverlay.MyApp.Dialog</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.MyApp.BottomSheetDialog</item>
+
         <item name="textAppearanceHeadline1">@style/TextAppearance.MyApp.Headline1</item>
         <item name="textAppearanceHeadline2">@style/TextAppearance.MyApp.Headline2</item>
         <item name="textAppearanceHeadline3">@style/TextAppearance.MyApp.Headline3</item>
@@ -39,11 +41,6 @@
         <item name="textAppearanceButton">@style/TextAppearance.MyApp.Button</item>
         <item name="textAppearanceCaption">@style/TextAppearance.MyApp.Caption</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MyApp.Overline</item>
-    </style>
-
-    <style name="ThemeOverlay.MyApp.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="colorSurface">@color/rhino</item>
-        <item name="dividerColor">@color/san_juan</item>
     </style>
 
     <style name="Base.Theme.Root" parent="Theme.MaterialComponents.DayNight.NoActionBar">

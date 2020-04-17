@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Widget.MyTheme.AutoCompleteTextView" parent="">
         <item name="android:cursorVisible">false</item>
@@ -9,4 +9,21 @@
         <item name="android:textColor">?attr/colorOnSurface</item>
         <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
     </style>
+
+    <style name="ThemeOverlay.MyApp.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorSurface">@color/rhino</item>
+        <item name="dividerColor">@color/san_juan</item>
+    </style>
+
+    <style name="Theme.MyApp.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.MyApp.BottomSheet.Modal</item>
+    </style>
+
+    <style name="Widget.MyApp.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="behavior_skipCollapsed">true</item>
+        <item name="behavior_fitToContents">true</item>
+        <item name="behavior_peekHeight">1000dp</item>
+        <item name="behavior_hideable">true</item>
+    </style>
+
 </resources>
