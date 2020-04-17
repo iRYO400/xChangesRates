@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">XChanges Rates</string>
+    <string name="app_name" translatable="false">xChanges Rates</string>
     <string name="my_name" translatable="false">Akbolat Sadvakassov</string>
 
     <string name="profile_subtitle" translatable="false">Mobile Developer</string>
@@ -16,11 +16,7 @@
     <string name="tvEquality" translatable="false">=</string>
     <string name="tvDoubleDots" translatable="false">:</string>
 
-
-    <string name="tvError">Something goes wrong…</string>
-
     <string name="no_snapshots">You didn\'t add any snapshot :(</string>
-    <string name="toast_saving">Saving snapshot</string>
     <string name="menu_shoot">Take a Snapshot</string>
     <string name="menu_refresh">Update data</string>
     <string name="menu_progress">Updating…</string>
@@ -134,5 +130,9 @@
     <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
     <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
     <string name="snapshot_notification_option_not_loaded_error">Couldn\'t load snapshot. Please, try again</string>
+
+    <string name="splash_exchangers_updated">Database update</string>
+    <string name="splash_updating_database">Updating database…</string>
+    <string name="splash_updating_database_error">Couldn\'t update data</string>
 
 </resources>

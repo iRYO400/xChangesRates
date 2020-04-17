@@ -3,6 +3,10 @@
 
     <style name="Theme.MyApp" parent="Base.Theme.MyApp" />
 
+    <style name="Theme.MyApp.Splash" parent="Theme.MyApp">
+        <item name="android:windowBackground">@drawable/bg_splash_screen</item>
+    </style>
+
     <style name="Base.Theme.MyApp" parent="Base.Theme.Root">
         <item name="colorPrimary">@color/licorice</item>
         <item name="colorSecondary">@color/san_juan</item>

@@ -1,6 +1,5 @@
 package workshop.akbolatss.xchangesrates.utils.extension
 
-import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import java.util.*
 
 fun String.Companion.empty() = ""

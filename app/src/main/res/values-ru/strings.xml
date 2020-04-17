@@ -4,8 +4,6 @@
     <integer name="key_id">0</integer>
     <integer name="key_pos">1</integer>
 
-    <string name="tvError">Что-то пошло не так…</string>
-
     <string name="no_snapshots">Вы не добавили ни единого снэпшота :(</string>
     <string name="menu_shoot">Сохранить снэпшот</string>
     <string name="menu_refresh">Обновить</string>
@@ -40,7 +38,6 @@
         <item>About</item>
     </array>
 
-    <string name="toast_saving">Сохраняю снэпшот</string>
     <string name="splash_1">Данные успешно обновлены</string>
     <string name="splash_2">Проверьте интернет соединение и перезапустите приложение</string>
     <string name="splash_3">"Не получается обновить данные. Последнее обновление было "</string>
@@ -91,4 +88,7 @@
     <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
     <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
     <string name="snapshot_notification_option_not_loaded_error">Couldn\'t load snapshot. Please, try again</string>
+    <string name="splash_exchangers_updated">Database update</string>
+    <string name="splash_updating_database">Updating database...</string>
+    <string name="splash_updating_database_error">Couldn\'t update database</string>
 </resources>
