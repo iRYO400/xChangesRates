@@ -56,27 +56,6 @@
         <item>5 years</item>
     </string-array>
 
-    <string-array name="array_interval_updates">
-        <item>5 seconds</item>
-        <item>10 seconds</item>
-        <item>15 seconds</item>
-        <item>30 seconds</item>
-        <item>1 minute</item>
-        <item>2 minutes</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>5 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-        <item>48 hours</item>
-        <item>1 week</item>
-        <item>2 weeks</item>
-    </string-array>
-
     <string-array name="array_interval_updates_smart">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -90,24 +69,8 @@
         <item>2 weeks</item>
     </string-array>
 
-    <!--<string name="tv5s">5 seconds</string>-->
-    <!--<string name="tv10s">10 seconds</string>-->
-    <!--<string name="tv15s">15 seconds</string>-->
-    <!--<string name="tv30s">30 seconds</string>-->
-    <!--<string name="tv1min">1 minute</string>-->
-    <!--<string name="tv2min">2 minutes</string>-->
-    <!--<string name="tv5min">5 minutes</string>-->
-    <!--<string name="tv10min">10 minutes</string>-->
-    <string name="tv15min">15 minutes</string>
-    <!--<string name="tv30min">30 minutes</string>-->
-    <!--<string name="tv1hour">1 hour</string>-->
-    <!--<string name="tv2hour">2 hours</string>-->
-    <!--<string name="tv5hour">5 hours</string>-->
-    <!--<string name="tv12hour">12 hours</string>-->
-    <!--<string name="tv24hour">24 hours</string>-->
-    <!--<string name="tv48hour">48 hours</string>-->
-    <!--<string name="tv1week">1 week</string>-->
-    <string name="tv2weeks">2 weeks</string>
+    <string name="tv15min">15M</string>
+    <string name="tv2weeks">2W</string>
 
     <string-array name="array_time">
         <item>10 minutes</item>
@@ -168,5 +131,7 @@
     <string name="notification_snapshot_low">Low:</string>
     <string name="notification_snapshot_change">Change:</string>
     <string name="notification_snapshot_change24">Change24:</string>
+    <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
+    <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
 
 </resources>

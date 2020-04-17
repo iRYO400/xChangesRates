@@ -88,4 +88,6 @@
     <string name="notification_snapshot_low">Low:</string>
     <string name="notification_snapshot_change">Change:</string>
     <string name="notification_snapshot_change24">Change24:</string>
+    <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
+    <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
 </resources>

@@ -5,12 +5,15 @@ import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
+import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 
 interface SnapshotRepository {
 
     suspend fun create(snapshot: Snapshot): Either<Failure, None>
 
     suspend fun update(updatedSnapshot: Snapshot): Either<Failure, None>
+
+    suspend fun updateOptions(updatedOptions: SnapshotOptions): Either<Failure, None>
 
     suspend fun findBy(id: Long): Snapshot
 

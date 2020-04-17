@@ -32,8 +32,8 @@ val viewModelModule: Module = module {
     }
 
     scope(named<SnapshotOptionsDialog>()) {
-        viewModel { (itemId: Long?) ->
-            SnapshotOptionsViewModel(itemId)
+        viewModel { (itemId: Long) ->
+            SnapshotOptionsViewModel(get(), get(), itemId)
         }
     }
 

@@ -22,7 +22,7 @@
             android:layout_marginTop="12dp"
             android:hapticFeedbackEnabled="true"
             app:cardBackgroundColor="?attr/colorSurface"
-            app:layout_constraintEnd_toStartOf="@+id/imgNotificationState"
+            app:layout_constraintEnd_toStartOf="@+id/btnToggleNotificationState"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -170,7 +170,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <ImageView
-            android:id="@+id/imgNotificationState"
+            android:id="@+id/btnToggleNotificationState"
             isSelected="@{model.options.notificationEnabled}"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -188,7 +188,7 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
-            android:id="@+id/imgNotificationOptions"
+            android:id="@+id/btnOptions"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="4dp"
@@ -200,7 +200,7 @@
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:padding="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imgNotificationState"
+            app:layout_constraintTop_toBottomOf="@+id/btnToggleNotificationState"
             app:srcCompat="@drawable/ic_outline_settings_24"
             tools:ignore="ContentDescription" />
 

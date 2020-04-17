@@ -17,13 +17,16 @@ import workshop.akbolatss.xchangesrates.presentation.base.Error
 import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
+import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.OnSnapshotOptionsCallback
+import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.extension.*
 
 
 class SnapshotsFragment(
     override val layoutId: Int = R.layout.fragment_snapshots
-) : BaseFragment<FragmentSnapshotsBinding>() {
+) : BaseFragment<FragmentSnapshotsBinding>(),
+    OnSnapshotOptionsCallback {
 
     companion object {
 
@@ -42,7 +45,9 @@ class SnapshotsFragment(
     }
 
     private fun initRecyclerView() {
-        adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, position: Int ->
+        adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, _: Int ->
+        }, showOptionsClickListener = { itemId ->
+            openSnapshotOptions(itemId)
         }, toggleNotificationListener = { itemId: Long ->
             toggleNotification(itemId)
         }, longClickListener = { itemId: Long, position: Int ->
@@ -50,6 +55,11 @@ class SnapshotsFragment(
         })
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun openSnapshotOptions(itemId: Long) {
+        val dialog = SnapshotOptionsDialog.newInstance(itemId)
+        dialog.show(childFragmentManager, dialog.tag)
     }
 
     override fun setObserversListeners() {

@@ -4,7 +4,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
 import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -15,6 +14,7 @@ import workshop.akbolatss.xchangesrates.data.mapper.SnapshotOptionsEntityMap.map
 import workshop.akbolatss.xchangesrates.data.mapper.SnapshotOptionsMap.map
 import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
+import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
 
 class SnapshotRepositoryImpl(
@@ -40,6 +40,14 @@ class SnapshotRepositoryImpl(
             Pair(snapshotEntity, optionsEntity)
         }, query = { (snapshot, options) ->
             snapshotDao.update(snapshot, options)
+        })
+    }
+
+    override suspend fun updateOptions(updatedOptions: SnapshotOptions): Either<Failure, None> {
+        return update(map = {
+            updatedOptions.map()
+        }, query = {
+            snapshotDao.update(it)
         })
     }
 

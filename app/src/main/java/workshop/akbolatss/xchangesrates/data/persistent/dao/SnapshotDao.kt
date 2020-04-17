@@ -39,7 +39,7 @@ abstract class SnapshotDao {
     protected abstract suspend fun update(snapshot: SnapshotEntity): Int
 
     @Update
-    protected abstract suspend fun update(snapshotOptions: SnapshotOptionsEntity): Int
+    abstract suspend fun update(snapshotOptions: SnapshotOptionsEntity): Int
 
     @Query("SELECT * FROM snapshot WHERE exchangerName = :exchange AND coin = :coin AND currency = :currency")
     abstract suspend fun findBy(exchange: String, coin: String, currency: String): SnapshotEntity?

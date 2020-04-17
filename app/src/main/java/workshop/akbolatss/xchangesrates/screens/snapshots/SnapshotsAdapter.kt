@@ -16,6 +16,7 @@ import workshop.akbolatss.xchangesrates.utils.binding.setupChartInList
 class SnapshotsAdapter(
     private val itemClickListener: (Long, Int) -> Unit,
     private val toggleNotificationListener: (Long) -> Unit,
+    private val showOptionsClickListener: (Long) -> Unit,
     private val longClickListener: (Long, Int) -> Unit
 ) : BaseRVA<Snapshot>(DIFF_CALLBACK) {
 
@@ -45,8 +46,11 @@ class SnapshotsAdapter(
                 snapshotView.setOnClickListener {
                     itemClickListener(item.id, holder.layoutPosition)
                 }
-                imgNotificationState.setOnClickListener {
+                btnToggleNotificationState.setOnClickListener {
                     toggleNotificationListener(item.id)
+                }
+                btnOptions.setOnClickListener {
+                    showOptionsClickListener(item.id)
                 }
             }
         }

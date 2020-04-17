@@ -1,9 +1,5 @@
 <resources>
 
-    <style name="Theme.RoundedDialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowBackground">@drawable/background_dialog</item>
-    </style>
-
     <style name="Widget.MyTheme.AutoCompleteTextView" parent="">
         <item name="android:cursorVisible">false</item>
         <item name="android:focusable">false</item>
