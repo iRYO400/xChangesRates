@@ -20,11 +20,17 @@ fun CoordinatorLayout.showSnackBar(messageRes: Int) {
         this, messageRes,
         Snackbar.LENGTH_LONG
     )
-//    snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-//        .textAlignment = View.TEXT_ALIGNMENT_CENTER
     snackbar.show()
 }
 
+fun CoordinatorLayout.showSnackBar(message: String?) {
+    val safeMessage = message ?: return
+    val snackbar = Snackbar.make(
+        this, safeMessage,
+        Snackbar.LENGTH_LONG
+    )
+    snackbar.show()
+}
 
 @ColorInt
 fun Context.getThemeColorV2(@AttrRes attribute: Int): Int {

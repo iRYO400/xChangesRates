@@ -71,8 +71,10 @@ class SnapshotOptionsDialog : BaseDialogFragment<FragmentOptionsBinding>(
                 viewModel.selectedUpdateInterval.value = updateIntervalHintArray[index]
             }
         })
-        viewModel.snapshotError.observe(viewLifecycleOwner, Observer {
-            //TODO error
+        viewModel.snapshotError.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState?.let {
+                callback.onSnapshotNotLoaded()
+            }
         })
         viewModel.optionsUpdated.observe(viewLifecycleOwner, Observer {
             if (it)
@@ -98,5 +100,7 @@ class SnapshotOptionsDialog : BaseDialogFragment<FragmentOptionsBinding>(
 }
 
 interface OnSnapshotOptionsCallback {
+
+    fun onSnapshotNotLoaded()
 
 }

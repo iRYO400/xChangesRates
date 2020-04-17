@@ -16,7 +16,6 @@ class SnapshotOptionsViewModel(
     private val snapshotId: Long
 ) : BaseViewModel() {
 
-    val snapshot = MutableLiveData<Snapshot>()
     val snapshotError = MutableLiveData<ViewState>()
 
     val chartChangesPeriod = MutableLiveData<Int>()
@@ -38,7 +37,6 @@ class SnapshotOptionsViewModel(
         executeUseCase { scope ->
             findSnapshotByIdUseCase(scope, FindSnapshotByIdUseCase.Params(snapshotId))
                 .onSuccess { snapshot ->
-                    this.snapshot.value = snapshot
                     initUi(snapshot)
                 }
                 .onFailure { failure ->

@@ -64,7 +64,6 @@ class SnapshotsFragment(
 
     override fun setObserversListeners() {
         observeViewModel()
-        setListeners()
     }
 
     private fun observeViewModel() {
@@ -128,16 +127,16 @@ class SnapshotsFragment(
         }
     }
 
-    private fun setListeners() {
-
-    }
-
     private fun toggleNotification(itemId: Long) {
         viewModel.toggleNotification(itemId)
     }
 
     fun updateAllSnapshots() {
         viewModel.updateAll()
+    }
+
+    override fun onSnapshotNotLoaded() {
+        binding.coordinator.showSnackBar(getString(R.string.snapshot_notification_option_not_loaded_error))
     }
 
     /**
