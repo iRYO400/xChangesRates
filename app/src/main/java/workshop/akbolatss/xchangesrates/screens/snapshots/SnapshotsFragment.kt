@@ -17,6 +17,7 @@ import workshop.akbolatss.xchangesrates.presentation.base.Error
 import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
+import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsBottomDialog
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.OnSnapshotOptionsCallback
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
@@ -46,6 +47,7 @@ class SnapshotsFragment(
 
     private fun initRecyclerView() {
         adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, _: Int ->
+            openSnapshotDetails(itemId)
         }, showOptionsClickListener = { itemId ->
             openSnapshotOptions(itemId)
         }, toggleNotificationListener = { itemId: Long ->
@@ -55,6 +57,11 @@ class SnapshotsFragment(
         })
         binding.recyclerView.setHasFixedSize(true)
         binding.recyclerView.adapter = adapter
+    }
+
+    private fun openSnapshotDetails(snapshotId: Long) {
+        val dialog = SnapshotDetailsBottomDialog.newInstance(snapshotId)
+        dialog.show(requireFragmentManager(), dialog.tag)
     }
 
     private fun openSnapshotOptions(itemId: Long) {

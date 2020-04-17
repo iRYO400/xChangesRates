@@ -10,6 +10,8 @@ import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 import workshop.akbolatss.xchangesrates.presentation.root.RootViewModel
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment
 import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsViewModel
+import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsBottomDialog
+import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsViewModel
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsViewModel
 import workshop.akbolatss.xchangesrates.screens.splash.SplashActivity
@@ -40,6 +42,12 @@ val viewModelModule: Module = module {
     scope(named<ChartFragment>()) {
         viewModel {
             ChartViewModel(get(), get(), get())
+        }
+    }
+
+    scope(named<SnapshotDetailsBottomDialog>()) {
+        viewModel { (itemId: Long) ->
+            SnapshotDetailsViewModel(get(), itemId)
         }
     }
 }
