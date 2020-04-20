@@ -65,14 +65,12 @@ dependencies {
     // Show Case
     implementation 'com.github.faruktoptas:FancyShowCaseView:1.3.0'
     // MPA Chart
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Hawk
     implementation 'com.orhanobut:hawk:2.0.1'
     // Space Navigation View
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
     // Fragmentation
     implementation 'me.xuexuan:fragmentationx:1.0.5'
-    // Expandable Layout
-    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
 
 }

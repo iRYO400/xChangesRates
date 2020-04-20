@@ -11,7 +11,7 @@ import workshop.akbolatss.xchangesrates.base.BaseRVA
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
 import workshop.akbolatss.xchangesrates.databinding.ItemSnapshotBinding
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
-import workshop.akbolatss.xchangesrates.utils.binding.setupChartInList
+import workshop.akbolatss.xchangesrates.utils.chart.setupChartInList
 
 class SnapshotsAdapter(
     private val itemClickListener: (Long, Int) -> Unit,
