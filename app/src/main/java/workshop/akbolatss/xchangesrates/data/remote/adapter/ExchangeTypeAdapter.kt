@@ -23,7 +23,7 @@ class ExchangeTypeAdapter : JsonDeserializer<ExchangeResponse> {
 
             val listMap = ArrayMap<String, List<String>>()
             var buffCurrency: MutableList<String>?
-            var buff = ""
+            var buff: String
             while (iterator.hasNext()) {
                 buff = iterator.next().toString()
 

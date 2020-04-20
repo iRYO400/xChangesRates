@@ -3,7 +3,7 @@ package workshop.akbolatss.xchangesrates.utils.extension
 import android.content.Context
 import androidx.work.*
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
-import workshop.akbolatss.xchangesrates.screens.notifications.SnapshotNotificationWorker
+import workshop.akbolatss.xchangesrates.worker.SnapshotNotificationWorker
 import java.util.concurrent.TimeUnit
 
 fun Context?.launchWorker(snapshot: Snapshot) {

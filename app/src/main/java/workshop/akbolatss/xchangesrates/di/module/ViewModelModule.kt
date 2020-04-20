@@ -8,14 +8,14 @@ import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartViewModel
 import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 import workshop.akbolatss.xchangesrates.presentation.root.RootViewModel
-import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment
-import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsViewModel
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsBottomDialog
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsViewModel
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsViewModel
-import workshop.akbolatss.xchangesrates.screens.splash.SplashActivity
-import workshop.akbolatss.xchangesrates.screens.splash.SplashViewModel
+import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsFragment
+import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsViewModel
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsViewModel
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsDialog
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsViewModel
+import workshop.akbolatss.xchangesrates.presentation.splash.SplashActivity
+import workshop.akbolatss.xchangesrates.presentation.splash.SplashViewModel
 
 val viewModelModule: Module = module {
 

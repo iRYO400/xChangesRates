@@ -50,7 +50,7 @@ class ChartFragment(
     }
 
     private fun onInitRV() {
-        adapter = PeriodSelectorAdapter { historyButton, position ->
+        adapter = PeriodSelectorAdapter { historyButton, _ ->
             highlightSelected(historyButton)
         }
 

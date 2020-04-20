@@ -7,8 +7,6 @@ import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.BuildConfig
 import me.yokeyword.fragmentation.Fragmentation
 import workshop.akbolatss.xchangesrates.di.KoinInjector
-import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.UtilityMethods
 import workshop.akbolatss.xchangesrates.utils.logging.TimberLogImplementation
 
 class ApplicationMain : Application() {

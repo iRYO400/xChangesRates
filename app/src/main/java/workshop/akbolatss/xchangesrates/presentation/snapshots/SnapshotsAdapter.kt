@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.snapshots
+package workshop.akbolatss.xchangesrates.presentation.snapshots
 
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater

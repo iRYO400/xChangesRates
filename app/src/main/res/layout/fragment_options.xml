@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsViewModel" />
+            type="workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsViewModel" />
     </data>
 
     <LinearLayout

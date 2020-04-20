@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsViewModel" />
+            type="workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

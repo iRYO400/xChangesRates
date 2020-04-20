@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.splash
+package workshop.akbolatss.xchangesrates.presentation.splash
 
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.notifications
+package workshop.akbolatss.xchangesrates.worker
 
 import android.app.Notification
 import android.content.Context

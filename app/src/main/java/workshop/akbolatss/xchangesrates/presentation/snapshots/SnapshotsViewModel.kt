@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.snapshots
+package workshop.akbolatss.xchangesrates.presentation.snapshots
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData

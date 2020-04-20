@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details
+package workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details
 
 import android.os.Bundle
 import android.view.LayoutInflater

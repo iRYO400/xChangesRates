@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.splash
+package workshop.akbolatss.xchangesrates.presentation.splash
 
 import android.content.Intent
 import android.os.Bundle

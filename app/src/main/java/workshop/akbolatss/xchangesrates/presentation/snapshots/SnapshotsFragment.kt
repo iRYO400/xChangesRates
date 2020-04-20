@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.snapshots
+package workshop.akbolatss.xchangesrates.presentation.snapshots
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
@@ -17,9 +17,9 @@ import workshop.akbolatss.xchangesrates.presentation.base.Error
 import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.details.SnapshotDetailsBottomDialog
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.OnSnapshotOptionsCallback
-import workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options.SnapshotOptionsDialog
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.OnSnapshotOptionsCallback
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.extension.*
 

@@ -13,7 +13,7 @@ import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
-import workshop.akbolatss.xchangesrates.screens.snapshots.SnapshotsFragment
+import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsFragment
 
 class RootActivity : SupportActivity(), SpaceOnClickListener {
 

@@ -13,7 +13,7 @@ import java.util.*
 @BindingAdapter("selectedEntryAttrChanged")
 fun AutoCompleteTextView.setListener(listener: InverseBindingListener?) {
     listener?.let {
-        this.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        this.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             setTag(R.id.selected_item_position, position)
             listener.onChange()
         }

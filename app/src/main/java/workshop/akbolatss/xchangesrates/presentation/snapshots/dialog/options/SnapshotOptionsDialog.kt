@@ -1,4 +1,4 @@
-package workshop.akbolatss.xchangesrates.screens.snapshots.dialog.options
+package workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options
 
 import android.content.Context
 import android.os.Bundle
@@ -33,21 +33,22 @@ class SnapshotOptionsDialog : BaseDialogFragment<FragmentOptionsBinding>(
         parametersOf(arguments?.getLong(PARAM_SNAPSHOT_ID) ?: defaultVal())
     }
 
-    private lateinit var callback: OnSnapshotOptionsCallback
-
     private val chartChangesPeriodHintArray by lazy {
         resources.getStringArray(R.array.array_history_timing)
     }
+
     private val updateIntervalHintArray by lazy {
         resources.getStringArray(R.array.array_interval_updates_smart)
     }
+
+    private lateinit var callback: OnSnapshotOptionsCallback
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (parentFragment is OnSnapshotOptionsCallback)
             callback = parentFragment as OnSnapshotOptionsCallback
         else
-            throw RuntimeException("Must implement OnSnapshotOptionsCallback")
+            throw RuntimeException("Caller must implement ${OnSnapshotOptionsCallback::class.java.simpleName}")
     }
 
     override fun init(savedInstanceState: Bundle?) {
