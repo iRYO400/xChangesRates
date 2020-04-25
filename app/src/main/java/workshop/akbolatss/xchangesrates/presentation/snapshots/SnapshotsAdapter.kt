@@ -34,6 +34,7 @@ class SnapshotsAdapter(
         when (holder.binding) {
             is ItemSnapshotBinding -> with(holder.binding) {
                 model = item
+                lifecycleOwner = holder.binding.lifecycleOwner
 
                 snapshotView.setOnLongClickListener {
                     it.performHapticFeedback(

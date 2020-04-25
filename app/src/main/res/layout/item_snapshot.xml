@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="lifecycleOwner"
+            type="androidx.lifecycle.LifecycleOwner" />
+
+        <variable
             name="model"
             type="workshop.akbolatss.xchangesrates.domain.model.Snapshot" />
     </data>
@@ -121,6 +125,7 @@
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
                     entries="@{model.charts}"
+                    lifecycleOwner="@{lifecycleOwner}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginStart="4dp"

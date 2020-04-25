@@ -2,14 +2,7 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineDataSet
 import com.orhanobut.hawk.Hawk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kz.jgroup.pos.util.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
@@ -18,11 +11,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
-import workshop.akbolatss.xchangesrates.domain.model.Chart
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.chart.ChartFragmentLineDataSet
-import workshop.akbolatss.xchangesrates.utils.chart.DateXAxisFormatter
 import workshop.akbolatss.xchangesrates.utils.chart.setupChart
 import workshop.akbolatss.xchangesrates.utils.extension.showSnackBar
 
@@ -44,6 +34,7 @@ class ChartFragment(
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         binding.viewModel = viewModel
+        binding.viewLifecycleOwner = viewLifecycleOwner
 
         onInitRV()
         onInitChart()
@@ -53,10 +44,6 @@ class ChartFragment(
         adapter = PeriodSelectorAdapter { historyButton, _ ->
             highlightSelected(historyButton)
         }
-
-        binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.layoutManager =
-            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = adapter
     }
 
@@ -82,9 +69,9 @@ class ChartFragment(
                 viewModel.tryLoadChart()
             }
         })
-        viewModel.chart.observe(viewLifecycleOwner, Observer { chart ->
-            chart?.let {
-                loadLineChart(chart)
+        viewModel.chartError.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                binding.coordinator.showSnackBar(it)
             }
         })
         viewModel.currencyError.observe(viewLifecycleOwner, Observer {
@@ -107,32 +94,6 @@ class ChartFragment(
 
     private fun setListeners() {
 
-    }
-
-    private fun loadLineChart(chart: Chart) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val entries = chart.units.mapIndexed { index, priceByTime ->
-                Entry(
-                    index.toFloat(),
-                    priceByTime.price.toFloat()
-                )
-            }
-
-            if (binding.lineChart.lineData.dataSetCount == 0) {
-                val dataSet = ChartFragmentLineDataSet(entries, null, _mActivity)
-                binding.lineChart.lineData.addDataSet(dataSet)
-            } else {
-                val dataSet = binding.lineChart.lineData.getDataSetByIndex(0) as LineDataSet
-                dataSet.values = entries
-                dataSet.notifyDataSetChanged()
-            }
-            binding.lineChart.lineData.notifyDataChanged()
-            binding.lineChart.notifyDataSetChanged()
-            binding.lineChart.xAxis.valueFormatter = DateXAxisFormatter(chart.units)
-            withContext(Dispatchers.Main) {
-                binding.lineChart.invalidate()
-            }
-        }
     }
 
     fun onSaveSnapshot() {

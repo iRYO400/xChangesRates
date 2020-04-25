@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="viewLifecycleOwner"
+            type="androidx.lifecycle.LifecycleOwner" />
+
+        <variable
             name="viewModel"
             type="workshop.akbolatss.xchangesrates.presentation.chart.ChartViewModel" />
 
@@ -91,6 +95,8 @@
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/lineChart"
+                entries="@{viewModel.charts}"
+                lifecycleOwner="@{viewLifecycleOwner}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="24dp" />

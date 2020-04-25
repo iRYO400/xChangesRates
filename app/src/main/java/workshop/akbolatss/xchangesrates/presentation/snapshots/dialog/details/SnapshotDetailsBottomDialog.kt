@@ -11,6 +11,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.databinding.DialogDetailsBinding
+import workshop.akbolatss.xchangesrates.utils.chart.setupChart
 import workshop.akbolatss.xchangesrates.utils.extension.defaultVal
 
 class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
@@ -40,15 +41,18 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.dialog_details, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        init(savedInstanceState)
+        init()
         return binding.root
     }
 
-    private fun init(savedInstanceState: Bundle?) {
+    private fun init() {
         binding.viewModel = viewModel
+        binding.lineChart.setupChart(requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
     }
 }

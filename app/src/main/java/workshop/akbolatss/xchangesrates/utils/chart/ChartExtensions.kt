@@ -8,7 +8,6 @@ import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.utils.extension.getThemeColor
 
 fun LineChart.setupChartInList() {
-    isLogEnabled = true
     description.isEnabled = false
     legend.isEnabled = false
     setTouchEnabled(false)
@@ -31,7 +30,6 @@ fun LineChart.setupChartInList() {
 }
 
 fun LineChart.setupChart(context: Context) {
-    isLogEnabled = false
     description.isEnabled = false
     legend.isEnabled = false
     setNoDataTextColor(context.getThemeColor(R.attr.colorError))
