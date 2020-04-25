@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
 import workshop.akbolatss.xchangesrates.utils.chart.DateXAxisFormatter
-import workshop.akbolatss.xchangesrates.utils.chart.SnapshotLineDataSet
+import workshop.akbolatss.xchangesrates.utils.chart.SnapshotListLineDataSet
 
 @BindingAdapter("entries", "lifecycleOwner")
 fun LineChart.bindData(entryList: List<PriceByTime>?, lifecycleOwner: LifecycleOwner?) {
@@ -27,7 +27,7 @@ fun LineChart.bindData(entryList: List<PriceByTime>?, lifecycleOwner: LifecycleO
                 xAxis.valueFormatter = DateXAxisFormatter(safeEntries)
 
                 if (lineData.dataSetCount == 0) {
-                    val dataSet = SnapshotLineDataSet(entries, null, context)
+                    val dataSet = SnapshotListLineDataSet(entries, null, context)
                     lineData.addDataSet(dataSet)
                 } else {
                     val dataSet = lineData.getDataSetByIndex(0) as LineDataSet

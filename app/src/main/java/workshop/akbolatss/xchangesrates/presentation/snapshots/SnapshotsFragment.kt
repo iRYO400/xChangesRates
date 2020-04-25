@@ -94,10 +94,10 @@ class SnapshotsFragment(
     }
 
     private fun handleSnapshotLoadingState(
-        loadingState: ViewState,
+        viewState: ViewState,
         position: Int
     ) {
-        when (loadingState) {
+        when (viewState) {
             is Loading -> {
                 binding.recyclerView.findViewHolderForLayoutPosition(position)?.apply {
                     if (this is DataBoundViewHolder && this.binding is ItemSnapshotBinding) {

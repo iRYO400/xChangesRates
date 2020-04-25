@@ -13,6 +13,8 @@ import workshop.akbolatss.xchangesrates.data.mapper.SnapshotMap.map
 import workshop.akbolatss.xchangesrates.data.mapper.SnapshotOptionsEntityMap.map
 import workshop.akbolatss.xchangesrates.data.mapper.SnapshotOptionsMap.map
 import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotOptionsEntity
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 import workshop.akbolatss.xchangesrates.domain.repository.SnapshotRepository
@@ -68,16 +70,24 @@ class SnapshotRepositoryImpl(
         return snapshotEntity.map(snapshotOptions)
     }
 
-    override fun findListFlow(): Flow<List<Snapshot>> = snapshotDao.findAll()
+    override fun findListFlow(): Flow<List<Snapshot>> = snapshotDao.findSnapshotListFlow()
         .combine(
-            snapshotDao.findOptionsList()
-        ) { snapshotEntities, snapshotOptionsEntities ->
+            snapshotDao.findOptionsListFlow()
+        ) { snapshotEntities, optionsEntities ->
             snapshotEntities.map { snapshotEntity ->
-                val snapshotOptions = snapshotOptionsEntities.find { snapshotOptionsEntity ->
+                val snapshotOptions = optionsEntities.find { snapshotOptionsEntity ->
                     snapshotOptionsEntity.snapshotId == snapshotEntity.id
                 }
                 snapshotEntity.map(snapshotOptions!!.map())
             }
+        }
+        .flowOn(Dispatchers.IO)
+
+    override fun findByFlow(id: Long): Flow<Snapshot> = snapshotDao.findFlow(id)
+        .combine(
+            snapshotDao.findOptionsFlow(id)
+        ) { snapshotEntity: SnapshotEntity, optionsEntity: SnapshotOptionsEntity ->
+            snapshotEntity.map(optionsEntity.map())
         }
         .flowOn(Dispatchers.IO)
 }

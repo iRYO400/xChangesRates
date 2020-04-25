@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Widget.MyTheme.AutoCompleteTextView" parent="">
         <item name="android:cursorVisible">false</item>
@@ -20,10 +20,11 @@
     </style>
 
     <style name="Widget.MyApp.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">?android:attr/colorBackground</item>
         <item name="behavior_skipCollapsed">true</item>
         <item name="behavior_fitToContents">true</item>
         <item name="behavior_peekHeight">1000dp</item>
-        <item name="behavior_hideable">true</item>
+        <item name="behavior_hideable">false</item>
     </style>
 
 </resources>

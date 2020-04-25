@@ -47,7 +47,7 @@ val viewModelModule: Module = module {
 
     scope(named<SnapshotDetailsBottomDialog>()) {
         viewModel { (itemId: Long) ->
-            SnapshotDetailsViewModel(get(), itemId)
+            SnapshotDetailsViewModel(get(), get(), itemId)
         }
     }
 }

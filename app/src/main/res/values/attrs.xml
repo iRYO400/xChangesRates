@@ -2,5 +2,6 @@
 <resources>
     <attr name="iconColor" format="color" />
     <attr name="popupBackgroundColor" format="color" />
-    <attr name="dividerColor" type="color"/>
+    <attr name="dividerColor" type="color" />
+    <attr name="colorAccentDark" format="color" />
 </resources>

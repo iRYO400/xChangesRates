@@ -20,6 +20,9 @@ val useCaseModule = module {
         FindSnapshotByIdUseCase(get())
     }
     factory {
+        FindSnapshotByIdFlowUseCase(get())
+    }
+    factory {
         CreateSnapshotUseCase(get())
     }
     factory {
@@ -27,6 +30,9 @@ val useCaseModule = module {
     }
     factory {
         UpdateSnapshotUseCase(get(), get(), get())
+    }
+    factory {
+        UpdateSnapshotByPeriodUseCase(get(), get(), get())
     }
     factory {
         UpdateSnapshotOptionsUseCase(get(), get())

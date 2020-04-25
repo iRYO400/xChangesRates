@@ -3,7 +3,6 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import kz.jgroup.pos.util.Event
-import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -129,8 +128,6 @@ class ChartViewModel(
             return
         }
         val timing = selectedPeriod.value ?: defaultChartPeriod()
-
-        Timber.d("tryLoadChart $exchange $coin $currency $timing")
 
         loadChart(exchange, coin, currency, timing.code)
     }

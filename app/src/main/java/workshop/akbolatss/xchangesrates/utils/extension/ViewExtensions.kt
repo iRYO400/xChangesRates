@@ -2,6 +2,7 @@ package workshop.akbolatss.xchangesrates.utils.extension
 
 import android.content.Context
 import android.graphics.Color
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -64,3 +65,9 @@ fun View.gone() = apply {
 fun View.invisible() = apply {
     this.visibility = View.INVISIBLE
 }
+
+fun Context.dpToPx(dp: Float): Float =
+    dp * resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT
+
+fun Context.pxToDp(px: Float): Float =
+    px / (resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT)

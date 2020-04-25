@@ -20,4 +20,6 @@ interface SnapshotRepository {
     suspend fun findBy(exchange: String, coin: String, currency: String): Snapshot
 
     fun findListFlow(): Flow<List<Snapshot>>
+
+    fun findByFlow(id:Long): Flow<Snapshot>
 }

@@ -13,6 +13,7 @@
         <item name="colorSurface">@color/big_stone</item>
 
         <item name="colorAccent">@color/aquamarine</item>
+        <item name="colorAccentDark">@color/lochinvar</item>
 
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSecondary">@color/lynch</item>

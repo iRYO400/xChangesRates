@@ -47,12 +47,18 @@ abstract class SnapshotDao {
     @Query("SELECT * FROM snapshot WHERE id = :id")
     abstract suspend fun findBy(id: Long): SnapshotEntity?
 
-    @Query("SELECT * FROM snapshot ORDER BY updateTime ASC")
-    abstract fun findAll(): Flow<List<SnapshotEntity>>
-
     @Query("SELECT * FROM snapshot_options WHERE snapshotId = :snapshotId")
     abstract suspend fun findOptions(snapshotId: Long): SnapshotOptionsEntity
 
+    @Query("SELECT * FROM snapshot WHERE id = :id")
+    abstract fun findFlow(id: Long): Flow<SnapshotEntity>
+
+    @Query("SELECT * FROM snapshot_options WHERE snapshotId = :snapshotId")
+    abstract fun findOptionsFlow(snapshotId: Long): Flow<SnapshotOptionsEntity>
+
+    @Query("SELECT * FROM snapshot ORDER BY updateTime ASC")
+    abstract fun findSnapshotListFlow(): Flow<List<SnapshotEntity>>
+
     @Query("SELECT * FROM snapshot_options")
-    abstract fun findOptionsList(): Flow<List<SnapshotOptionsEntity>>
+    abstract fun findOptionsListFlow(): Flow<List<SnapshotOptionsEntity>>
 }

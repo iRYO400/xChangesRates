@@ -13,7 +13,7 @@ import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.utils.Constants
-import workshop.akbolatss.xchangesrates.utils.chart.setupChart
+import workshop.akbolatss.xchangesrates.utils.chart.setupLineChartInChartOverview
 import workshop.akbolatss.xchangesrates.utils.extension.showSnackBar
 
 class ChartFragment(
@@ -52,7 +52,7 @@ class ChartFragment(
     }
 
     private fun onInitChart() {
-        binding.lineChart.setupChart(_mActivity)
+        binding.lineChart.setupLineChartInChartOverview(_mActivity)
     }
 
     override fun setObserversListeners() {

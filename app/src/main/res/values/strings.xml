@@ -134,5 +134,6 @@
     <string name="splash_exchangers_updated">Database update</string>
     <string name="splash_updating_database">Updating database…</string>
     <string name="splash_updating_database_error">Couldn\'t update data</string>
+    <string name="snapshot_details_load_by_period">Couldn\'t load selected period, please try again</string>
 
 </resources>

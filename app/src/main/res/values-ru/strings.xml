@@ -91,4 +91,5 @@
     <string name="splash_exchangers_updated">Database update</string>
     <string name="splash_updating_database">Updating database...</string>
     <string name="splash_updating_database_error">Couldn\'t update database</string>
+    <string name="snapshot_details_load_by_period">Couldn\'t update snapshot, try again</string>
 </resources>
