@@ -9,9 +9,9 @@ import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.base.resource.onFailure
 import workshop.akbolatss.xchangesrates.base.resource.onSuccess
-import workshop.akbolatss.xchangesrates.data.persistent.model.ExchangeEntity
 import workshop.akbolatss.xchangesrates.domain.model.Chart
 import workshop.akbolatss.xchangesrates.domain.model.ChartDot
+import workshop.akbolatss.xchangesrates.domain.model.Exchange
 import workshop.akbolatss.xchangesrates.domain.usecase.CreateOrUpdateSnapshotUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.DownloadChartUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
@@ -26,8 +26,8 @@ class ChartViewModel(
     private val createOrUpdateSnapshotUseCase: CreateOrUpdateSnapshotUseCase
 ) : BaseViewModel() {
 
-    val exchangeList = MutableLiveData<List<ExchangeEntity>>()
-    val exchange = MediatorLiveData<ExchangeEntity>()
+    val exchangeList = MutableLiveData<List<Exchange>>()
+    val exchange = MediatorLiveData<Exchange>()
     val exchangeError = MutableLiveData<Int>()
 
     val coinList = MediatorLiveData<List<String>>()
@@ -82,7 +82,7 @@ class ChartViewModel(
         selectedPeriod.value = defaultChartPeriod()
     }
 
-    private fun loadCoinsWithDefault(exchange: ExchangeEntity) {
+    private fun loadCoinsWithDefault(exchange: Exchange) {
         if (exchange.currencies.isNotEmpty()) {
             val coins = exchange.currencies.keys.toList().sorted()
             coinList.postValue(coins)
@@ -133,7 +133,7 @@ class ChartViewModel(
     }
 
     private fun loadChart(
-        exchange: ExchangeEntity,
+        exchange: Exchange,
         coin: String,
         currency: String,
         timing: String
