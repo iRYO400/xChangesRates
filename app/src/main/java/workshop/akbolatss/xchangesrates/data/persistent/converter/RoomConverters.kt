@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.ChartDotEntity
 import workshop.akbolatss.xchangesrates.domain.model.ChangesForPeriod
 import workshop.akbolatss.xchangesrates.domain.model.UpdateInterval
 import java.math.BigDecimal
@@ -17,14 +17,14 @@ object RoomConverters : KoinComponent {
 
     @TypeConverter
     @JvmStatic
-    fun fromChartItems(charts: List<PriceByTimeEntity>?): String? {
+    fun fromChartItems(charts: List<ChartDotEntity>?): String? {
         return gson.toJson(charts)
     }
 
     @TypeConverter
     @JvmStatic
-    fun toChartItems(chartsString: String?): List<PriceByTimeEntity>? {
-        val listType = object : TypeToken<List<PriceByTimeEntity>>() {
+    fun toChartItems(chartsString: String?): List<ChartDotEntity>? {
+        val listType = object : TypeToken<List<ChartDotEntity>>() {
         }.type
         return gson.fromJson(chartsString, listType)
     }

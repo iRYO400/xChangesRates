@@ -5,5 +5,5 @@ data class DataResponse(
     val currency: String,
     val source: String,
     val info: InfoResponse,
-    val chart: List<UnitResponse> //TODO rename
+    val chartDots: List<ChartDotResponse>
 )

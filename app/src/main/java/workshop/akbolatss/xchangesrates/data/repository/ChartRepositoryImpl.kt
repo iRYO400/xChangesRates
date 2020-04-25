@@ -5,7 +5,7 @@ import workshop.akbolatss.xchangesrates.base.resource.Either
 import workshop.akbolatss.xchangesrates.base.resource.Failure
 import workshop.akbolatss.xchangesrates.data.remote.service.ApiService
 import workshop.akbolatss.xchangesrates.domain.model.Chart
-import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
+import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.domain.repository.ChartRepository
 
 class ChartRepositoryImpl(
@@ -27,8 +27,8 @@ class ChartRepositoryImpl(
                 low = response.data.info.low,
                 change = response.data.info.change,
                 change24 = response.data.info.change24,
-                units = response.data.chart.map {
-                    PriceByTime(it.timestamp, it.price)
+                chartDots = response.data.chartDots.map {
+                    ChartDot(it.timestamp, it.price)
                 }
             )
         })

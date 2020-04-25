@@ -4,7 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
-import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
+import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.domain.usecase.FindSnapshotByIdFlowUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.UpdateSnapshotByPeriodUseCase
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
@@ -29,7 +29,7 @@ class SnapshotDetailsViewModel(
     val selectedChartDotRate = MediatorLiveData<BigDecimal>()
     val selectedChartDotTime = MediatorLiveData<Date>()
 
-    val charts = MediatorLiveData<List<PriceByTime>>()
+    val charts = MediatorLiveData<List<ChartDot>>()
 
     val chartPeriodList = MutableLiveData<List<ChartPeriod>>()
     val selectedPeriod = MutableLiveData<ChartPeriod>()
@@ -41,7 +41,7 @@ class SnapshotDetailsViewModel(
 
     private fun setObservers() {
         charts.addSource(snapshot) {
-            charts.value = it.charts
+            charts.value = it.chartDots
         }
         selectedChartDotRate.addSource(snapshot) {
             selectedChartDotRate.value = it.rate

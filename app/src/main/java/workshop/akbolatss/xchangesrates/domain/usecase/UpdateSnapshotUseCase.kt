@@ -33,7 +33,7 @@ class UpdateSnapshotUseCase(
                     low = chart.low,
                     change = chart.change,
                     change24 = chart.change24,
-                    charts = chart.units,
+                    chartDots = chart.chartDots,
                     updateTime = Date()
                 )
                 snapshotRepository.update(updatedSnapshot)

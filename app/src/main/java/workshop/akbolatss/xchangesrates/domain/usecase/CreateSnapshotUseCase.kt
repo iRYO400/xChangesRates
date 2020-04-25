@@ -38,7 +38,7 @@ class CreateSnapshotUseCase(
             change24 = params.chart.change24,
             updateTime = Date(),
             options = options,
-            charts = params.chart.units
+            chartDots = params.chart.chartDots
         )
 
         return snapshotRepository.create(snapshot)

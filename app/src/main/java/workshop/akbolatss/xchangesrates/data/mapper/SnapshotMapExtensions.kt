@@ -1,8 +1,8 @@
 package workshop.akbolatss.xchangesrates.data.mapper
 
-import workshop.akbolatss.xchangesrates.data.persistent.model.PriceByTimeEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.ChartDotEntity
 import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
-import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
+import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 
@@ -19,8 +19,8 @@ object SnapshotMap {
         low = low,
         change = change,
         change24 = change24,
-        charts = charts.map {
-            PriceByTimeEntity(it.timestamp, it.price)
+        chartDots = chartDots.map {
+            ChartDotEntity(it.timestamp, it.price)
         }
     )
 }
@@ -40,8 +40,8 @@ object SnapshotEntityMap {
         change = change,
         change24 = change24,
         options = snapshotOptions,
-        charts = charts.map {
-            PriceByTime(it.timestamp, it.price)
+        chartDots = chartDots.map {
+            ChartDot(it.timestamp, it.price)
         }
     )
 }

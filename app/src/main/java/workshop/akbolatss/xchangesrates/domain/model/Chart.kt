@@ -8,7 +8,7 @@ data class Chart(
     val low: BigDecimal,
     val change: BigDecimal,
     val change24: BigDecimal,
-    val units: List<PriceByTime>
+    val chartDots: List<ChartDot>
 ) {
 
     companion object {
@@ -18,7 +18,7 @@ data class Chart(
             low = BigDecimal.ZERO,
             change = BigDecimal.ZERO,
             change24 = BigDecimal.ZERO,
-            units = emptyList()
+            chartDots = emptyList()
         )
     }
 

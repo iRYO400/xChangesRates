@@ -9,12 +9,12 @@ import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
+import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.utils.chart.DateXAxisFormatter
 import workshop.akbolatss.xchangesrates.utils.chart.SnapshotListLineDataSet
 
 @BindingAdapter("entries", "lifecycleOwner")
-fun LineChart.bindData(entryList: List<PriceByTime>?, lifecycleOwner: LifecycleOwner?) {
+fun LineChart.bindData(entryList: List<ChartDot>?, lifecycleOwner: LifecycleOwner?) {
     entryList?.let { safeEntries ->
         lifecycleOwner?.let { lifecycleOwner ->
             lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {

@@ -124,7 +124,7 @@
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/lineChart"
-                    entries="@{model.charts}"
+                    entries="@{model.chartDots}"
                     lifecycleOwner="@{lifecycleOwner}"
                     android:layout_width="0dp"
                     android:layout_height="0dp"

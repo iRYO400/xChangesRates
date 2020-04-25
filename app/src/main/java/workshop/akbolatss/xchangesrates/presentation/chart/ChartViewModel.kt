@@ -11,7 +11,7 @@ import workshop.akbolatss.xchangesrates.base.resource.onFailure
 import workshop.akbolatss.xchangesrates.base.resource.onSuccess
 import workshop.akbolatss.xchangesrates.data.persistent.model.ExchangeEntity
 import workshop.akbolatss.xchangesrates.domain.model.Chart
-import workshop.akbolatss.xchangesrates.domain.model.PriceByTime
+import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.domain.usecase.CreateOrUpdateSnapshotUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.DownloadChartUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
@@ -40,7 +40,7 @@ class ChartViewModel(
 
     val chart = MutableLiveData<Chart>()
     val chartError = MutableLiveData<Int>()
-    val charts = MediatorLiveData<List<PriceByTime>>()
+    val charts = MediatorLiveData<List<ChartDot>>()
 
     val chartPeriodList = MutableLiveData<List<ChartPeriod>>()
     val selectedPeriod = MutableLiveData<ChartPeriod>()
@@ -73,7 +73,7 @@ class ChartViewModel(
             rate.value = it.rate
         }
         charts.addSource(chart) {
-            charts.value = it.units
+            charts.value = it.chartDots
         }
     }
 

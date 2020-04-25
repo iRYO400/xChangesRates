@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "6959eb60ff7581b467d0b9ad89258a96",
+    "identityHash": "7c572f2edaa4290040078ab2dc4c664e",
     "entities": [
       {
         "tableName": "exchange",
@@ -44,7 +44,7 @@
       },
       {
         "tableName": "snapshot",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchangerName` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `rate` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL, `change` TEXT NOT NULL, `change24` TEXT NOT NULL, `charts` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `exchangerName` TEXT NOT NULL, `coin` TEXT NOT NULL, `currency` TEXT NOT NULL, `updateTime` INTEGER NOT NULL, `rate` TEXT NOT NULL, `high` TEXT NOT NULL, `low` TEXT NOT NULL, `change` TEXT NOT NULL, `change24` TEXT NOT NULL, `chartDots` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -107,8 +107,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "charts",
-            "columnName": "charts",
+            "fieldPath": "chartDots",
+            "columnName": "chartDots",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -193,7 +193,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6959eb60ff7581b467d0b9ad89258a96')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7c572f2edaa4290040078ab2dc4c664e')"
     ]
   }
 }
