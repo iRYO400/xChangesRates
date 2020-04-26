@@ -2,6 +2,7 @@ package workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options
 
 import androidx.lifecycle.MutableLiveData
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
+import workshop.akbolatss.xchangesrates.base.resource.flatMap
 import workshop.akbolatss.xchangesrates.base.resource.onFailure
 import workshop.akbolatss.xchangesrates.base.resource.onSuccess
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
@@ -27,7 +28,7 @@ class SnapshotOptionsViewModel(
     val isNotificationEnabled = MutableLiveData<Boolean>()
     val isStickNotification = MutableLiveData<Boolean>()
 
-    val optionsUpdated = MutableLiveData<Boolean>()
+    val updatedSnapshot = MutableLiveData<Snapshot>()
 
     init {
         loadSnapshot()
@@ -67,8 +68,10 @@ class SnapshotOptionsViewModel(
                     chartChangesPeriodIndex,
                     updateIntervalIndex
                 )
-            ).onSuccess {
-                optionsUpdated.value = true
+            ).flatMap {
+                findSnapshotByIdUseCase(scope, FindSnapshotByIdUseCase.Params(snapshotId))
+            }.onSuccess {
+                updatedSnapshot.value = it
             }
         }
     }

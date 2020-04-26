@@ -67,7 +67,6 @@ class ChartViewModel(
         }
         currencyList.addSource(coin) { coin ->
             loadCurrenciesWithDefault(coin)
-            tryLoadChart()
         }
         rate.addSource(chart) {
             rate.value = it.rate

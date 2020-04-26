@@ -9,14 +9,17 @@ import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 fun Context?.createNotificationChannel(snapshot: Snapshot) {
     this?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = snapshot.generateSnapshotName()
             val serviceChannel = NotificationChannel(
-                snapshot.generateSnapshotName(),
-                snapshot.generateSnapshotName(),
+                channelId,
+                channelId,
                 NotificationManager.IMPORTANCE_MIN
             )
 
             val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager?.createNotificationChannel(serviceChannel)
+            val notificationChannel = notificationManager?.getNotificationChannel(channelId)
+            if (notificationChannel == null)
+                notificationManager?.createNotificationChannel(serviceChannel)
         }
     }
 }

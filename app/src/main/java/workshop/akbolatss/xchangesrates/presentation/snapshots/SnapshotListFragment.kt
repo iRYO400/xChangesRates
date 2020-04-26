@@ -3,6 +3,7 @@ package workshop.akbolatss.xchangesrates.presentation.snapshots
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.orhanobut.hawk.Hawk
+import kz.jgroup.pos.util.Event
 import kz.jgroup.pos.util.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
@@ -13,6 +14,7 @@ import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
 import workshop.akbolatss.xchangesrates.databinding.FragmentSnapshotsBinding
 import workshop.akbolatss.xchangesrates.databinding.ItemSnapshotBinding
+import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.presentation.base.Error
 import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
@@ -24,15 +26,15 @@ import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.extension.*
 
 
-class SnapshotsFragment(
+class SnapshotListFragment(
     override val layoutId: Int = R.layout.fragment_snapshots
 ) : BaseFragment<FragmentSnapshotsBinding>(),
     OnSnapshotOptionsCallback {
 
     companion object {
 
-        fun newInstance(): SnapshotsFragment {
-            return SnapshotsFragment()
+        fun newInstance(): SnapshotListFragment {
+            return SnapshotListFragment()
         }
     }
 
@@ -67,6 +69,14 @@ class SnapshotsFragment(
     private fun openSnapshotOptions(itemId: Long) {
         val dialog = SnapshotOptionsDialog.newInstance(itemId)
         dialog.show(childFragmentManager, dialog.tag)
+    }
+
+    override fun onSnapshotNotLoaded() {
+        binding.coordinator.showSnackBar(getString(R.string.snapshot_notification_option_not_loaded_error))
+    }
+
+    override fun onSnapshotUpdated(snapshot: Snapshot) {
+        viewModel.snapshot2ToggleNotification.value = Event(snapshot)
     }
 
     override fun setObserversListeners() {
@@ -140,10 +150,6 @@ class SnapshotsFragment(
 
     fun updateAllSnapshots() {
         viewModel.updateAll()
-    }
-
-    override fun onSnapshotNotLoaded() {
-        binding.coordinator.showSnackBar(getString(R.string.snapshot_notification_option_not_loaded_error))
     }
 
     /**

@@ -13,7 +13,7 @@ import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
-import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsFragment
+import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotListFragment
 
 class RootActivity : SupportActivity(), SpaceOnClickListener {
 
@@ -33,7 +33,7 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
         ) {
             loadMultipleRootFragment(
                 R.id.flContainer, 0,
-                SnapshotsFragment.newInstance(),
+                SnapshotListFragment.newInstance(),
                 ChartFragment.newInstance()
             )
         }
@@ -80,7 +80,7 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
             if (event.peekContent() == ScreenState.CHART)
                 findFragment(ChartFragment::class.java).onSaveSnapshot()
             else if (event.peekContent() == ScreenState.SNAPSHOTS)
-                findFragment(SnapshotsFragment::class.java).updateAllSnapshots()
+                findFragment(SnapshotListFragment::class.java).updateAllSnapshots()
         }
     }
 

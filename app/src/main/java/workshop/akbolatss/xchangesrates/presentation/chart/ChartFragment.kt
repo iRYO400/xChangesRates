@@ -69,6 +69,11 @@ class ChartFragment(
                 viewModel.tryLoadChart()
             }
         })
+        viewModel.currency.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                viewModel.tryLoadChart()
+            }
+        })
         viewModel.chartError.observe(viewLifecycleOwner, Observer {
             it?.let {
                 binding.coordinator.showSnackBar(it)

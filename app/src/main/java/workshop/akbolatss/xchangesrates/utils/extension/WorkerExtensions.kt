@@ -4,10 +4,16 @@ import android.content.Context
 import androidx.work.*
 import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.worker.SnapshotNotificationWorker
+import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
+
 
 fun Context?.launchWorker(snapshot: Snapshot) {
     this?.let {
+        val uniqueWorkName = snapshot.generateSnapshotName()
+        if (isWorkAlreadyExists(it, uniqueWorkName))
+            return@let
+
         val constraints = Constraints.Builder().apply {
             setRequiredNetworkType(NetworkType.CONNECTED)
             setRequiresCharging(false)
@@ -28,10 +34,24 @@ fun Context?.launchWorker(snapshot: Snapshot) {
             }.build()
 
         WorkManager.getInstance(it).enqueueUniquePeriodicWork(
-            snapshot.generateSnapshotName(),
+            uniqueWorkName,
             ExistingPeriodicWorkPolicy.REPLACE,
             notificationWorker
         )
+    }
+}
+
+private fun isWorkAlreadyExists(context: Context, uniqueWorkName: String): Boolean {
+    return try {
+        val workInfos =
+            WorkManager.getInstance(context).getWorkInfosForUniqueWork(uniqueWorkName).get()
+        workInfos.size > 0
+    } catch (e: ExecutionException) {
+        e.printStackTrace()
+        false
+    } catch (e: InterruptedException) {
+        e.printStackTrace()
+        false
     }
 }
 

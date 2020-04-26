@@ -9,6 +9,7 @@ import org.koin.core.parameter.parametersOf
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.dialog.BaseDialogFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentOptionsBinding
+import workshop.akbolatss.xchangesrates.domain.model.Snapshot
 import workshop.akbolatss.xchangesrates.utils.extension.defaultVal
 import workshop.akbolatss.xchangesrates.utils.widget.PopupView
 
@@ -77,9 +78,11 @@ class SnapshotOptionsDialog : BaseDialogFragment<FragmentOptionsBinding>(
                 callback.onSnapshotNotLoaded()
             }
         })
-        viewModel.optionsUpdated.observe(viewLifecycleOwner, Observer {
-            if (it)
+        viewModel.updatedSnapshot.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                callback.onSnapshotUpdated(it)
                 dismiss()
+            }
         })
     }
 
@@ -104,4 +107,5 @@ interface OnSnapshotOptionsCallback {
 
     fun onSnapshotNotLoaded()
 
+    fun onSnapshotUpdated(snapshot: Snapshot)
 }

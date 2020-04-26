@@ -8,7 +8,7 @@ import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartViewModel
 import workshop.akbolatss.xchangesrates.presentation.root.RootActivity
 import workshop.akbolatss.xchangesrates.presentation.root.RootViewModel
-import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsFragment
+import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotListFragment
 import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsViewModel
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsViewModel
@@ -29,7 +29,7 @@ val viewModelModule: Module = module {
         viewModel { RootViewModel() }
     }
 
-    scope(named<SnapshotsFragment>()) {
+    scope(named<SnapshotListFragment>()) {
         viewModel { SnapshotsViewModel(get(), get(), get()) }
     }
 
