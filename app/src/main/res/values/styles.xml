@@ -21,7 +21,6 @@
     </style>
 
     <style name="Widget.MyApp.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="android:background">?android:attr/colorBackground</item>
         <item name="behavior_skipCollapsed">true</item>
         <item name="behavior_fitToContents">true</item>
         <item name="behavior_peekHeight">800dp</item>

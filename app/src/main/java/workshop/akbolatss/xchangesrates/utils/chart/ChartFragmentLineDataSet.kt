@@ -24,6 +24,6 @@ class ChartFragmentLineDataSet(
 
         setDrawFilled(true)
         fillDrawable =
-            ContextCompat.getDrawable(context, R.drawable.bg_chart_fill_gradient_accent)
+            ContextCompat.getDrawable(context, R.drawable.bg_chart_fill_in_chart_fragment)
     }
 }

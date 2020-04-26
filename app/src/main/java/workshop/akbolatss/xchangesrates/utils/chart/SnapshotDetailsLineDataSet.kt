@@ -23,6 +23,6 @@ class SnapshotDetailsLineDataSet(
 
         setDrawFilled(true)
         fillDrawable =
-            ContextCompat.getDrawable(context, R.drawable.bg_chart_fill_gradient_accent)
+            ContextCompat.getDrawable(context, R.drawable.bg_chart_fill_in_snapshot_details)
     }
 }
