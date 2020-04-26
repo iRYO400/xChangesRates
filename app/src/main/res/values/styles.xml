@@ -16,6 +16,7 @@
     </style>
 
     <style name="Theme.MyApp.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:theme">@style/Theme.MyApp</item>
         <item name="bottomSheetStyle">@style/Widget.MyApp.BottomSheet.Modal</item>
     </style>
 
@@ -23,7 +24,7 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="behavior_skipCollapsed">true</item>
         <item name="behavior_fitToContents">true</item>
-        <item name="behavior_peekHeight">1000dp</item>
+        <item name="behavior_peekHeight">800dp</item>
         <item name="behavior_hideable">false</item>
     </style>
 

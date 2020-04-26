@@ -9,7 +9,6 @@ import workshop.akbolatss.xchangesrates.domain.usecase.FindSnapshotByIdFlowUseCa
 import workshop.akbolatss.xchangesrates.domain.usecase.UpdateSnapshotByPeriodUseCase
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
-import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriod
 import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriodList
 import java.math.BigDecimal
 import java.util.*
@@ -53,7 +52,6 @@ class SnapshotDetailsViewModel(
 
     private fun initChartPeriod() {
         chartPeriodList.value = defaultChartPeriodList
-        selectedPeriod.value = defaultChartPeriod()
     }
 
     fun toggleSelected(chartPeriod: ChartPeriod) {

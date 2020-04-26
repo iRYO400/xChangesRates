@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -49,6 +50,8 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
 
     private lateinit var adapter: PeriodSelectorAdapter
 
+    private var isFragmentDraggable = false
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
             setOnShowListener(::onShow)
@@ -62,13 +65,17 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
                 ?: return
 
         BottomSheetBehavior.from(frameLayout).apply {
+            this.
             addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (newState == BottomSheetBehavior.STATE_DRAGGING)
+                    if (newState == BottomSheetBehavior.STATE_DRAGGING && !isFragmentDraggable)
                         state = BottomSheetBehavior.STATE_EXPANDED
                 }
 
-                override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    if (slideOffset >= -0.2 && state != BottomSheetBehavior.STATE_DRAGGING)
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                }
             })
         }
     }
@@ -91,7 +98,7 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
             viewModel.charts.value?.let { list ->
                 val priceByTime = list[it.x.toInt()]
                 viewModel.selectedChartDotRate.value = priceByTime.price
-                viewModel.selectedChartDotTime.value = Date(priceByTime.timestamp)
+                viewModel.selectedChartDotTime.value = Date(priceByTime.timestamp * 1000)
             }
         }
         initRV()
@@ -141,8 +148,16 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
     }
 
     private fun setListeners() {
-        binding.vDragArea.setOnClickListener {
-            dismiss()
+        binding.vDragArea.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    isFragmentDraggable = true
+                }
+                MotionEvent.ACTION_UP or MotionEvent.ACTION_MOVE or MotionEvent.ACTION_CANCEL -> {
+                    isFragmentDraggable = false
+                }
+            }
+            true
         }
     }
 }

@@ -66,6 +66,7 @@ fun LineChart.setupLineChartInSnapshotDetails(
     description.isEnabled = false
     legend.isEnabled = false
     setDrawGridBackground(false)
+    setMaxVisibleValueCount(10)
     minOffset = 0f
 
     setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -77,7 +78,6 @@ fun LineChart.setupLineChartInSnapshotDetails(
     })
 
     setNoDataTextColor(context.getThemeColor(R.attr.colorError))
-//    setMaxVisibleValueCount(20)
 
     with(xAxis) {
         isEnabled = false
@@ -95,7 +95,7 @@ fun LineChart.setupLineChartInSnapshotDetails(
 
     val lineDataSet = SnapshotDetailsLineDataSet(emptyList(), null, context)
     data = LineData(lineDataSet).apply {
-        setDrawValues(false)
+        setValueTextSize(9f)
         isHighlightEnabled = true
     }
 }

@@ -81,7 +81,8 @@ private val DIFF_CALLBACK: DiffUtil.ItemCallback<Snapshot> =
                     oldItem.low == newItem.low &&
                     oldItem.change == newItem.change &&
                     oldItem.updateTime == newItem.updateTime &&
-                    oldItem.options.isNotificationEnabled == newItem.options.isNotificationEnabled
+                    oldItem.options.isNotificationEnabled == newItem.options.isNotificationEnabled &&
+                    oldItem.chartDots == newItem.chartDots
         }
 
     }

@@ -1,6 +1,7 @@
 package workshop.akbolatss.xchangesrates.utils.chart
 
 import android.content.Context
+import android.graphics.Color
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
@@ -16,6 +17,9 @@ class SnapshotDetailsLineDataSet(
         mode = Mode.LINEAR
         lineWidth = 2f
         color = context.getThemeColor(R.attr.colorAccent)
+        circleRadius = 1.4f
+        setCircleColor(Color.WHITE)
+        valueTextColor = Color.WHITE
 
         setDrawFilled(true)
         fillDrawable =

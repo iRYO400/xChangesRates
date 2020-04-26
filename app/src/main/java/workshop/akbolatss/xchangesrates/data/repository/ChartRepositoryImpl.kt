@@ -27,7 +27,7 @@ class ChartRepositoryImpl(
                 low = response.data.info.low,
                 change = response.data.info.change,
                 change24 = response.data.info.change24,
-                chartDots = response.data.chartDots.map {
+                chartDots = response.data.chart.map {
                     ChartDot(it.timestamp, it.price)
                 }
             )

@@ -7,4 +7,8 @@ data class Exchange(
     val caption: String,
     val currencies: Map<String, List<String>>,
     val updateTime: Date
-)
+) {
+
+    override fun toString(): String = caption
+
+}
