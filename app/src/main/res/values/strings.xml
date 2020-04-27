@@ -16,7 +16,7 @@
     <string name="tvEquality" translatable="false">=</string>
     <string name="tvDoubleDots" translatable="false">:</string>
 
-    <string name="no_snapshots">You didn\'t add any snapshot :(</string>
+    <string name="no_snapshots">&#160;&#160;You didn\'t add any snapshot :(\n\nIf You forget how to create Snapshot:\n&#160;&#160;1. Open Charts tab\n&#160;&#160;2. Select interesting currency rates\n&#160;&#160;3. Click Plus button!</string>
     <string name="menu_shoot">Take a Snapshot</string>
     <string name="menu_refresh">Update data</string>
     <string name="menu_progress">Updating…</string>
@@ -95,21 +95,20 @@
     <string name="tvNotifiesLimit" translatable="false">/5</string>
     <string name="tvExchanger">Exchanger</string>
 
-    <string name="showcase_snap_1">Thanks for using XChanges Rate! This is first time You launch app, so let\'s introduce basic functions.</string>
+    <string name="showcase_snap_1">Thanks for using xChangesRates! This is first time You launch app, so let\'s introduce basic functions.</string>
     <string name="showcase_snap_2">Let\'s add Your first Snapshot. Click here.</string>
     <string name="showcase_snap_3">Glad that You added! Now click on it and remember next.</string>
     <string name="showcase_snap_4">One click is to update Snapshot data. Long click is to open Options.</string>
 
+    <string name="showcase_chart_0">Thanks for using xChanges Rates! This is your first time, let\'s check basic functions.</string>
     <string name="showcase_chart_1">This is the main control screen.</string>
-    <string name="showcase_chart_2">There You can select the Exchanger(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
+    <string name="showcase_chart_2">Here You can select the Exchanger(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_3">Coin(Bitcoin, Ethereum, etc)&#8230; &#8212;>></string>
-    <string name="showcase_chart_4">and Currency. Of course if it\'s available.</string>
-    <string name="showcase_chart_5">Also set History timestamp for the gorgeous diagram.</string>
+    <string name="showcase_chart_4">and Currency. Of course, if it\'s available.</string>
+    <string name="showcase_chart_5">In case, if You want to track some Coin/Currency rates with notification</string>
+    <string name="showcase_chart_6">Click that big PLUS button!</string>
+    <string name="showcase_chart_7">Now go to Snapshots tab!</string>
 
-    <string name="showcase_main_1">And You can save it for quick access.</string>
-    <string name="showcase_main_2">Try it Yourself.</string>
-    <string name="showcase_main_3">What about notifications, You can set them here.</string>
-    <string name="showcase_main_4">Now You\'re ready to go on.</string>
     <string name="bottom_bar_snapshots">Snapshots</string>
     <string name="bottom_bar_charts">Charts</string>
     <string name="notification_switch">Notification</string>

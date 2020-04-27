@@ -57,16 +57,15 @@
     <string name="showcase_snap_3">Вот он Ваш первый снэпшот! Теперь кликните и запомните следующее.</string>
     <string name="showcase_snap_4">Один клик - обновляет данные снэпшота. Удержание открывает опции снэпшота.</string>
 
+    <string name="showcase_chart_0">Спасибо за использование XChanges Rates! Это Ваш первый запуск, давайте пройдёмся по базовым функциям.</string>
     <string name="showcase_chart_1">Это основной экран(центр) управления.</string>
     <string name="showcase_chart_2">Вы можете выбрать обменник(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_3">Криптовалюту(Bitcoin, Ethereum, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_4">и Валюту. Конечно, если они поддерживается обменником.</string>
-    <string name="showcase_chart_5">Также можете выбрать временной период и отразить его на великолепном графике.</string>
+    <string name="showcase_chart_5">In case, if You want to track some Coin/Currency rates with notification</string>
+    <string name="showcase_chart_6">Click that big PLUS button!</string>
+    <string name="showcase_chart_7">Then open Snapshots tab</string>
 
-    <string name="showcase_main_1">Для быстрого доступа к выбранным параметрам нажмите сохранить.</string>
-    <string name="showcase_main_2">Попробуйте.</string>
-    <string name="showcase_main_3">Что насчет уведомлении, Вы можете настроить их здесь.</string>
-    <string name="showcase_main_4">Теперь вы готовы к использованию.</string>
     <string name="tv5s">5 секунд</string>
     <string name="tv15min">15 минут</string>
     <string name="tv2weeks">2 недели</string>

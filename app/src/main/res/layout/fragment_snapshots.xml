@@ -2,6 +2,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotsViewModel" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
@@ -11,10 +20,19 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{viewModel.snapshots.empty ? View.GONE : View.VISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:reverseLayout="true"
             app:stackFromEnd="true"
+            tools:itemCount="2"
             tools:listitem="@layout/item_snapshot" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/no_snapshots"
+            android:textColor="?attr/colorSecondary"
+            android:visibility="@{viewModel.snapshots.empty ? View.VISIBLE : View.GONE}" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

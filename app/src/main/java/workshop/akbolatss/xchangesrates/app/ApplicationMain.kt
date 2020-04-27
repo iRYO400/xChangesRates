@@ -17,8 +17,6 @@ class ApplicationMain : Application() {
         TimberLogImplementation.init()
         initKoin()
         initFragmentation()
-
-//        initNotificationChannel()
     }
 
     private fun initHawk() {
@@ -36,10 +34,4 @@ class ApplicationMain : Application() {
             .install()
     }
 
-//    private fun initNotificationChannel() {
-//        if (!Hawk.contains(Constants.HAWK_CHANNEL_CREATED)) {
-//            Hawk.put(Constants.HAWK_CHANNEL_CREATED, true)
-//            UtilityMethods.createDefaultNotificationChannel(this)
-//        }
-//    }
 }

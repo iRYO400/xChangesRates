@@ -15,5 +15,7 @@
     <color name="cardinal">#D22424</color>
     <color name="lime_green">#30CC30</color>
 
+    <color name="big_stone_trans">#80313C47</color>
+
     <color name="translucent">#00000000</color>
 </resources>
