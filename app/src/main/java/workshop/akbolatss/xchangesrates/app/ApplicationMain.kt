@@ -6,6 +6,8 @@ import android.app.Application
 import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.BuildConfig
 import me.yokeyword.fragmentation.Fragmentation
+import timber.log.Timber
+import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.di.KoinInjector
 import workshop.akbolatss.xchangesrates.utils.logging.TimberLogImplementation
 

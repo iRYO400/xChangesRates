@@ -10,3 +10,5 @@
 .externalNativeBuild
 /app/build
 /app/release
+/gradle/keys.gradle
+/gradle/keys-debug.gradle

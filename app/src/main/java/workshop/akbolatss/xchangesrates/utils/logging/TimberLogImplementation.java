@@ -1,5 +1,9 @@
 package workshop.akbolatss.xchangesrates.utils.logging;
 
+import android.util.Log;
+
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,11 +31,11 @@ public class TimberLogImplementation {
         protected void log(int priority, @Nullable String tag, @NotNull String message, @Nullable Throwable t) {
             super.log(priority, tag, message, t);
 
-//            if (priority == Log.ERROR || priority == Log.WARN)
-//                if (t != null)
-//                    FirebaseCrashlytics.getInstance().recordException(t);
-//                else
-//                    FirebaseCrashlytics.getInstance().log(tag + ": Exception with `null` Throwable. Message " + message);
+            if (priority == Log.ERROR || priority == Log.WARN)
+                if (t != null)
+                    FirebaseCrashlytics.getInstance().recordException(t);
+                else
+                    FirebaseCrashlytics.getInstance().log(tag + ": Exception with `null` Throwable. Message " + message);
         }
     }
 
@@ -39,11 +43,11 @@ public class TimberLogImplementation {
 
         @Override
         protected void log(int priority, @Nullable String tag, @NotNull String message, @Nullable Throwable t) {
-//            if (priority == Log.ERROR || priority == Log.WARN)
-//                if (t != null)
-//                    FirebaseCrashlytics.getInstance().recordException(t);
-//                else
-//                    FirebaseCrashlytics.getInstance().log(tag + ": Exception with `null` Throwable. Message " + message);
+            if (priority == Log.ERROR || priority == Log.WARN)
+                if (t != null)
+                    FirebaseCrashlytics.getInstance().recordException(t);
+                else
+                    FirebaseCrashlytics.getInstance().log(tag + ": Exception with `null` Throwable. Message " + message);
         }
     }
 }

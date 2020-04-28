@@ -4,14 +4,17 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
-import kotlinx.android.synthetic.main.activity_main.*
 import me.yokeyword.fragmentation.SupportActivity
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import workshop.akbolatss.xchangesrates.R
+import workshop.akbolatss.xchangesrates.databinding.ActivityMainBinding
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
 import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotListFragment
 
@@ -19,12 +22,18 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
 
     private val viewModel by currentScope.viewModel<RootViewModel>(this)
 
+    private val binding by lazy {
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main).apply {
+            lifecycleOwner = this@RootActivity
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         initSpaceView(savedInstanceState)
         initFragments()
         observeViewModel()
+        initAd()
     }
 
     private fun initFragments() {
@@ -40,20 +49,20 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
     }
 
     private fun initSpaceView(savedInstanceState: Bundle?) {
-        spaceView.initWithSaveInstanceState(savedInstanceState)
-        spaceView.addSpaceItem(
+        binding.spaceView.initWithSaveInstanceState(savedInstanceState)
+        binding.spaceView.addSpaceItem(
             SpaceItem(
                 getString(R.string.bottom_bar_charts),
                 R.drawable.ic_round_score_24
             )
         )
-        spaceView.addSpaceItem(
+        binding.spaceView.addSpaceItem(
             SpaceItem(
                 getString(R.string.bottom_bar_snapshots),
                 R.drawable.ic_round_insert_chart_outlined_24
             )
         )
-        spaceView.setSpaceOnClickListener(this)
+        binding.spaceView.setSpaceOnClickListener(this)
     }
 
     private fun observeViewModel() {
@@ -63,9 +72,21 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
                     val fragment = findFragment(state.fragment)
                     showHideFragment(fragment)
                 }
-                spaceView.changeCenterButtonIcon(event.peekContent().buttonIcon)
+                binding.spaceView.setCentreButtonIcon(event.peekContent().buttonIcon)
             }
         })
+    }
+
+    private fun initAd() {
+        MobileAds.initialize(this) {}
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
+//        val adView = AdView(this).apply {
+//            adSize = AdSize.BANNER
+//            adUnitId = getString(R.string.bottomBanner)
+//        }
+//        binding.coordinator.addView(adView)
     }
 
     override fun onCentreButtonClick() {
