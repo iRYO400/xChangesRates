@@ -8,6 +8,9 @@ import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotOptionsEnt
 @Dao
 abstract class SnapshotDao {
 
+    @Query("SELECT COUNT(id) FROM snapshot")
+    abstract suspend fun getSnapshotCount(): Int
+
     @Transaction
     open suspend fun create(
         snapshot: SnapshotEntity,
@@ -61,4 +64,5 @@ abstract class SnapshotDao {
 
     @Query("SELECT * FROM snapshot_options")
     abstract fun findOptionsListFlow(): Flow<List<SnapshotOptionsEntity>>
+
 }

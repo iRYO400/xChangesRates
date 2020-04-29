@@ -174,7 +174,7 @@ class SnapshotListFragment(
         )
             interstitialOnSnapshotDetails.show()
         else
-            Timber.e("InterstitialAd in SnapshotDetails not loaded")
+            Timber.e("InterstitialAd not loaded when SnapshotDetails opened")
     }
 
     fun updateAllSnapshots() {

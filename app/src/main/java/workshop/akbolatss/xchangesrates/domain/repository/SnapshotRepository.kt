@@ -9,6 +9,8 @@ import workshop.akbolatss.xchangesrates.domain.model.SnapshotOptions
 
 interface SnapshotRepository {
 
+    suspend fun getSnapshotCount(): Int
+
     suspend fun create(snapshot: Snapshot): Either<Failure, None>
 
     suspend fun update(updatedSnapshot: Snapshot): Either<Failure, None>

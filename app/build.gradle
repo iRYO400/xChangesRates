@@ -30,11 +30,13 @@ android {
             apply from: '../gradle/keys-debug.gradle'
             resValue("string", "bottomBanner", bottomBanner)
             resValue("string", "snapshotsListInterstitial", snapshotsListInterstitial)
+            resValue("string", "snapshotsCreateInterstitial", snapshotsCreateInterstitial)
         }
         release {
             apply from: '../gradle/keys.gradle'
             resValue("string", "bottomBanner", bottomBanner)
             resValue("string", "snapshotsListInterstitial", snapshotsListInterstitial)
+            resValue("string", "snapshotsCreateInterstitial", snapshotsCreateInterstitial)
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

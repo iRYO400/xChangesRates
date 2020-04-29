@@ -14,6 +14,7 @@ import workshop.akbolatss.xchangesrates.domain.model.ChartDot
 import workshop.akbolatss.xchangesrates.domain.model.Exchange
 import workshop.akbolatss.xchangesrates.domain.usecase.CreateOrUpdateSnapshotUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.DownloadChartUseCase
+import workshop.akbolatss.xchangesrates.domain.usecase.GetSnapshotCountUseCase
 import workshop.akbolatss.xchangesrates.domain.usecase.LoadExchangesUseCase
 import workshop.akbolatss.xchangesrates.presentation.model.ChartPeriod
 import workshop.akbolatss.xchangesrates.presentation.model.defaultChartPeriod
@@ -23,7 +24,8 @@ import java.math.BigDecimal
 class ChartViewModel(
     private val findExchangesUseCase: LoadExchangesUseCase,
     private val loadChartUseCase: DownloadChartUseCase,
-    private val createOrUpdateSnapshotUseCase: CreateOrUpdateSnapshotUseCase
+    private val createOrUpdateSnapshotUseCase: CreateOrUpdateSnapshotUseCase,
+    private val getSnapshotCountUseCase: GetSnapshotCountUseCase
 ) : BaseViewModel() {
 
     val exchangeList = MutableLiveData<List<Exchange>>()
@@ -49,6 +51,8 @@ class ChartViewModel(
 
     val snapshotCreated = MutableLiveData<Event<Int>>()
     val snapshotCreatedError = MutableLiveData<Event<Int>>()
+
+    val showInterstitialAd = MutableLiveData<Boolean>()
 
     init {
         setObservers()
@@ -197,6 +201,7 @@ class ChartViewModel(
                 )
             ).onSuccess {
                 snapshotCreated.value = Event(R.string.chart_create_snapshot_success)
+                tryShowInterstitialAd()
             }.onFailure {
                 if (it is Failure.SnapshotAlreadyExists)
                     snapshotCreatedError.value =
@@ -205,4 +210,15 @@ class ChartViewModel(
                     snapshotCreatedError.value = Event(R.string.chart_create_snapshot_error_unknown)
             }
         }
+
+    private fun tryShowInterstitialAd() {
+        executeUseCase { scope ->
+            getSnapshotCountUseCase(scope, GetSnapshotCountUseCase.Params())
+                .onSuccess {
+                    if (it > 3)
+                        showInterstitialAd.value = true
+                }
+        }
+    }
+
 }

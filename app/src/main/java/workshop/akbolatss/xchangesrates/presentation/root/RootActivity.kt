@@ -3,7 +3,9 @@ package workshop.akbolatss.xchangesrates.presentation.root
 import android.content.Context
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.google.android.gms.ads.AdListener
@@ -19,6 +21,7 @@ import workshop.akbolatss.xchangesrates.databinding.ActivityMainBinding
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
 import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotListFragment
 import workshop.akbolatss.xchangesrates.utils.Constants
+import workshop.akbolatss.xchangesrates.utils.extension.dpToPx
 import workshop.akbolatss.xchangesrates.utils.extension.visible
 
 class RootActivity : SupportActivity(), SpaceOnClickListener {
@@ -75,7 +78,7 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
                     val fragment = findFragment(state.fragment)
                     showHideFragment(fragment)
                 }
-                binding.spaceView.setCentreButtonIcon(event.peekContent().buttonIcon)
+                binding.spaceView.changeCenterButtonIcon(event.peekContent().buttonIcon)
             }
         })
     }
@@ -87,6 +90,8 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
             binding.adView.adListener = object : AdListener() {
                 override fun onAdLoaded() {
                     super.onAdLoaded()
+                    val params = binding.flContainer.layoutParams as ViewGroup.MarginLayoutParams
+                    params.bottomMargin = dpToPx(110f).toInt()
                     binding.adView.visible()
                 }
             }

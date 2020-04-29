@@ -2,12 +2,16 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
 import com.orhanobut.hawk.Hawk
 import kz.jgroup.pos.util.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.databinding.FragmentChartBinding
@@ -31,16 +35,19 @@ class ChartFragment(
 
     private lateinit var adapter: PeriodSelectorAdapter
 
+    private lateinit var interstitialOnSnapshotCreate: InterstitialAd
+
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         binding.viewModel = viewModel
         binding.viewLifecycleOwner = viewLifecycleOwner
 
-        onInitRV()
-        onInitChart()
+        initRV()
+        initChart()
+        preloadInterstitialAd()
     }
 
-    private fun onInitRV() {
+    private fun initRV() {
         adapter = PeriodSelectorAdapter { historyButton, _ ->
             highlightSelected(historyButton)
         }
@@ -51,8 +58,20 @@ class ChartFragment(
         viewModel.toggleSelected(historyButton)
     }
 
-    private fun onInitChart() {
+    private fun initChart() {
         binding.lineChart.setupLineChartInChartOverview(_mActivity)
+    }
+
+    private fun preloadInterstitialAd() {
+        interstitialOnSnapshotCreate = InterstitialAd(_mActivity).apply {
+            adUnitId = getString(R.string.snapshotsCreateInterstitial)
+            loadAd(AdRequest.Builder().build())
+            adListener = object : AdListener() {
+                override fun onAdClosed() {
+                    loadAd(AdRequest.Builder().build())
+                }
+            }
+        }
     }
 
     override fun setObserversListeners() {
@@ -94,10 +113,24 @@ class ChartFragment(
         viewModel.snapshotCreatedError.observe(viewLifecycleOwner, EventObserver {
             binding.coordinator.showSnackBar(it)
         })
+        viewModel.showInterstitialAd.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                showInterstitialAd()
+            }
+        })
     }
 
     fun onSaveSnapshot() {
         viewModel.tryCreateSnapshot()
+    }
+
+    private fun showInterstitialAd() {
+        if (::interstitialOnSnapshotCreate.isInitialized
+            && interstitialOnSnapshotCreate.isLoaded
+        )
+            interstitialOnSnapshotCreate.show()
+        else
+            Timber.e("InterstitialAd not loaded when SnapshotCreated")
     }
 
     override fun onResume() {

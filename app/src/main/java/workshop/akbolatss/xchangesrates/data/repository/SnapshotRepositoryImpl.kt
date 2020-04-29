@@ -23,6 +23,9 @@ class SnapshotRepositoryImpl(
     private val snapshotDao: SnapshotDao
 ) : BaseRepository(), SnapshotRepository {
 
+    override suspend fun getSnapshotCount(): Int =
+        snapshotDao.getSnapshotCount()
+
     override suspend fun create(snapshot: Snapshot): Either<Failure, None> {
         return insert(
             map = {
