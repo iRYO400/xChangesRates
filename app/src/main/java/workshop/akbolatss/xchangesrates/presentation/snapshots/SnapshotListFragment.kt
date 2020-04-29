@@ -2,13 +2,14 @@ package workshop.akbolatss.xchangesrates.presentation.snapshots
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import com.orhanobut.hawk.Hawk
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
 import kz.jgroup.pos.util.Event
 import kz.jgroup.pos.util.EventObserver
-import me.toptas.fancyshowcase.FancyShowCaseQueue
-import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseFragment
 import workshop.akbolatss.xchangesrates.base.DataBoundViewHolder
@@ -22,7 +23,6 @@ import workshop.akbolatss.xchangesrates.presentation.base.ViewState
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.OnSnapshotOptionsCallback
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsDialog
-import workshop.akbolatss.xchangesrates.utils.Constants
 import workshop.akbolatss.xchangesrates.utils.extension.*
 
 
@@ -40,15 +40,19 @@ class SnapshotListFragment(
 
     private val viewModel by currentScope.viewModel<SnapshotsViewModel>(this)
 
+    private lateinit var interstitialOnSnapshotDetails: InterstitialAd
+
     private lateinit var adapter: SnapshotsAdapter
 
     override fun init(savedInstanceState: Bundle?) {
         super.init(savedInstanceState)
         initRecyclerView()
+        preloadInterstitialAd()
     }
 
     private fun initRecyclerView() {
         adapter = SnapshotsAdapter(itemClickListener = { itemId: Long, _: Int ->
+            viewModel.updateSnapshotClickTimes()
             openSnapshotDetails(itemId)
         }, showOptionsClickListener = { itemId ->
             openSnapshotOptions(itemId)
@@ -79,6 +83,18 @@ class SnapshotListFragment(
         viewModel.snapshot2ToggleNotification.value = Event(snapshot)
     }
 
+    private fun preloadInterstitialAd() {
+        interstitialOnSnapshotDetails = InterstitialAd(_mActivity).apply {
+            adUnitId = getString(R.string.snapshotsListInterstitial)
+            loadAd(AdRequest.Builder().build())
+            adListener = object : AdListener() {
+                override fun onAdClosed() {
+                    loadAd(AdRequest.Builder().build())
+                }
+            }
+        }
+    }
+
     override fun setObserversListeners() {
         observeViewModel()
     }
@@ -101,6 +117,10 @@ class SnapshotListFragment(
                     context.deleteNotificationChannel(snapshot)
                 }
             })
+        viewModel.snapshotClickedTimes.observe(viewLifecycleOwner, EventObserver {
+            if (it.rem(3) == 0)
+                showInterstitialAd()
+        })
     }
 
     private fun handleSnapshotLoadingState(
@@ -148,27 +168,17 @@ class SnapshotListFragment(
         viewModel.toggleNotification(itemId)
     }
 
-    fun updateAllSnapshots() {
-        viewModel.updateAll()
+    private fun showInterstitialAd() {
+        if (::interstitialOnSnapshotDetails.isInitialized &&
+            interstitialOnSnapshotDetails.isLoaded
+        )
+            interstitialOnSnapshotDetails.show()
+        else
+            Timber.e("InterstitialAd in SnapshotDetails not loaded")
     }
 
-    /**
-     * Show ShowCase at startup
-     */
-    private fun showStartupShowCase() {
-        if (!Hawk.get(Constants.HAWK_SHOWCASE_0_DONE, false)) {
-            val showCaseQueue: FancyShowCaseQueue
-            val showCase1 = FancyShowCaseView.Builder(activity!!)
-                .title(resources.getString(R.string.showcase_snap_1))
-//                .backgroundColor(R.color.colorShowCaseBG)
-                .build()
-
-            showCaseQueue = FancyShowCaseQueue()
-                .add(showCase1)
-
-            showCaseQueue.show()
-            Hawk.put(Constants.HAWK_SHOWCASE_0_DONE, true)
-        }
+    fun updateAllSnapshots() {
+        viewModel.updateAll()
     }
 
 }

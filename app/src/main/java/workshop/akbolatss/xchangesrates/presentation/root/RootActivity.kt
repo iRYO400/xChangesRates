@@ -6,10 +6,11 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.MobileAds
 import com.luseen.spacenavigation.SpaceItem
 import com.luseen.spacenavigation.SpaceOnClickListener
+import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.SupportActivity
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,6 +18,8 @@ import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.databinding.ActivityMainBinding
 import workshop.akbolatss.xchangesrates.presentation.chart.ChartFragment
 import workshop.akbolatss.xchangesrates.presentation.snapshots.SnapshotListFragment
+import workshop.akbolatss.xchangesrates.utils.Constants
+import workshop.akbolatss.xchangesrates.utils.extension.visible
 
 class RootActivity : SupportActivity(), SpaceOnClickListener {
 
@@ -78,15 +81,16 @@ class RootActivity : SupportActivity(), SpaceOnClickListener {
     }
 
     private fun initAd() {
-        MobileAds.initialize(this) {}
-
-        val adRequest = AdRequest.Builder().build()
-        binding.adView.loadAd(adRequest)
-//        val adView = AdView(this).apply {
-//            adSize = AdSize.BANNER
-//            adUnitId = getString(R.string.bottomBanner)
-//        }
-//        binding.coordinator.addView(adView)
+        if (Hawk.get(Constants.HAWK_IS_INTRO_START_DONE, false)) {
+            val adRequest = AdRequest.Builder().build()
+            binding.adView.loadAd(adRequest)
+            binding.adView.adListener = object : AdListener() {
+                override fun onAdLoaded() {
+                    super.onAdLoaded()
+                    binding.adView.visible()
+                }
+            }
+        }
     }
 
     override fun onCentreButtonClick() {

@@ -11,7 +11,7 @@ data class ChartPeriod(
 
 val defaultChartPeriodList = listOf(
     ChartPeriod(Constants.MINUTES_10, R.string.tv10min, false),
-    defaultChartPeriod(),
+    ChartPeriod(Constants.HOUR_1, R.string.tv1h, false),
     ChartPeriod(Constants.HOUR_3, R.string.tv3h, false),
     ChartPeriod(Constants.HOUR_12, R.string.tv12h, false),
     ChartPeriod(Constants.HOUR_24, R.string.tv24h, false),
@@ -24,5 +24,5 @@ val defaultChartPeriodList = listOf(
     ChartPeriod(Constants.YEAR_5, R.string.tv5y, false)
 )
 
-fun defaultChartPeriod() = ChartPeriod(Constants.HOUR_1, R.string.tv1h, true)
+fun defaultChartPeriod() = ChartPeriod(Constants.HOUR_1, R.string.tv1h, false)
 

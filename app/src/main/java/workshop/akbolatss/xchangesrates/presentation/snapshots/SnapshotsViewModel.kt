@@ -25,6 +25,8 @@ class SnapshotsViewModel(
 
     val snapshot2ToggleNotification = MutableLiveData<Event<Snapshot>>()
 
+    val snapshotClickedTimes = MutableLiveData<Event<Int>>()
+
     fun updateSingle(itemId: Long, position: Int) {
         executeUseCase(
             viewState = { viewState ->
@@ -50,6 +52,11 @@ class SnapshotsViewModel(
                     snapshot2ToggleNotification.value = Event(snapshot)
                 }
         }
+    }
+
+    fun updateSnapshotClickTimes() {
+        var current = snapshotClickedTimes.value?.peekContent() ?: 0
+        snapshotClickedTimes.value = Event(++current)
     }
 
 }

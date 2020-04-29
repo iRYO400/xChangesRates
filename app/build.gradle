@@ -28,13 +28,13 @@ android {
     buildTypes {
         debug {
             apply from: '../gradle/keys-debug.gradle'
-            resValue("string", "admobId", admobId)
             resValue("string", "bottomBanner", bottomBanner)
+            resValue("string", "snapshotsListInterstitial", snapshotsListInterstitial)
         }
         release {
             apply from: '../gradle/keys.gradle'
-            resValue("string", "admobId", admobId)
             resValue("string", "bottomBanner", bottomBanner)
+            resValue("string", "snapshotsListInterstitial", snapshotsListInterstitial)
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
