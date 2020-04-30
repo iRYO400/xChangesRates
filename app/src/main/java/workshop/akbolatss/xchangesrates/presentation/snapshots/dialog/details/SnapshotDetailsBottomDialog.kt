@@ -1,6 +1,8 @@
 package workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details
 
+import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -52,6 +54,16 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
 
     private var isFragmentDraggable = false
 
+    private lateinit var callback: OnSnapshotDetailsCallback
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (parentFragment is OnSnapshotDetailsCallback)
+            callback = parentFragment as OnSnapshotDetailsCallback
+        else
+            throw IllegalStateException("Caller must implement ${OnSnapshotDetailsCallback::class.java.simpleName}")
+    }
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState).apply {
             setOnShowListener(::onShow)
@@ -65,8 +77,7 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
                 ?: return
 
         BottomSheetBehavior.from(frameLayout).apply {
-            this.
-            addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            this.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     if (newState == BottomSheetBehavior.STATE_DRAGGING && !isFragmentDraggable)
                         state = BottomSheetBehavior.STATE_EXPANDED
@@ -147,6 +158,7 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setListeners() {
         binding.vDragArea.setOnTouchListener { _, event ->
             when (event.action) {
@@ -159,5 +171,15 @@ class SnapshotDetailsBottomDialog : BottomSheetDialogFragment() {
             }
             true
         }
+
+        binding.ivDelete.setOnClickListener {
+            callback.deleteSnapshot(viewModel.snapshotId)
+            dismiss()
+        }
+    }
+
+    interface OnSnapshotDetailsCallback {
+
+        fun deleteSnapshot(snapshotId: Long)
     }
 }

@@ -1,9 +1,7 @@
 package workshop.akbolatss.xchangesrates.data.repository
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 import workshop.akbolatss.xchangesrates.base.BaseRepository
 import workshop.akbolatss.xchangesrates.base.None
 import workshop.akbolatss.xchangesrates.base.resource.Either
@@ -56,6 +54,12 @@ class SnapshotRepositoryImpl(
         })
     }
 
+    override suspend fun deleteSnapshot(snapshotId: Long): Either<Failure, None> {
+        return delete(query = {
+            snapshotDao.delete(snapshotId)
+        })
+    }
+
     override suspend fun findBy(id: Long): Snapshot {
         val snapshotEntity = snapshotDao.findBy(id) ?: return Snapshot.empty()
         val snapshotOptionsEntity = snapshotDao.findOptions(id)
@@ -87,6 +91,7 @@ class SnapshotRepositoryImpl(
         .flowOn(Dispatchers.IO)
 
     override fun findByFlow(id: Long): Flow<Snapshot> = snapshotDao.findFlow(id)
+        .filterNotNull()
         .combine(
             snapshotDao.findOptionsFlow(id)
         ) { snapshotEntity: SnapshotEntity, optionsEntity: SnapshotOptionsEntity ->

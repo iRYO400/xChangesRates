@@ -17,6 +17,8 @@ interface SnapshotRepository {
 
     suspend fun updateOptions(updatedOptions: SnapshotOptions): Either<Failure, None>
 
+    suspend fun deleteSnapshot(snapshotId: Long): Either<Failure, None>
+
     suspend fun findBy(id: Long): Snapshot
 
     suspend fun findBy(exchange: String, coin: String, currency: String): Snapshot

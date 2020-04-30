@@ -94,5 +94,6 @@
     <string name="splash_updating_database">Updating database…</string>
     <string name="splash_updating_database_error">Could not update data</string>
     <string name="snapshot_details_load_by_period">Could not load selected period, please try again</string>
+    <string name="snapshot_delete_error">Error occurred while deleting</string>
 
 </resources>

@@ -43,4 +43,7 @@ val useCaseModule = module {
     factory {
         GetSnapshotCountUseCase(get())
     }
+    factory {
+        DeleteSnapshotUseCase(get())
+    }
 }

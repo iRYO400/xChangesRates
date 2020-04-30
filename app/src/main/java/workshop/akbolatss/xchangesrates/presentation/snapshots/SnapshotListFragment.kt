@@ -21,6 +21,7 @@ import workshop.akbolatss.xchangesrates.presentation.base.Loading
 import workshop.akbolatss.xchangesrates.presentation.base.Success
 import workshop.akbolatss.xchangesrates.presentation.base.ViewState
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog
+import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.details.SnapshotDetailsBottomDialog.OnSnapshotDetailsCallback
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.OnSnapshotOptionsCallback
 import workshop.akbolatss.xchangesrates.presentation.snapshots.dialog.options.SnapshotOptionsDialog
 import workshop.akbolatss.xchangesrates.utils.extension.*
@@ -29,7 +30,8 @@ import workshop.akbolatss.xchangesrates.utils.extension.*
 class SnapshotListFragment(
     override val layoutId: Int = R.layout.fragment_snapshots
 ) : BaseFragment<FragmentSnapshotsBinding>(),
-    OnSnapshotOptionsCallback {
+    OnSnapshotOptionsCallback,
+    OnSnapshotDetailsCallback {
 
     companion object {
 
@@ -67,7 +69,11 @@ class SnapshotListFragment(
 
     private fun openSnapshotDetails(snapshotId: Long) {
         val dialog = SnapshotDetailsBottomDialog.newInstance(snapshotId)
-        dialog.show(requireFragmentManager(), dialog.tag)
+        dialog.show(childFragmentManager, dialog.tag)
+    }
+
+    override fun deleteSnapshot(snapshotId: Long) {
+        viewModel.deleteSnapshot(snapshotId)
     }
 
     private fun openSnapshotOptions(itemId: Long) {

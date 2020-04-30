@@ -55,4 +55,6 @@
     <string name="splash_updating_database">Обновление базы данных…</string>
     <string name="splash_updating_database_error">Не получилось обновить базы данных</string>
     <string name="snapshot_details_load_by_period">Возникли неполадки с данными, попробуй еще раз</string>
+    <string name="snapshot_delete_error">Возникла ошибка при удалении</string>
+
 </resources>
