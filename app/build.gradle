@@ -39,6 +39,7 @@ android {
             resValue("string", "snapshotsCreateInterstitial", snapshotsCreateInterstitial)
 
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
