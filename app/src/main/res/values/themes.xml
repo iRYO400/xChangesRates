@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MyApp" parent="Base.Theme.MyApp" />
+
+    <style name="Theme.MyApp.Splash" parent="Theme.MyApp">
+        <item name="android:windowBackground">@drawable/bg_splash_screen</item>
+    </style>
+
+    <style name="Base.Theme.MyApp" parent="Base.Theme.Root">
+        <item name="colorPrimary">@color/licorice</item>
+        <item name="colorSecondary">@color/san_juan</item>
+        <item name="colorSurface">@color/big_stone</item>
+
+        <item name="colorAccent">@color/aquamarine</item>
+        <item name="colorAccentDark">@color/lochinvar</item>
+
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnSecondary">@color/lynch</item>
+        <item name="colorOnSurface">@color/white</item>
+
+        <item name="android:colorBackground">@color/rhino</item>
+
+        <item name="colorError">@color/cardinal</item>
+
+        <item name="iconColor">@color/white</item>
+        <item name="popupBackgroundColor">@color/translucent</item>
+
+        <item name="dialogTheme">@style/ThemeOverlay.MyApp.Dialog</item>
+        <item name="bottomSheetDialogTheme">@style/Theme.MyApp.BottomSheetDialog</item>
+
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MyApp.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MyApp.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MyApp.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MyApp.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MyApp.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MyApp.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MyApp.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MyApp.Subtitle2</item>
+        <item name="textAppearanceBody1">@style/TextAppearance.MyApp.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MyApp.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MyApp.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MyApp.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MyApp.Overline</item>
+    </style>
+
+    <style name="Base.Theme.Root" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">?android:attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+</resources>

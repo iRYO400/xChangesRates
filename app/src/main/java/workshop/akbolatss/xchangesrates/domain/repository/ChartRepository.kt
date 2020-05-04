@@ -1,11 +1,8 @@
 package workshop.akbolatss.xchangesrates.domain.repository
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.model.response.ChartResponse
+import workshop.akbolatss.xchangesrates.base.resource.Either
+import workshop.akbolatss.xchangesrates.base.resource.Failure
+import workshop.akbolatss.xchangesrates.domain.model.Chart
 
 /**
  * Author: Akbolat Sadvakassov
@@ -14,18 +11,10 @@ import workshop.akbolatss.xchangesrates.model.response.ChartResponse
 
 interface ChartRepository {
 
-    fun getQueryResult(coin: String, exchange: String,
-                       currency: String, term: String): Observable<ChartResponse>
-
-    fun getSnapshot(coin: String, exchange: String,
-                    currency: String, term: String): Observable<ChartResponse>
-
-    val allChartData: Flowable<List<ChartData>>
-
-    fun onAddChartData(chartData: ChartData): Single<Long>
-
-    fun onDeleteChartData(chartData: ChartData): Completable
-
-    fun onUpdateChartData(chartData: ChartData): Observable<ChartData>
-    fun onDeleteChartData(id: Long): Completable
+    suspend fun download(
+        exchange: String,
+        coin: String,
+        currency: String,
+        timing: String
+    ): Either<Failure, Chart>
 }

@@ -2,24 +2,27 @@ package workshop.akbolatss.xchangesrates.data.persistent
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import workshop.akbolatss.xchangesrates.model.response.ChartData
-import workshop.akbolatss.xchangesrates.model.response.ChartInfo
-import workshop.akbolatss.xchangesrates.model.response.ChartItem
-import workshop.akbolatss.xchangesrates.data.persistent.dao.ChartDataDao
+import androidx.room.TypeConverters
+import workshop.akbolatss.xchangesrates.data.persistent.converter.RoomConverters
+import workshop.akbolatss.xchangesrates.data.persistent.dao.ExchangeDao
+import workshop.akbolatss.xchangesrates.data.persistent.dao.SnapshotDao
+import workshop.akbolatss.xchangesrates.data.persistent.model.ExchangeEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotEntity
+import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotOptionsEntity
 
-@Database(entities = [(ChartData::class), (ChartInfo::class), (ChartItem::class)], version = 1)
+@Database(
+    entities = [
+        ExchangeEntity::class,
+        SnapshotEntity::class,
+        SnapshotOptionsEntity::class
+    ],
+    version = 1,
+    exportSchema = true
+)
+@TypeConverters(RoomConverters::class)
 abstract class AppDataBase : RoomDatabase() {
 
-    abstract fun chartDataDao(): ChartDataDao
+    abstract fun exchangeDao(): ExchangeDao
 
-    companion object {
-        val MIGRATION_1_2 = object : Migration(1, 2) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE ImageResponse ADD Column field1 INTEGER DEFAULT 0 NOT NULL")
-            }
-
-        }
-    }
+    abstract fun snapshotDao(): SnapshotDao
 }

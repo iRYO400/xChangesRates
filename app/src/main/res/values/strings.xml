@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">XChanges Rates</string>
+    <string name="app_name" translatable="false">xChanges Rates</string>
     <string name="my_name" translatable="false">Akbolat Sadvakassov</string>
 
     <string name="profile_subtitle" translatable="false">Mobile Developer</string>
@@ -16,11 +16,7 @@
     <string name="tvEquality" translatable="false">=</string>
     <string name="tvDoubleDots" translatable="false">:</string>
 
-
-    <string name="tvError">Something goes wrong…</string>
-
-    <string name="no_snapshots">You didn\'t add any snapshot :(</string>
-    <string name="toast_saving">Saving snapshot</string>
+    <string name="no_snapshots">&#160;&#160;You didn\'t add any snapshot :(\n\nIf You forget how to create Snapshot:\n&#160;&#160;1. Open Charts tab\n&#160;&#160;2. Select interesting currency rates\n&#160;&#160;3. Click Plus button!</string>
     <string name="menu_shoot">Take a Snapshot</string>
     <string name="menu_refresh">Update data</string>
     <string name="menu_progress">Updating…</string>
@@ -28,18 +24,18 @@
 
     //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
 
-    <string name="tv10min">10 minutes</string>
-    <string name="tv1h">Hour</string>
-    <string name="tv3h">3 hours</string>
-    <string name="tv12h">12 hours</string>
-    <string name="tv24h">24 hours</string>
-    <string name="tv1w">Week</string>
-    <string name="tv1m">Month</string>
-    <string name="tv3m">3 months</string>
-    <string name="tv6m">Half a year</string>
-    <string name="tv1y">Year</string>
-    <string name="tv2y">2 years</string>
-    <string name="tv5y">5 years</string>
+    <string name="tv10min">10M</string>
+    <string name="tv1h">1H</string>
+    <string name="tv3h">3H</string>
+    <string name="tv12h">12H</string>
+    <string name="tv24h">24H</string>
+    <string name="tv1w">1W</string>
+    <string name="tv1m">1M</string>
+    <string name="tv3m">3M</string>
+    <string name="tv6m">6M</string>
+    <string name="tv1y">1Y</string>
+    <string name="tv2y">2Y</string>
+    <string name="tv5y">5Y</string>
 
     <string-array name="array_history_timing">
         <item>10 minutes</item>
@@ -56,27 +52,6 @@
         <item>5 years</item>
     </string-array>
 
-    <string-array name="array_interval_updates">
-        <item>5 seconds</item>
-        <item>10 seconds</item>
-        <item>15 seconds</item>
-        <item>30 seconds</item>
-        <item>1 minute</item>
-        <item>2 minutes</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>5 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-        <item>48 hours</item>
-        <item>1 week</item>
-        <item>2 weeks</item>
-    </string-array>
-
     <string-array name="array_interval_updates_smart">
         <item>15 minutes</item>
         <item>30 minutes</item>
@@ -90,24 +65,8 @@
         <item>2 weeks</item>
     </string-array>
 
-    <!--<string name="tv5s">5 seconds</string>-->
-    <!--<string name="tv10s">10 seconds</string>-->
-    <!--<string name="tv15s">15 seconds</string>-->
-    <!--<string name="tv30s">30 seconds</string>-->
-    <!--<string name="tv1min">1 minute</string>-->
-    <!--<string name="tv2min">2 minutes</string>-->
-    <!--<string name="tv5min">5 minutes</string>-->
-    <!--<string name="tv10min">10 minutes</string>-->
-    <string name="tv15min">15 minutes</string>
-    <!--<string name="tv30min">30 minutes</string>-->
-    <!--<string name="tv1hour">1 hour</string>-->
-    <!--<string name="tv2hour">2 hours</string>-->
-    <!--<string name="tv5hour">5 hours</string>-->
-    <!--<string name="tv12hour">12 hours</string>-->
-    <!--<string name="tv24hour">24 hours</string>-->
-    <!--<string name="tv48hour">48 hours</string>-->
-    <!--<string name="tv1week">1 week</string>-->
-    <string name="tv2weeks">2 weeks</string>
+    <string name="tv15min">15M</string>
+    <string name="tv2weeks">2W</string>
 
     <string-array name="array_time">
         <item>10 minutes</item>
@@ -136,26 +95,44 @@
     <string name="tvNotifiesLimit" translatable="false">/5</string>
     <string name="tvExchanger">Exchanger</string>
 
-    <string name="showcase_snap_1">Thanks for using XChanges Rate! This is first time You launch app, so let\'s introduce basic functions.</string>
+    <string name="showcase_snap_1">Thanks for using xChangesRates! This is first time You launch app, so let\'s introduce basic functions.</string>
     <string name="showcase_snap_2">Let\'s add Your first Snapshot. Click here.</string>
     <string name="showcase_snap_3">Glad that You added! Now click on it and remember next.</string>
     <string name="showcase_snap_4">One click is to update Snapshot data. Long click is to open Options.</string>
 
+    <string name="showcase_chart_0">Thanks for using xChanges Rates! This is your first time, let\'s check basic functions.</string>
     <string name="showcase_chart_1">This is the main control screen.</string>
-    <string name="showcase_chart_2">There You can select the Exchanger(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
+    <string name="showcase_chart_2">Here You can select the Exchanger(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_3">Coin(Bitcoin, Ethereum, etc)&#8230; &#8212;>></string>
-    <string name="showcase_chart_4">and Currency. Of course if it\'s available.</string>
-    <string name="showcase_chart_5">Also set History timestamp for the gorgeous diagram.</string>
+    <string name="showcase_chart_4">and Currency. Of course, if it\'s available.</string>
+    <string name="showcase_chart_5">In case, if You want to track some Coin/Currency rates with notification</string>
+    <string name="showcase_chart_6">Click that big PLUS button!</string>
+    <string name="showcase_chart_7">Now go to Snapshots tab!</string>
 
-    <string name="showcase_main_1">And You can save it for quick access.</string>
-    <string name="showcase_main_2">Try it Yourself.</string>
-    <string name="showcase_main_3">What about notifications, You can set them here.</string>
-    <string name="showcase_main_4">Now You\'re ready to go on.</string>
     <string name="bottom_bar_snapshots">Snapshots</string>
     <string name="bottom_bar_charts">Charts</string>
     <string name="notification_switch">Notification</string>
     <string name="notification_smart_switch">Smart(Battery save)</string>
     <string name="notification_sticked_switch" translatable="false">Sticked</string>
     <string name="tv5s">5 seconds</string>
+    <string name="chart_selected_coin_error">Coin not selected</string>
+    <string name="chart_selected_currency_error">Currency not selected</string>
+    <string name="chart_selected_exchange_error">Exchanger not selected</string>
+    <string name="chart_create_snapshot_error_already_exists">Snapshot already exists</string>
+    <string name="chart_create_snapshot_error_unknown">Couldn\'t save snapshot</string>
+    <string name="chart_create_snapshot_success">Snapshot successfully created</string>
+    <string name="chart_create_snapshot_error_not_loaded">Looks like chart have not laoded yet</string>
+    <string name="notification_snapshot_high">High:</string>
+    <string name="notification_snapshot_low">Low:</string>
+    <string name="notification_snapshot_change">Change:</string>
+    <string name="notification_snapshot_change24">Change24:</string>
+    <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
+    <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
+    <string name="snapshot_notification_option_not_loaded_error">Couldn\'t load snapshot. Please, try again</string>
+
+    <string name="splash_exchangers_updated">Database update</string>
+    <string name="splash_updating_database">Updating database…</string>
+    <string name="splash_updating_database_error">Couldn\'t update data</string>
+    <string name="snapshot_details_load_by_period">Couldn\'t load selected period, please try again</string>
 
 </resources>

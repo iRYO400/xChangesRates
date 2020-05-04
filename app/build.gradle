@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
+
 
 android {
     compileSdkVersion 29
@@ -15,16 +18,30 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                includeCompileClasspath true
+                arguments = [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
             }
         }
     }
     buildTypes {
+        debug {
+            apply from: '../gradle/keys-debug.gradle'
+            resValue("string", "admobId", admobId)
+            resValue("string", "bottomBanner", bottomBanner)
+        }
         release {
-            minifyEnabled false
+            apply from: '../gradle/keys.gradle'
+            resValue("string", "admobId", admobId)
+            resValue("string", "bottomBanner", bottomBanner)
+
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding.enabled = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

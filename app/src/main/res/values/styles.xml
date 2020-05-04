@@ -1,76 +1,30 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-
-        <item name="android:fontFamily">@font/main_font</item>
-
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
-
-        <item name="android:windowBackground">@null</item>
-
-        <item name="android:alertDialogTheme">@style/CustomDialog</item>
-    </style>
-
-    <style name="CustomDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="android:colorBackground">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="StyleAppName">
-        <item name="android:textColor">@color/colorSpinTxt</item>
-        <item name="android:textSize">@dimen/txtAppName</item>
-    </style>
-
-    <style name="StyleEditText">
-        <item name="android:inputType">textNoSuggestions|numberDecimal</item>
-        <item name="android:maxLines">1</item>
+    <style name="Widget.MyTheme.AutoCompleteTextView" parent="">
+        <item name="android:cursorVisible">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:background">@drawable/bg_spinner</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:background">@drawable/bg_et</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">@dimen/etText</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline6</item>
     </style>
 
-    <style name="StyleSpinner" parent="android:Widget.TextView.SpinnerItem">
-        <item name="android:textColor">@color/colorSpinTxt</item>
-        <item name="android:textSize">@dimen/spinnerText</item>
-        <item name="android:textAlignment">center</item>
+    <style name="ThemeOverlay.MyApp.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="colorSurface">@color/rhino</item>
+        <item name="dividerColor">@color/san_juan</item>
     </style>
 
-    <style name="StyleSpinnerDropItem" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
-        <item name="android:textColor">@color/colorSpinTxt</item>
-        <item name="android:textSize">@dimen/spinnerDropText</item>
-        <item name="android:background">@drawable/bg_spinner_drop</item>
-        <item name="android:textAlignment">center</item>
+    <style name="Theme.MyApp.BottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:theme">@style/Theme.MyApp</item>
+        <item name="bottomSheetStyle">@style/Widget.MyApp.BottomSheet.Modal</item>
     </style>
 
-    <style name="StyleNumberPicker" parent="AppTheme">
-        <item name="android:editTextColor">@color/colorWhite</item>
-        <item name="colorControlNormal">@color/colorAccent</item>
+    <style name="Widget.MyApp.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="behavior_skipCollapsed">true</item>
+        <item name="behavior_fitToContents">true</item>
+        <item name="behavior_peekHeight">800dp</item>
+        <item name="behavior_hideable">false</item>
     </style>
-
-    <style name="StyleButton">
-        <item name="android:background">@drawable/bg_btn</item>
-        <item name="android:textColor">@drawable/bg_btn_text</item>
-        <item name="android:textSize">@dimen/dimBtnSize</item>
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-
-    <style name="txtPriceMain">
-        <item name="android:textSize">@dimen/txtPriceMain</item>
-        <item name="android:textColor">@color/colorPrice</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="txtPriceSecondary">
-        <item name="android:textSize">@dimen/txtPriceSecondary</item>
-        <item name="android:textColor">@color/colorPrice</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-    </style>
-
 
 </resources>

@@ -24,12 +24,17 @@ sealed class Failure {
 
     data class ServerError(override var errorMessage: String?) : Failure()
     data class UnknownException(override var errorMessage: String?) : Failure()
-    data class ServerUpdateInProgressError(override var errorMessage: String?) : Failure()
     data class DatabaseError(override var errorMessage: String?) : Failure()
 
     /** * Extend this class for feature specific failures.*/
-    abstract class FeatureFailure : Failure()
+    abstract class FeatureFailure(override var errorMessage: String? = null) : Failure()
+
     object UseCaseError : FeatureFailure()
 
+
+    object SnapshotListIsEmpty : FeatureFailure()
+    object SnapshotAlreadyExists : FeatureFailure()
+    object SnapshotNotFound : FeatureFailure()
+    object ChartNotLoaded : FeatureFailure()
 }
 

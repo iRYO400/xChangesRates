@@ -1,22 +1,15 @@
 package workshop.akbolatss.xchangesrates.utils
 
-/**
- * Author: Akbolat Sadvakassov
- * Date: 20.11.2017
- */
-
 object Constants {
 
     const val BASE_URL = "http://bitcoinstat.org/api_v3/"
     const val DB_SNAPS_NAME_NEW = "snapshots.db"
 
+    const val HAWK_IS_INTRO_START_DONE = "_isFirstIntroDone"
+
     const val HAWK_FIRST_START = "IsFirstStart"
     const val HAWK_LAST_UPDATE = "LastUpdateDate"
     const val HAWK_EXCHANGE_RESPONSE = "ExchangeResponse"
-
-    const val HAWK_CHANNEL_CREATED = "isNotifyChannelCreated"
-    const val HAWK_HISTORY_CODE = "SelectedHistory"
-    const val HAWK_HISTORY_POS = "SelectedHistoryPos"
 
     const val MINUTES_10 = "10min"
     const val HOUR_1 = "1h"
@@ -31,23 +24,8 @@ object Constants {
     const val YEAR_2 = "2y"
     const val YEAR_5 = "5y"
 
-    const val BUNDLE_CHART_ID = "chartId"
-    const val BUNDLE_TIMING = "timingName"
-    const val BUNDLE_POSITION = "chartPosition"
-    const val BUNDLE_ISACTIVE = "isActive"
-
-    const val WORKER_INPUT_ID = "idForInputData"
-    const val NOTIFICATION_MAIN_ID = 1731
-    const val NOTIFICATION_GROUP_ID = "workshop.akbolatss.xchangesrates.group"
-    const val NOTIFICATION_GROUP_SUMMARY = 1371
-    const val NOTIFICATION_CHANNEL_ID = "workshop.akbolatss.xchangesrates.main"
-    const val NOTIFICATION_CHANNEL_NAME = "Background service"
-    const val NOTIFICATION_CHANNEL_DESCRIPTION = "For updating snapshots"
-
     const val HAWK_SHOWCASE_0_DONE = "showCase0Done"
     const val HAWK_SHOWCASE_1_DONE = "showCase1Done"
     const val HAWK_SHOWCASE_2_DONE = "showCase2Done"
 
-
-    const val HAWK_SHOULD_OFF = "shouldToOffService"
 }

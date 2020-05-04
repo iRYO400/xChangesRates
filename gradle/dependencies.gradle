@@ -22,6 +22,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //Kotlin support
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.2.0'
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
@@ -38,22 +39,18 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swipe_refresh"
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout"
 
+    // Timber
     implementation "com.jakewharton.timber:timber:$timber"
 
+    // Lifecycle
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle"
 
-
     //Retrofit 2
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.8.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.4.1'
-
-    //RxJava 2, RxAndroid 2
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     // Koin
     implementation "org.koin:koin-androidx-scope:$koin_version"
@@ -63,21 +60,23 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
     // Show Case
     implementation 'com.github.faruktoptas:FancyShowCaseView:1.3.0'
     // MPA Chart
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     // Hawk
     implementation 'com.orhanobut:hawk:2.0.1'
     // Space Navigation View
     implementation 'com.github.armcha:SpaceNavigationView:1.6.0'
     // Fragmentation
     implementation 'me.xuexuan:fragmentationx:1.0.5'
-    // Expandable Layout
-    implementation 'net.cachapa.expandablelayout:expandablelayout:2.9.2'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.4.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
 
 }
