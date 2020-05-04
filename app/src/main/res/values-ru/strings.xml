@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="key_id">0</integer>
-    <integer name="key_pos">1</integer>
-
-    <string name="no_snapshots">Вы не добавили ни единого снэпшота :(</string>
-    <string name="menu_shoot">Сохранить снэпшот</string>
-    <string name="menu_refresh">Обновить</string>
-    <string name="menu_progress">Обновляется…</string>
+    <string name="no_snapshots">&#160;&#160;Вы не добавили ни единого снэпшота :(\n\nЧтобы исправить ситуацию, следуйте:\n&#160;&#160;1. Кликнете на Чарты\n&#160;&#160;2. Выберите интересующие криптовалюту/валюту\n&#160;&#160;3. Нажмите на плюсик!</string>
 
     //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
 
@@ -24,47 +18,18 @@
     <string name="tv2y">2Г</string>
     <string name="tv5y">5Л</string>
 
-    <string-array name="array_time">
-        <item>10 минут</item>
-        <item>Час</item>
-        <item>3 часа</item>
-        <item>12 часов</item>
-        <item>24 часа</item>
-    </string-array>
-
-    <array name="menuOptions">
-        <item>Snapshots</item>
-        <item>Chart</item>
-        <item>About</item>
-    </array>
-
-    <string name="splash_1">Данные успешно обновлены</string>
-    <string name="splash_2">Проверьте интернет соединение и перезапустите приложение</string>
-    <string name="splash_3">"Не получается обновить данные. Последнее обновление было "</string>
-
-    <string name="menu_notify">Уведомления</string>
-
     <string name="alert_save">Сохранить</string>
     <string name="alert_cancel">Отмена</string>
     <string name="alert_remove">Удалить</string>
-    <string name="alert_notifies">Настройки уведомлении</string>
-    <string name="alert_snap">Настройки снэпшота</string>
-    <string name="addNotify">Добавить уведомление</string>
-    <string name="tvExchanger">Обменник</string>
-
-    <string name="showcase_snap_1">Спасибо за использование XChanges Rates! Это Ваш первый запуск, давайте пройдёмся по базовым функциям.</string>
-    <string name="showcase_snap_2">Начнем с добавления первого снэпшота. Кликните сюда.</string>
-    <string name="showcase_snap_3">Вот он Ваш первый снэпшот! Теперь кликните и запомните следующее.</string>
-    <string name="showcase_snap_4">Один клик - обновляет данные снэпшота. Удержание открывает опции снэпшота.</string>
 
     <string name="showcase_chart_0">Спасибо за использование XChanges Rates! Это Ваш первый запуск, давайте пройдёмся по базовым функциям.</string>
     <string name="showcase_chart_1">Это основной экран(центр) управления.</string>
     <string name="showcase_chart_2">Вы можете выбрать обменник(Coindesk, Bitpay, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_3">Криптовалюту(Bitcoin, Ethereum, etc)&#8230; &#8212;>></string>
     <string name="showcase_chart_4">и Валюту. Конечно, если они поддерживается обменником.</string>
-    <string name="showcase_chart_5">In case, if You want to track some Coin/Currency rates with notification</string>
-    <string name="showcase_chart_6">Click that big PLUS button!</string>
-    <string name="showcase_chart_7">Then open Snapshots tab</string>
+    <string name="showcase_chart_5">Если Вы хотите получать уведомления и быстро обозревать последние изменения</string>
+    <string name="showcase_chart_6">Нажмите на эту КРУГЛУЮ кнопку с плюсиком!</string>
+    <string name="showcase_chart_7">Затем откройте окно Снэпшоты</string>
 
     <string name="tv5s">5 секунд</string>
     <string name="tv15min">15 минут</string>
@@ -73,22 +38,23 @@
     <string name="bottom_bar_charts">Чарты</string>
     <string name="notification_switch">Включить уведомления</string>
     <string name="notification_smart_switch">Умные уведомления</string>
-    <string name="chart_selected_coin_error">Coin not selected</string>
-    <string name="chart_selected_currency_error">Currency not selected</string>
-    <string name="chart_selected_exchange_error">Exchanger not selected</string>
-    <string name="chart_create_snapshot_error_already_exists">Snapshot already exists</string>
-    <string name="chart_create_snapshot_error_unknown">Couldn\'t save snapshot</string>
-    <string name="chart_create_snapshot_success">Snapshot successfully created</string>
-    <string name="chart_create_snapshot_error_not_loaded">Looks like chart have not laoded yet</string>
+    <string name="chart_selected_coin_error">Выберите криптовалюту</string>
+    <string name="chart_selected_currency_error">Выберите валюту</string>
+    <string name="chart_selected_exchange_error">Выберите обменник</string>
+    <string name="chart_create_snapshot_error_already_exists">У вас уже такой снэпшот</string>
+    <string name="chart_create_snapshot_error_unknown">Возникла ошибка с сохранением снэпшота, попробуйте еще раз</string>
+    <string name="chart_create_snapshot_success">Снэпшот успешно создан</string>
+    <string name="chart_create_snapshot_error_not_loaded">Данные еще не прогрузились</string>
     <string name="notification_snapshot_high">High:</string>
     <string name="notification_snapshot_low">Low:</string>
     <string name="notification_snapshot_change">Change:</string>
     <string name="notification_snapshot_change24">Change24:</string>
-    <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
-    <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
-    <string name="snapshot_notification_option_not_loaded_error">Couldn\'t load snapshot. Please, try again</string>
-    <string name="splash_exchangers_updated">Database update</string>
-    <string name="splash_updating_database">Updating database...</string>
-    <string name="splash_updating_database_error">Couldn\'t update database</string>
-    <string name="snapshot_details_load_by_period">Couldn\'t update snapshot, try again</string>
+    <string name="snapshot_notification_option_chart_period">Интервал изменения валюты</string>
+    <string name="snapshot_notification_option_update_interval">Интервал обновления уведомления</string>
+    <string name="snapshot_notification_option_not_loaded_error">Возникла ошибка с загрузкой снэпшота. Попробуйте еще раз</string>
+    <string name="splash_updating_database">Обновление базы данных…</string>
+    <string name="splash_updating_database_error">Не получилось обновить базы данных</string>
+    <string name="snapshot_details_load_by_period">Возникли неполадки с данными, попробуй еще раз</string>
+    <string name="snapshot_delete_error">Возникла ошибка при удалении</string>
+
 </resources>

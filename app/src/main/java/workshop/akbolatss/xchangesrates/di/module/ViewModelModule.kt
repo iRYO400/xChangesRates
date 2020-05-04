@@ -30,7 +30,7 @@ val viewModelModule: Module = module {
     }
 
     scope(named<SnapshotListFragment>()) {
-        viewModel { SnapshotsViewModel(get(), get(), get()) }
+        viewModel { SnapshotsViewModel(get(), get(), get(), get()) }
     }
 
     scope(named<SnapshotOptionsDialog>()) {
@@ -41,7 +41,7 @@ val viewModelModule: Module = module {
 
     scope(named<ChartFragment>()) {
         viewModel {
-            ChartViewModel(get(), get(), get())
+            ChartViewModel(get(), get(), get(), get())
         }
     }
 

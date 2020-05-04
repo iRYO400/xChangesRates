@@ -40,4 +40,10 @@ val useCaseModule = module {
     factory {
         ToggleNotificationUseCase(get(), get())
     }
+    factory {
+        GetSnapshotCountUseCase(get())
+    }
+    factory {
+        DeleteSnapshotUseCase(get())
+    }
 }

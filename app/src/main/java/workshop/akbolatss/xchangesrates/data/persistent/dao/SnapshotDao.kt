@@ -8,6 +8,9 @@ import workshop.akbolatss.xchangesrates.data.persistent.model.SnapshotOptionsEnt
 @Dao
 abstract class SnapshotDao {
 
+    @Query("SELECT COUNT(id) FROM snapshot")
+    abstract suspend fun getSnapshotCount(): Int
+
     @Transaction
     open suspend fun create(
         snapshot: SnapshotEntity,
@@ -41,6 +44,9 @@ abstract class SnapshotDao {
     @Update
     abstract suspend fun update(snapshotOptions: SnapshotOptionsEntity): Int
 
+    @Query("DELETE FROM snapshot WHERE id = :snapshotId")
+    abstract suspend fun delete(snapshotId: Long): Int
+
     @Query("SELECT * FROM snapshot WHERE exchangerName = :exchange AND coin = :coin AND currency = :currency")
     abstract suspend fun findBy(exchange: String, coin: String, currency: String): SnapshotEntity?
 
@@ -51,7 +57,7 @@ abstract class SnapshotDao {
     abstract suspend fun findOptions(snapshotId: Long): SnapshotOptionsEntity
 
     @Query("SELECT * FROM snapshot WHERE id = :id")
-    abstract fun findFlow(id: Long): Flow<SnapshotEntity>
+    abstract fun findFlow(id: Long): Flow<SnapshotEntity?>
 
     @Query("SELECT * FROM snapshot_options WHERE snapshotId = :snapshotId")
     abstract fun findOptionsFlow(snapshotId: Long): Flow<SnapshotOptionsEntity>
@@ -61,4 +67,5 @@ abstract class SnapshotDao {
 
     @Query("SELECT * FROM snapshot_options")
     abstract fun findOptionsListFlow(): Flow<List<SnapshotOptionsEntity>>
+
 }

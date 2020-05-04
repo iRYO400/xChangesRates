@@ -1,26 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">xChanges Rates</string>
-    <string name="my_name" translatable="false">Akbolat Sadvakassov</string>
-
-    <string name="profile_subtitle" translatable="false">Mobile Developer</string>
-    <string name="profile_github" translatable="false">iRYO400</string>
-    <string name="profile_instagram" translatable="false">akbolat.ss</string>
-    <string name="profile_feedback" translatable="false">whitesteel400@gmail.com</string>
-    <string name="profile_more_from_me" translatable="false">iRYO400%27+Workshop</string>
-    <string name="profile_playstore_link" translatable="false">workshop.akbolatss.tagsnews</string>
-    <string name="profile_brief" translatable="false">Self-motivated developer. Have a strong background in Native Mobile Application Development.</string>
-
-    <integer name="key_id">0</integer>
-    <integer name="key_pos">1</integer>
-
-    <string name="tvEquality" translatable="false">=</string>
-    <string name="tvDoubleDots" translatable="false">:</string>
 
     <string name="no_snapshots">&#160;&#160;You didn\'t add any snapshot :(\n\nIf You forget how to create Snapshot:\n&#160;&#160;1. Open Charts tab\n&#160;&#160;2. Select interesting currency rates\n&#160;&#160;3. Click Plus button!</string>
-    <string name="menu_shoot">Take a Snapshot</string>
-    <string name="menu_refresh">Update data</string>
-    <string name="menu_progress">Updating…</string>
-    <string name="menu_notify">Notifications</string>
 
     //10min, 1h, 3h, 12h, 24h, 1w, 1m, 3m, 6m, 1y, 2y, 5y
 
@@ -76,29 +57,9 @@
         <item>24 hours</item>
     </string-array>
 
-    <array name="menuOptions">
-        <item>Snapshots</item>
-        <item>Chart</item>
-        <item>About</item>
-    </array>
-
-    <string name="splash_1">Data updated successfully</string>
-    <string name="splash_2">Check your connection and restart app</string>
-    <string name="splash_3">Can\'t update. Last update was</string>
-
     <string name="alert_save">Save</string>
     <string name="alert_cancel">Cancel</string>
     <string name="alert_remove">Delete</string>
-    <string name="alert_notifies">Notification settings</string>
-    <string name="alert_snap">Snapshot options</string>
-    <string name="addNotify">Add snapshotNotification</string>
-    <string name="tvNotifiesLimit" translatable="false">/5</string>
-    <string name="tvExchanger">Exchanger</string>
-
-    <string name="showcase_snap_1">Thanks for using xChangesRates! This is first time You launch app, so let\'s introduce basic functions.</string>
-    <string name="showcase_snap_2">Let\'s add Your first Snapshot. Click here.</string>
-    <string name="showcase_snap_3">Glad that You added! Now click on it and remember next.</string>
-    <string name="showcase_snap_4">One click is to update Snapshot data. Long click is to open Options.</string>
 
     <string name="showcase_chart_0">Thanks for using xChanges Rates! This is your first time, let\'s check basic functions.</string>
     <string name="showcase_chart_1">This is the main control screen.</string>
@@ -128,11 +89,11 @@
     <string name="notification_snapshot_change24">Change24:</string>
     <string name="snapshot_notification_option_chart_period">Set last changes period of chart</string>
     <string name="snapshot_notification_option_update_interval">Set update interval of notification</string>
-    <string name="snapshot_notification_option_not_loaded_error">Couldn\'t load snapshot. Please, try again</string>
+    <string name="snapshot_notification_option_not_loaded_error">Could not load snapshot. Please, try again</string>
 
-    <string name="splash_exchangers_updated">Database update</string>
     <string name="splash_updating_database">Updating database…</string>
-    <string name="splash_updating_database_error">Couldn\'t update data</string>
-    <string name="snapshot_details_load_by_period">Couldn\'t load selected period, please try again</string>
+    <string name="splash_updating_database_error">Could not update data</string>
+    <string name="snapshot_details_load_by_period">Could not load selected period, please try again</string>
+    <string name="snapshot_delete_error">Error occurred while deleting</string>
 
 </resources>

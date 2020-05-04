@@ -16,7 +16,7 @@ import java.util.*
 class SnapshotDetailsViewModel(
     findSnapshotByIdFlowUseCase: FindSnapshotByIdFlowUseCase,
     private val updateSnapshotUseCase: UpdateSnapshotByPeriodUseCase,
-    private val snapshotId: Long
+    val snapshotId: Long
 ) : BaseViewModel() {
 
     val snapshot = findSnapshotByIdFlowUseCase(FindSnapshotByIdFlowUseCase.Params(snapshotId))

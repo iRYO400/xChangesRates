@@ -3,11 +3,10 @@
 package workshop.akbolatss.xchangesrates.app
 
 import android.app.Application
+import com.google.android.gms.ads.MobileAds
 import com.orhanobut.hawk.Hawk
 import me.yokeyword.fragmentation.BuildConfig
 import me.yokeyword.fragmentation.Fragmentation
-import timber.log.Timber
-import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.di.KoinInjector
 import workshop.akbolatss.xchangesrates.utils.logging.TimberLogImplementation
 
@@ -19,6 +18,7 @@ class ApplicationMain : Application() {
         TimberLogImplementation.init()
         initKoin()
         initFragmentation()
+        MobileAds.initialize(this) {}
     }
 
     private fun initHawk() {
