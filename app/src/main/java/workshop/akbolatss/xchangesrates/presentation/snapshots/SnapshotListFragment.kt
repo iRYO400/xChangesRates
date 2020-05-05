@@ -5,8 +5,8 @@ import androidx.lifecycle.Observer
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
-import kz.jgroup.pos.util.Event
-import kz.jgroup.pos.util.EventObserver
+import workshop.akbolatss.xchangesrates.utils.android.Event
+import workshop.akbolatss.xchangesrates.utils.android.EventObserver
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber

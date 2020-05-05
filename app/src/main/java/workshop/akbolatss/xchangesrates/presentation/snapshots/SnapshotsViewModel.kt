@@ -3,7 +3,7 @@ package workshop.akbolatss.xchangesrates.presentation.snapshots
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import kz.jgroup.pos.util.Event
+import workshop.akbolatss.xchangesrates.utils.android.Event
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
 import workshop.akbolatss.xchangesrates.base.resource.onFailure

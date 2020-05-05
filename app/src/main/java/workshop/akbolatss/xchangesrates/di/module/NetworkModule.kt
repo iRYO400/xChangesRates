@@ -30,7 +30,7 @@ val networkModule = module {
             readTimeout(30, TimeUnit.SECONDS)
             if (BuildConfig.DEBUG)
                 addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.NONE
+                    level = HttpLoggingInterceptor.Level.BODY
                 })
         }.build()
     }

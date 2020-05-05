@@ -12,8 +12,8 @@ android {
         applicationId "workshop.akbolatss.xchangesrates"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 10
-        versionName "2.0.0.0"
+        versionCode 11
+        versionName "2.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
@@ -31,6 +31,9 @@ android {
             resValue("string", "bottomBanner", bottomBanner)
             resValue("string", "snapshotsListInterstitial", snapshotsListInterstitial)
             resValue("string", "snapshotsCreateInterstitial", snapshotsCreateInterstitial)
+
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             apply from: '../gradle/keys.gradle'
@@ -39,7 +42,6 @@ android {
             resValue("string", "snapshotsCreateInterstitial", snapshotsCreateInterstitial)
 
             minifyEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

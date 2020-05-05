@@ -6,7 +6,7 @@ import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 import com.orhanobut.hawk.Hawk
-import kz.jgroup.pos.util.EventObserver
+import workshop.akbolatss.xchangesrates.utils.android.EventObserver
 import me.toptas.fancyshowcase.FancyShowCaseQueue
 import me.toptas.fancyshowcase.FancyShowCaseView
 import org.koin.androidx.scope.currentScope

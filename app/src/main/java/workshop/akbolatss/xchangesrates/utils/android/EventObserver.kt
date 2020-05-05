@@ -1,4 +1,4 @@
-package kz.jgroup.pos.util
+package workshop.akbolatss.xchangesrates.utils.android
 
 import androidx.lifecycle.Observer
 

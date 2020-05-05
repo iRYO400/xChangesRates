@@ -19,3 +19,6 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class workshop.akbolatss.xchangesrates.data.remote.** { *; }
+-keep class workshop.akbolatss.xchangesrates.data.persistent.** { *; }

@@ -2,7 +2,7 @@ package workshop.akbolatss.xchangesrates.presentation.chart
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import kz.jgroup.pos.util.Event
+import workshop.akbolatss.xchangesrates.utils.android.Event
 import workshop.akbolatss.xchangesrates.R
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
 import workshop.akbolatss.xchangesrates.base.resource.Either

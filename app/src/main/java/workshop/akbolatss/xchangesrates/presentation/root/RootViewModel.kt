@@ -1,7 +1,7 @@
 package workshop.akbolatss.xchangesrates.presentation.root
 
 import androidx.lifecycle.MutableLiveData
-import kz.jgroup.pos.util.Event
+import workshop.akbolatss.xchangesrates.utils.android.Event
 import workshop.akbolatss.xchangesrates.base.BaseViewModel
 
 class RootViewModel : BaseViewModel() {
