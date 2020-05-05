@@ -20,5 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class workshop.akbolatss.xchangesrates.data.remote.** { *; }
--keep class workshop.akbolatss.xchangesrates.data.persistent.** { *; }
+-keep class workshop.akbolatss.xchangesrates.data.remote.model.** { *; }
+-keep class workshop.akbolatss.xchangesrates.data.persistent.model.** { *; }
